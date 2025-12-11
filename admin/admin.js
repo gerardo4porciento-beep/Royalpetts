@@ -1,5 +1,5 @@
 // Variables globales
-let db;
+// db se declara en firebase-config.js como window.db
 let ventas = [];
 let gastos = [];
 let isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showDashboard();
         // Esperar a que db esté listo antes de cargar datos
         const checkDb = setInterval(() => {
-            if (db) {
+            if (window.db) {
                 clearInterval(checkDb);
                 loadDashboard();
             }
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Timeout después de 5 segundos
         setTimeout(() => {
             clearInterval(checkDb);
-            if (!db) {
+            if (!window.db) {
                 console.warn('Firebase no disponible, mostrando dashboard sin datos');
                 updateStats();
                 updateCharts();
@@ -60,7 +60,6 @@ function initializeFirebase() {
     try {
         const result = initFirebase();
         if (result && result.db) {
-            db = result.db;
             console.log('Firebase inicializado correctamente');
         } else {
             console.error('No se pudo inicializar Firebase');
@@ -151,14 +150,14 @@ function handleLogin(e) {
         showDashboard();
         
         // Intentar cargar dashboard, esperar a que db esté listo si es necesario
-        if (db) {
+        if (window.db) {
             console.log('Firebase listo, cargando dashboard...');
             loadDashboard();
         } else {
             console.log('Esperando Firebase...');
             // Esperar a que Firebase se inicialice
             const checkDbInterval = setInterval(() => {
-                if (db) {
+                if (window.db) {
                     clearInterval(checkDbInterval);
                     console.log('Firebase listo, cargando dashboard...');
                     loadDashboard();
@@ -168,7 +167,7 @@ function handleLogin(e) {
             // Timeout después de 5 segundos
             setTimeout(() => {
                 clearInterval(checkDbInterval);
-                if (!db) {
+                if (!window.db) {
                     console.warn('Firebase no está disponible, pero el login fue exitoso');
                     // Mostrar dashboard vacío
                     updateStats();
@@ -222,13 +221,13 @@ function closeModal(modalId) {
 
 // Firestore: Cargar datos en tiempo real
 function loadDashboard() {
-    if (!db) {
+    if (!window.db) {
         console.error('Firebase no está inicializado');
         return;
     }
     
     // Listener en tiempo real para ventas
-    ventasUnsubscribe = db.collection('ventas')
+    ventasUnsubscribe = window.db.collection('ventas')
         .orderBy('fecha', 'desc')
         .onSnapshot((snapshot) => {
             ventas = [];
@@ -243,7 +242,7 @@ function loadDashboard() {
         });
     
     // Listener en tiempo real para gastos
-    gastosUnsubscribe = db.collection('gastos')
+    gastosUnsubscribe = window.db.collection('gastos')
         .orderBy('fecha', 'desc')
         .onSnapshot((snapshot) => {
             gastos = [];
@@ -279,7 +278,11 @@ async function handleVentaSubmit(e) {
     };
     
     try {
-        await db.collection('ventas').add(venta);
+        if (!window.db) {
+            alert('Error: Firebase no está conectado');
+            return;
+        }
+        await window.db.collection('ventas').add(venta);
         closeModal('ventaModal');
     } catch (error) {
         console.error('Error guardando venta:', error);
@@ -307,7 +310,11 @@ async function handleGastoSubmit(e) {
     };
     
     try {
-        await db.collection('gastos').add(gasto);
+        if (!window.db) {
+            alert('Error: Firebase no está conectado');
+            return;
+        }
+        await window.db.collection('gastos').add(gasto);
         closeModal('gastoModal');
     } catch (error) {
         console.error('Error guardando gasto:', error);
@@ -501,8 +508,12 @@ async function deleteItem(id, tipo) {
     }
     
     try {
+        if (!window.db) {
+            alert('Error: Firebase no está conectado');
+            return;
+        }
         const collection = tipo === 'venta' ? 'ventas' : 'gastos';
-        await db.collection(collection).doc(id).delete();
+        await window.db.collection(collection).doc(id).delete();
     } catch (error) {
         console.error('Error eliminando registro:', error);
         alert('Error al eliminar el registro. Intenta nuevamente.');
@@ -542,7 +553,11 @@ function editItem(id, tipo) {
                 };
                 
                 try {
-                    await db.collection('ventas').doc(id).update(updatedData);
+                    if (!window.db) {
+                        alert('Error: Firebase no está conectado');
+                        return;
+                    }
+                    await window.db.collection('ventas').doc(id).update(updatedData);
                     closeModal('ventaModal');
                     form.onsubmit = originalSubmit;
                 } catch (error) {
@@ -579,7 +594,11 @@ function editItem(id, tipo) {
                 };
                 
                 try {
-                    await db.collection('gastos').doc(id).update(updatedData);
+                    if (!window.db) {
+                        alert('Error: Firebase no está conectado');
+                        return;
+                    }
+                    await window.db.collection('gastos').doc(id).update(updatedData);
                     closeModal('gastoModal');
                     form.onsubmit = originalSubmit;
                 } catch (error) {
