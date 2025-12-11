@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo - ROYALPETTS STORE</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Skater+Girls+Rock&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Login Panel -->
+    <div id="loginPanel" class="login-panel">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-logo">
+                    <img src="SEPARACION 6/LOGO 1.png" alt="Logo" class="logo-img-login">
+                </div>
+                <h1 class="login-title">ROYALPETTS</h1>
+                <h2 class="login-subtitle">Panel Administrativo</h2>
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="username">Usuario</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn-login">Iniciar Sesión</button>
+                </form>
+                <p class="login-hint">Usuario: admin | Contraseña: admin123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard hidden">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1 class="dashboard-title">ROYALPETTS - Panel Administrativo</h1>
+                <button id="logoutBtn" class="btn-logout">Cerrar Sesión</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🐕</div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="totalVendidos">0</h3>
+                        <p class="stat-label">Cachorros Vendidos</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="totalVentas">$0</h3>
+                        <p class="stat-label">Total Ventas</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💸</div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="totalGastos">$0</h3>
+                        <p class="stat-label">Total Gastos</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="gananciaNeta">$0</h3>
+                        <p class="stat-label">Ganancia Neta</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">Ventas por Mes</h3>
+                    <canvas id="ventasMesChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-title">Ventas por Raza</h3>
+                    <canvas id="ventasRazaChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Actions Section -->
+            <div class="actions-section">
+                <button id="btnCargarVenta" class="btn-action">➕ Cargar Venta</button>
+                <button id="btnCargarGasto" class="btn-action">➖ Cargar Gasto</button>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h2 class="table-title">Registro de Datos</h2>
+                    <div class="table-filters">
+                        <select id="filterType" class="filter-select">
+                            <option value="all">Todos</option>
+                            <option value="venta">Ventas</option>
+                            <option value="gasto">Gastos</option>
+                        </select>
+                        <input type="text" id="searchInput" class="search-input" placeholder="Buscar...">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="dataTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th>Raza</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Total</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Cargar Venta -->
+    <div id="ventaModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Cargar Nueva Venta</h2>
+                <button class="modal-close" data-modal="ventaModal">&times;</button>
+            </div>
+            <form id="ventaForm" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ventaFecha">Fecha</label>
+                        <input type="date" id="ventaFecha" name="fecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ventaRaza">Raza</label>
+                        <input type="text" id="ventaRaza" name="raza" placeholder="Ej: Golden Retriever" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ventaCantidad">Cantidad</label>
+                        <input type="number" id="ventaCantidad" name="cantidad" min="1" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ventaPrecio">Precio Unitario ($)</label>
+                        <input type="number" id="ventaPrecio" name="precio" step="0.01" min="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ventaDescripcion">Descripción</label>
+                    <textarea id="ventaDescripcion" name="descripcion" rows="3" placeholder="Descripción adicional..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" data-modal="ventaModal">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar Venta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Cargar Gasto -->
+    <div id="gastoModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Cargar Nuevo Gasto</h2>
+                <button class="modal-close" data-modal="gastoModal">&times;</button>
+            </div>
+            <form id="gastoForm" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gastoFecha">Fecha</label>
+                        <input type="date" id="gastoFecha" name="fecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gastoCategoria">Categoría</label>
+                        <select id="gastoCategoria" name="categoria" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="Alimentos">Alimentos</option>
+                            <option value="Veterinaria">Veterinaria</option>
+                            <option value="Suministros">Suministros</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gastoMonto">Monto ($)</label>
+                        <input type="number" id="gastoMonto" name="monto" step="0.01" min="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="gastoDescripcion">Descripción</label>
+                    <textarea id="gastoDescripcion" name="descripcion" rows="3" placeholder="Descripción del gasto..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" data-modal="gastoModal">Cancelar</button>
+                    <button type="submit" class="btn-save">Guardar Gasto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
+
