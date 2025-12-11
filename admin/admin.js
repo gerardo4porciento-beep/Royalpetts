@@ -260,8 +260,10 @@ function loadDashboard() {
 // Ventas
 async function handleVentaSubmit(e) {
     e.preventDefault();
-    if (!db) {
-        alert('Error: Firebase no está conectado');
+    
+    if (!window.db) {
+        alert('Error: Firebase no está conectado. Por favor, recarga la página.');
+        console.error('window.db no está disponible');
         return;
     }
     
@@ -278,23 +280,24 @@ async function handleVentaSubmit(e) {
     };
     
     try {
-        if (!window.db) {
-            alert('Error: Firebase no está conectado');
-            return;
-        }
-        await window.db.collection('ventas').add(venta);
+        console.log('Guardando venta en Firebase...', venta);
+        const docRef = await window.db.collection('ventas').add(venta);
+        console.log('Venta guardada con ID:', docRef.id);
         closeModal('ventaModal');
+        alert('Venta guardada correctamente');
     } catch (error) {
         console.error('Error guardando venta:', error);
-        alert('Error al guardar la venta. Intenta nuevamente.');
+        alert('Error al guardar la venta: ' + error.message);
     }
 }
 
 // Gastos
 async function handleGastoSubmit(e) {
     e.preventDefault();
-    if (!db) {
-        alert('Error: Firebase no está conectado');
+    
+    if (!window.db) {
+        alert('Error: Firebase no está conectado. Por favor, recarga la página.');
+        console.error('window.db no está disponible');
         return;
     }
     
@@ -310,15 +313,14 @@ async function handleGastoSubmit(e) {
     };
     
     try {
-        if (!window.db) {
-            alert('Error: Firebase no está conectado');
-            return;
-        }
-        await window.db.collection('gastos').add(gasto);
+        console.log('Guardando gasto en Firebase...', gasto);
+        const docRef = await window.db.collection('gastos').add(gasto);
+        console.log('Gasto guardado con ID:', docRef.id);
         closeModal('gastoModal');
+        alert('Gasto guardado correctamente');
     } catch (error) {
         console.error('Error guardando gasto:', error);
-        alert('Error al guardar el gasto. Intenta nuevamente.');
+        alert('Error al guardar el gasto: ' + error.message);
     }
 }
 
@@ -502,21 +504,21 @@ function formatDate(dateString) {
 
 async function deleteItem(id, tipo) {
     if (!confirm('¿Estás seguro de eliminar este registro?')) return;
-    if (!db) {
-        alert('Error: Firebase no está conectado');
+    
+    if (!window.db) {
+        alert('Error: Firebase no está conectado. Por favor, recarga la página.');
+        console.error('window.db no está disponible');
         return;
     }
     
     try {
-        if (!window.db) {
-            alert('Error: Firebase no está conectado');
-            return;
-        }
         const collection = tipo === 'venta' ? 'ventas' : 'gastos';
+        console.log('Eliminando registro:', id, 'de', collection);
         await window.db.collection(collection).doc(id).delete();
+        console.log('Registro eliminado correctamente');
     } catch (error) {
         console.error('Error eliminando registro:', error);
-        alert('Error al eliminar el registro. Intenta nuevamente.');
+        alert('Error al eliminar el registro: ' + error.message);
     }
 }
 
@@ -536,8 +538,10 @@ function editItem(id, tipo) {
             const originalSubmit = form.onsubmit;
             form.onsubmit = async (e) => {
                 e.preventDefault();
-                if (!db) {
-                    alert('Error: Firebase no está conectado');
+                
+                if (!window.db) {
+                    alert('Error: Firebase no está conectado. Por favor, recarga la página.');
+                    console.error('window.db no está disponible');
                     return;
                 }
                 
@@ -553,16 +557,14 @@ function editItem(id, tipo) {
                 };
                 
                 try {
-                    if (!window.db) {
-                        alert('Error: Firebase no está conectado');
-                        return;
-                    }
+                    console.log('Actualizando venta en Firebase...', id, updatedData);
                     await window.db.collection('ventas').doc(id).update(updatedData);
+                    console.log('Venta actualizada correctamente');
                     closeModal('ventaModal');
                     form.onsubmit = originalSubmit;
                 } catch (error) {
                     console.error('Error actualizando venta:', error);
-                    alert('Error al actualizar la venta. Intenta nuevamente.');
+                    alert('Error al actualizar la venta: ' + error.message);
                 }
             };
         }
@@ -578,8 +580,10 @@ function editItem(id, tipo) {
             const originalSubmit = form.onsubmit;
             form.onsubmit = async (e) => {
                 e.preventDefault();
-                if (!db) {
-                    alert('Error: Firebase no está conectado');
+                
+                if (!window.db) {
+                    alert('Error: Firebase no está conectado. Por favor, recarga la página.');
+                    console.error('window.db no está disponible');
                     return;
                 }
                 
@@ -594,16 +598,14 @@ function editItem(id, tipo) {
                 };
                 
                 try {
-                    if (!window.db) {
-                        alert('Error: Firebase no está conectado');
-                        return;
-                    }
+                    console.log('Actualizando gasto en Firebase...', id, updatedData);
                     await window.db.collection('gastos').doc(id).update(updatedData);
+                    console.log('Gasto actualizado correctamente');
                     closeModal('gastoModal');
                     form.onsubmit = originalSubmit;
                 } catch (error) {
                     console.error('Error actualizando gasto:', error);
-                    alert('Error al actualizar el gasto. Intenta nuevamente.');
+                    alert('Error al actualizar el gasto: ' + error.message);
                 }
             };
         }
