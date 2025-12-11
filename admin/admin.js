@@ -7,24 +7,30 @@ let ventasUnsubscribe, gastosUnsubscribe;
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM cargado, inicializando...');
+    
+    // Configurar event listeners primero
+    setupEventListeners();
+    
     // Esperar a que Firebase esté cargado
     if (typeof firebase !== 'undefined') {
+        console.log('Firebase SDK detectado, inicializando...');
         initializeFirebase();
     } else {
+        console.log('Esperando Firebase SDK...');
         // Esperar un poco más si Firebase aún no está cargado
         setTimeout(() => {
-            initializeFirebase();
-        }, 500);
+            if (typeof firebase !== 'undefined') {
+                initializeFirebase();
+            } else {
+                console.warn('Firebase SDK no está disponible');
+            }
+        }, 1000);
     }
     
     if (isAuthenticated) {
+        console.log('Usuario autenticado, mostrando dashboard');
         showDashboard();
-    } else {
-        showLogin();
-    }
-    
-    setupEventListeners();
-    if (isAuthenticated) {
         // Esperar a que db esté listo antes de cargar datos
         const checkDb = setInterval(() => {
             if (db) {
@@ -32,6 +38,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadDashboard();
             }
         }, 100);
+        
+        // Timeout después de 5 segundos
+        setTimeout(() => {
+            clearInterval(checkDb);
+            if (!db) {
+                console.warn('Firebase no disponible, mostrando dashboard sin datos');
+                updateStats();
+                updateCharts();
+                updateTable();
+            }
+        }, 5000);
+    } else {
+        console.log('Usuario no autenticado, mostrando login');
+        showLogin();
     }
 });
 
@@ -53,48 +73,112 @@ function initializeFirebase() {
 
 // Event Listeners
 function setupEventListeners() {
-    // Login
-    document.getElementById('loginForm').addEventListener('submit', handleLogin);
-    
-    // Logout
-    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-    
-    // Modals
-    document.getElementById('btnCargarVenta').addEventListener('click', () => openModal('ventaModal'));
-    document.getElementById('btnCargarGasto').addEventListener('click', () => openModal('gastoModal'));
-    
-    // Forms
-    document.getElementById('ventaForm').addEventListener('submit', handleVentaSubmit);
-    document.getElementById('gastoForm').addEventListener('submit', handleGastoSubmit);
-    
-    // Filters
-    document.getElementById('filterType').addEventListener('change', filterTable);
-    document.getElementById('searchInput').addEventListener('input', filterTable);
-    
-    // Modal close buttons
-    document.querySelectorAll('.modal-close, .btn-cancel').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const modalId = e.target.getAttribute('data-modal');
-            if (modalId) {
-                closeModal(modalId);
-            }
+    try {
+        // Login
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', handleLogin);
+        }
+        
+        // Logout
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', handleLogout);
+        }
+        
+        // Modals
+        const btnCargarVenta = document.getElementById('btnCargarVenta');
+        if (btnCargarVenta) {
+            btnCargarVenta.addEventListener('click', () => openModal('ventaModal'));
+        }
+        
+        const btnCargarGasto = document.getElementById('btnCargarGasto');
+        if (btnCargarGasto) {
+            btnCargarGasto.addEventListener('click', () => openModal('gastoModal'));
+        }
+        
+        // Forms
+        const ventaForm = document.getElementById('ventaForm');
+        if (ventaForm) {
+            ventaForm.addEventListener('submit', handleVentaSubmit);
+        }
+        
+        const gastoForm = document.getElementById('gastoForm');
+        if (gastoForm) {
+            gastoForm.addEventListener('submit', handleGastoSubmit);
+        }
+        
+        // Filters
+        const filterType = document.getElementById('filterType');
+        if (filterType) {
+            filterType.addEventListener('change', filterTable);
+        }
+        
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', filterTable);
+        }
+        
+        // Modal close buttons
+        document.querySelectorAll('.modal-close, .btn-cancel').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const modalId = e.target.getAttribute('data-modal');
+                if (modalId) {
+                    closeModal(modalId);
+                }
+            });
         });
-    });
+    } catch (error) {
+        console.error('Error configurando event listeners:', error);
+    }
 }
 
 // Authentication
 function handleLogin(e) {
     e.preventDefault();
+    console.log('Intento de login...');
+    
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     
+    console.log('Usuario:', username);
+    
     // Credenciales simples (en producción usar autenticación real)
     if (username === 'admin' && password === 'admin123') {
+        console.log('Credenciales correctas, iniciando sesión...');
         localStorage.setItem('isAuthenticated', 'true');
         isAuthenticated = true;
         showDashboard();
-        loadDashboard();
+        
+        // Intentar cargar dashboard, esperar a que db esté listo si es necesario
+        if (db) {
+            console.log('Firebase listo, cargando dashboard...');
+            loadDashboard();
+        } else {
+            console.log('Esperando Firebase...');
+            // Esperar a que Firebase se inicialice
+            const checkDbInterval = setInterval(() => {
+                if (db) {
+                    clearInterval(checkDbInterval);
+                    console.log('Firebase listo, cargando dashboard...');
+                    loadDashboard();
+                }
+            }, 100);
+            
+            // Timeout después de 5 segundos
+            setTimeout(() => {
+                clearInterval(checkDbInterval);
+                if (!db) {
+                    console.warn('Firebase no está disponible, pero el login fue exitoso');
+                    // Mostrar dashboard vacío
+                    updateStats();
+                    updateCharts();
+                    updateTable();
+                }
+            }, 5000);
+        }
     } else {
+        console.log('Credenciales incorrectas');
         alert('Usuario o contraseña incorrectos');
     }
 }
