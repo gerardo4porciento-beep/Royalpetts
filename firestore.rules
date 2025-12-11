@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Reglas para ventas
+    match /ventas/{ventaId} {
+      allow read, write: if true; // Modo desarrollo - cambiar en producción
+    }
+    
+    // Reglas para gastos
+    match /gastos/{gastoId} {
+      allow read, write: if true; // Modo desarrollo - cambiar en producción
+    }
+    
+    // Denegar acceso a cualquier otra colección
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+

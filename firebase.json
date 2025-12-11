@@ -1,0 +1,42 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "**/SEPARACION */**",
+      "**/*.psd",
+      "**/*.tif",
+      "**/*.pdf",
+      "**/Nueva carpeta/**",
+      "package.json",
+      "package-lock.json",
+      "node_modules/**",
+      ".git/**",
+      ".gitignore",
+      "FIREBASE_SETUP.md",
+      "INSTRUCCIONES_FIREBASE.md",
+      "configurar-firebase.bat"
+    ],
+    "rewrites": [
+      {
+        "source": "/admin",
+        "destination": "/admin/index.html"
+      },
+      {
+        "source": "/admin/**",
+        "destination": "/admin/index.html"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
+
