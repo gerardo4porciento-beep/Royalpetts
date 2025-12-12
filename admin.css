@@ -37,7 +37,120 @@ body {
     display: none !important;
 }
 
-/* ... Login Panel styles skipped ... */
+/* Login Panel */
+.login-panel {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-azul) 0%, var(--color-verde) 100%);
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.login-box {
+    background: var(--color-rosa);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.login-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo-img-login {
+    max-width: 120px;
+    height: auto;
+    object-fit: contain;
+}
+
+.login-title {
+    font-size: 48px;
+    font-weight: 900;
+    text-align: center;
+    color: var(--white);
+    margin-bottom: 10px;
+}
+
+.login-subtitle {
+    font-size: 20px;
+    text-align: center;
+    color: var(--black);
+    margin-bottom: 30px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 12px;
+    background: var(--white);
+    border: 2px solid var(--gray);
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: var(--black);
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-azul);
+}
+
+.btn-login {
+    background: var(--white);
+    color: var(--black);
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Skater Girls Rock', Arial, sans-serif;
+}
+
+.btn-login:hover {
+    background: var(--gray-light);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.login-hint {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--white);
+    font-family: Arial, sans-serif;
+}
 
 /* Dashboard */
 .dashboard {
