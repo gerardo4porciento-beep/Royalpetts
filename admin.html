@@ -172,36 +172,6 @@
                         <input type="date" id="ventaFecha" name="fecha" required>
                     </div>
                     <div class="form-group">
-                        <label for="ventaRaza">Raza</label>
-                        <input type="text" id="ventaRaza" name="raza" list="razas-lista"
-                            placeholder="Escribe o selecciona..." required>
-                        <datalist id="razas-lista">
-                            <option value="Golden Retriever">
-                            <option value="Bulldog Francés">
-                            <option value="Poodle (Caniche)">
-                            <option value="Husky Siberiano">
-                            <option value="Pastor Alemán">
-                            <option value="Yorkshire Terrier">
-                            <option value="Beagle">
-                            <option value="Rottweiler">
-                            <option value="Chihuahua">
-                            <option value="Shih Tzu">
-                            <option value="Pug (Carlino)">
-                            <option value="Schnauzer">
-                            <option value="Boxer">
-                            <option value="Doberman">
-                            <option value="Cocker Spaniel">
-                            <option value="Bichón Maltés">
-                            <option value="Pomerania">
-                            <option value="Labrador Retriever">
-                            <option value="Jack Russell">
-                            <option value="Border Collie">
-                        </datalist>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
                         <label for="ventaEstado">Estado de Venta</label>
                         <select id="ventaEstado" name="estado" required>
                             <option value="">Seleccionar Estado...</option>
@@ -231,24 +201,61 @@
                             <option value="Zulia">Zulia</option>
                         </select>
                     </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ventaRaza">Raza</label>
+                        <input type="text" id="ventaRaza" name="raza" list="razas-lista"
+                            placeholder="Escribe o selecciona..." required>
+                        <datalist id="razas-lista">
+                            <option value="Golden Retriever">
+                            <option value="Bulldog Francés">
+                            <option value="Poodle (Caniche)">
+                            <option value="Husky Siberiano">
+                            <option value="Pastor Alemán">
+                            <option value="Yorkshire Terrier">
+                            <option value="Beagle">
+                            <option value="Rottweiler">
+                            <option value="Chihuahua">
+                            <option value="Shih Tzu">
+                            <option value="Pug (Carlino)">
+                            <option value="Schnauzer">
+                            <option value="Boxer">
+                            <option value="Doberman">
+                            <option value="Cocker Spaniel">
+                            <option value="Bichón Maltés">
+                            <option value="Pomerania">
+                            <option value="Labrador Retriever">
+                            <option value="Jack Russell">
+                            <option value="Border Collie">
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label for="ventaSexo">Sexo</label>
+                        <select id="ventaSexo" name="sexo" required>
+                            <option value="Macho">Macho</option>
+                            <option value="Hembra">Hembra</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
                     <div class="form-group">
                         <label for="ventaCantidad">Cantidad</label>
                         <input type="number" id="ventaCantidad" name="cantidad" min="1" value="1" required>
                     </div>
-                </div>
-
-                <div class="form-row">
                     <div class="form-group">
                         <label for="ventaPrecio">Precio ($)</label>
                         <input type="number" id="ventaPrecio" name="precio" step="0.01" min="0" required>
                     </div>
+                </div>
+
+                <div class="form-row">
                     <div class="form-group">
                         <label for="ventaCosto">Costo ($)</label>
                         <input type="number" id="ventaCosto" name="costo" step="0.01" min="0" placeholder="0.00">
                     </div>
-                </div>
-
-                <div class="form-row">
                     <div class="form-group">
                         <label for="ventaCompartida">¿Venta Compartida?</label>
                         <select id="ventaCompartida" name="compartida" required>

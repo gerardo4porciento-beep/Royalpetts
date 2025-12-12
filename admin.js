@@ -281,6 +281,9 @@ async function handleVentaSubmit(e) {
         tipo: 'venta',
         fecha: formData.get('fecha'),
         raza: formData.get('raza'),
+        fecha: formData.get('fecha'),
+        raza: formData.get('raza'),
+        sexo: formData.get('sexo') || 'Macho',
         estado: formData.get('estado'),
         cantidad: cantidad,
         precio: precio,
@@ -477,9 +480,7 @@ function updateTable() {
                     <td>${formatDate(item.fecha)}</td>
                     <td><span class="badge-venta">Venta</span></td>
                     <td>${item.descripcion || '-'}</td>
-                    <td><span class="badge-venta">Venta</span></td>
-                    <td>${item.descripcion || '-'}</td>
-                    <td>${item.raza} (${item.estado || 'N/A'})</td>
+                    <td>${item.raza} (${item.sexo || '?'}) <br> <small>${item.estado || 'N/A'}</small></td>
                     <td>${item.cantidad}</td>
                     <td>$${item.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })} ${item.compartida ? '(50%)' : ''}</td>
                     <td>$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
@@ -488,6 +489,7 @@ function updateTable() {
                         <button class="btn-delete" onclick="deleteItem('${item.id}', 'venta')">Eliminar</button>
                     </td>
                 </tr>
+
             `;
         } else {
             return `
@@ -562,9 +564,7 @@ function editItem(id, tipo) {
         if (item) {
             document.getElementById('ventaFecha').value = item.fecha;
             document.getElementById('ventaRaza').value = item.raza;
-            document.getElementById('ventaFecha').value = item.fecha;
-            document.getElementById('ventaRaza').value = item.raza;
-            if (document.getElementById('ventaEstado')) document.getElementById('ventaEstado').value = item.estado || '';
+            if (document.getElementById('ventaSexo')) document.getElementById('ventaSexo').value = item.sexo || 'Macho';
             if (document.getElementById('ventaEstado')) document.getElementById('ventaEstado').value = item.estado || '';
             document.getElementById('ventaCantidad').value = item.cantidad;
             document.getElementById('ventaPrecio').value = item.precio;
@@ -599,6 +599,7 @@ function editItem(id, tipo) {
                 const updatedData = {
                     fecha: formData.get('fecha'),
                     raza: formData.get('raza'),
+                    sexo: formData.get('sexo') || 'Macho',
                     estado: formData.get('estado'),
                     cantidad: cantidad,
                     precio: precio,
