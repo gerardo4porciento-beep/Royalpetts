@@ -72,7 +72,10 @@
         <!-- Header -->
         <header class="dashboard-header">
             <div class="header-content">
-                <h1 class="dashboard-title">ROYALPETTS - Panel Administrativo</h1>
+                <h1 class="dashboard-title">
+                    <img src="../SEPARACION 6/LOGO 3.png" alt="RoyalPetts Logo" class="header-logo">
+                    ROYALPETTS - Panel Administrativo
+                </h1>
                 <button id="logoutBtn" class="btn-logout">Cerrar Sesión</button>
             </div>
         </header>
@@ -103,10 +106,24 @@
                     </div>
                 </div>
                 <div class="stat-card">
+                    <div class="stat-icon">📉</div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="totalCostos">$0</h3>
+                        <p class="stat-label">Total Costos</p>
+                    </div>
+                </div>
+                <div class="stat-card">
                     <div class="stat-icon">📊</div>
                     <div class="stat-info">
                         <h3 class="stat-value" id="gananciaNeta">$0</h3>
                         <p class="stat-label">Ganancia Neta</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💵</div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="totalDisponible">$0</h3>
+                        <p class="stat-label">Disponible</p>
                     </div>
                 </div>
             </div>
@@ -132,16 +149,21 @@
             <!-- Data Table -->
             <div class="table-section">
                 <div class="table-header">
-                    <h2 class="table-title">Registro de Datos</h2>
-                    <div class="table-filters">
-                        <select id="filterType" class="filter-select">
-                            <option value="all">Todos</option>
-                            <option value="venta">Ventas</option>
-                            <option value="gasto">Gastos</option>
-                        </select>
-                        <input type="text" id="searchInput" class="search-input" placeholder="Buscar...">
-                    </div>
+                    <h2 class="table-title">Registro de Movimientos</h2>
                 </div>
+
+                <!-- Filter Tabs -->
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">Todo</button>
+                    <button class="filter-tab" data-filter="venta">Ventas</button>
+                    <button class="filter-tab" data-filter="costo">Costos</button>
+                    <button class="filter-tab" data-filter="gasto">Gastos</button>
+                </div>
+
+                <div class="table-actions-bar">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar...">
+                </div>
+
                 <div class="table-container">
                     <table id="dataTable" class="data-table">
                         <thead>
@@ -149,11 +171,9 @@
                                 <th>Fecha</th>
                                 <th>Tipo</th>
                                 <th>Descripción</th>
-                                <th>Raza</th>
-                                <th>Cantidad</th>
-                                <th>Precio Unitario</th>
-                                <th>Total</th>
-                                <th>Acciones</th>
+                                <th>Detalle</th>
+                                <th class="mobile-hidden">Monto/Total</th>
+                                <th class="mobile-hidden">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">

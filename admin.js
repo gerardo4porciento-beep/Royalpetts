@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.warn('Firebase no disponible, mostrando dashboard sin datos');
                 updateStats();
                 updateCharts();
-                updateTables();
+                updateTable();
             }
         }, 5000);
     } else {
@@ -108,12 +108,28 @@ function setupEventListeners() {
             gastoForm.addEventListener('submit', handleGastoSubmit);
         }
 
-        // Filters (Search inputs for each table)
-        ['searchVentas', 'searchCostos', 'searchGastos'].forEach(id => {
-            const input = document.getElementById(id);
-            if (input) {
-                input.addEventListener('input', (e) => filterTable(e.target.id));
-            }
+        // Filters
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => updateTable());
+        }
+
+        // Tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                updateTable();
+            });
+        });
+
+        // Tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                updateTable();
+            });
         });
 
         // Modal close buttons
@@ -171,7 +187,11 @@ function handleLogin(e) {
                     // Mostrar dashboard vacío
                     updateStats();
                     updateCharts();
-                    updateTables();
+                    updateStats();
+                    updateCharts();
+                    updateStats();
+                    updateCharts();
+                    updateTable();
                 }
             }, 5000);
         }
@@ -252,7 +272,7 @@ function loadDashboard() {
             });
             updateStats();
             updateCharts();
-            updateTables();
+            updateTable();
         }, (error) => {
             console.error('Error cargando gastos:', error);
         });
@@ -267,7 +287,7 @@ function loadDashboard() {
             });
             updateStats();
             updateCharts();
-            updateTables();
+            updateTable();
         }, (error) => {
             console.error('Error cargando costos:', error);
         });
@@ -390,15 +410,30 @@ async function handleGastoSubmit(e) {
 function updateStats() {
     const totalVendidos = ventas.reduce((sum, v) => sum + v.cantidad, 0);
     const totalVentas = ventas.reduce((sum, v) => sum + v.total, 0);
-    const totalGastos = gastos.reduce((sum, g) => sum + g.total, 0);
-    const totalCostos = costos.reduce((sum, c) => sum + c.monto, 0);
-    const gananciaNeta = totalVentas - totalGastos - totalCostos;
+
+    // Separar gastos reales de costos legacy (guardados como gastos)
+    const trueGastos = gastos.filter(g => g.categoria !== 'Costo de Venta' && g.categoria !== 'Comisión Socio');
+    const legacyCostos = gastos.filter(g => g.categoria === 'Costo de Venta' || g.categoria === 'Comisión Socio');
+
+    const totalGastos = trueGastos.reduce((sum, g) => sum + g.total, 0);
+    const totalCostos = costos.reduce((sum, c) => sum + c.monto, 0) +
+        legacyCostos.reduce((sum, c) => sum + (c.monto || c.total), 0);
+
+    // Solicitud usuario: No descontar gastos, solo costos y comisiones
+    const gananciaNeta = totalVentas - totalCostos;
+
+    // Solicitud usuario: Nuevo cuadro "Disponible" = Ganancia - Gastos
+    const totalDisponible = gananciaNeta - totalGastos;
 
     document.getElementById('totalVendidos').textContent = totalVendidos;
     document.getElementById('totalVentas').textContent = `$${totalVentas.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
     document.getElementById('totalGastos').textContent = `$${totalGastos.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
     document.getElementById('totalCostos').textContent = `$${totalCostos.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
     document.getElementById('gananciaNeta').textContent = `$${gananciaNeta.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+    // Verificar si existe el elemento antes de actualizarlo (por si acaso caché viejo de HTML)
+    if (document.getElementById('totalDisponible')) {
+        document.getElementById('totalDisponible').textContent = `$${totalDisponible.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+    }
 }
 
 function updateCharts() {
@@ -455,6 +490,7 @@ function updateVentasMesChart() {
 
 function updateVentasRazaChart() {
     const ctx = document.getElementById('ventasRazaChart');
+    if (!ctx) return;
 
     // Agrupar ventas por raza
     const ventasPorRaza = {};
@@ -496,96 +532,161 @@ function updateVentasRazaChart() {
     });
 }
 
-function toggleMobileRow(id) {
-    const row = document.getElementById(`row-${id}`);
-    const btn = document.getElementById(`btn-toggle-${id}`);
-    if (row) {
-        row.classList.toggle('expanded');
-        const isExpanded = row.classList.contains('expanded');
-        if (btn) btn.innerHTML = isExpanded ? '▲ Ocultar Detalles' : '▼ Ver Detalles';
+// Consolidated Table Update
+function updateTable() {
+    const tbody = document.getElementById('tableBody');
+    const searchInput = document.getElementById('searchInput');
+    const searchText = searchInput ? searchInput.value.toLowerCase() : '';
+
+    // Determine current filter from active tab
+    let activeTab = document.querySelector('.filter-tab.active');
+    if (!activeTab) {
+        // Default to 'all' if no active tab found
+        activeTab = document.querySelector('.filter-tab[data-filter="all"]');
+        if (activeTab) activeTab.classList.add('active');
     }
-}
+    currentFilter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
 
-function updateTables() {
-    // Render Ventas
-    const ventasBody = document.getElementById('ventasTableBody');
-    ventasBody.innerHTML = ventas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
-        .map(venta => `
-            <tr id="row-${venta.id}">
-                <td data-label="Fecha">${formatDate(venta.fecha)}</td>
-                <td data-label="Tipo"><span class="badge-venta">Venta</span></td>
-                <td data-label="Descripción">${venta.descripcion || '-'}</td>
-                <td data-label="Detalle"><strong>${venta.raza}</strong> <small>(${venta.sexo || '?'})</small><br><small>${venta.estado || ''}</small></td>
-                <td data-label="Cantidad">${venta.cantidad}</td>
-                <td data-label="Precio">$${venta.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
-                <td data-label="Total">$${venta.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
-                <td data-label="Acciones">
-                    <button class="btn-edit" onclick="editItem('${venta.id}', 'venta')">Editar</button>
-                    <button class="btn-delete" onclick="deleteItem('${venta.id}', 'venta')">Eliminar</button>
-                </td>
-            </tr>
-        `).join('');
+    // Split Gastos into True Gastos and Legacy Costs
+    const trueGastos = [];
+    const legacyCostos = [];
 
-    // Render Costos
-    const costosBody = document.getElementById('costosTableBody');
-    costosBody.innerHTML = costos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
-        .map(costo => `
-            <tr id="row-${costo.id}">
-                <td data-label="Fecha">${formatDate(costo.fecha)}</td>
-                <td data-label="Tipo"><span class="badge-costo" style="background: #ffea20; color: #1a1a1a; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Costo</span></td>
-                <td data-label="Descripción">${costo.descripcion}</td>
-                <td data-label="Monto">$${costo.monto.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
-                <td data-label="Acciones">
-                    <button class="btn-delete" onclick="deleteItem('${costo.id}', 'costo')">Eliminar</button>
-                </td>
-            </tr>
-        `).join('');
-
-    // Render Gastos
-    const gastosBody = document.getElementById('gastosTableBody');
-    gastosBody.innerHTML = gastos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
-        .map(gasto => `
-            <tr id="row-${gasto.id}">
-                <td data-label="Fecha">${formatDate(gasto.fecha)}</td>
-                <td data-label="Tipo"><span class="badge-gasto">Gasto</span></td>
-                <td data-label="Descripción">${gasto.descripcion}</td>
-                <td data-label="Concepto"><strong>${gasto.categoria}</strong></td>
-                <td data-label="Monto">$${gasto.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
-                <td data-label="Acciones">
-                    <button class="btn-edit" onclick="editItem('${gasto.id}', 'gasto')">Editar</button>
-                    <button class="btn-delete" onclick="deleteItem('${gasto.id}', 'gasto')">Eliminar</button>
-                </td>
-            </tr>
-        `).join('');
-
-    // Apply filters
-    filterTable('searchVentas');
-    filterTable('searchCostos');
-    filterTable('searchGastos');
-}
-
-function filterTable(inputId) {
-    let tableType, rows;
-
-    if (inputId === 'searchVentas') {
-        rows = document.querySelectorAll('#ventasTableBody tr');
-    } else if (inputId === 'searchCostos') {
-        rows = document.querySelectorAll('#costosTableBody tr');
-    } else if (inputId === 'searchGastos') {
-        rows = document.querySelectorAll('#gastosTableBody tr');
-    } else {
-        return;
-    }
-
-    const input = document.getElementById(inputId);
-    if (!input) return;
-
-    const searchText = input.value.toLowerCase();
-
-    rows.forEach(row => {
-        const texto = row.textContent.toLowerCase();
-        row.style.display = texto.includes(searchText) ? '' : 'none';
+    gastos.forEach(g => {
+        if (g.categoria === 'Costo de Venta' || g.categoria === 'Comisión Socio') {
+            legacyCostos.push(g);
+        } else {
+            trueGastos.push(g);
+        }
     });
+
+    // Merge all data
+    let allData = [
+        ...ventas.map(v => ({ ...v, dataType: 'venta', collection: 'ventas' })),
+        ...trueGastos.map(g => ({ ...g, dataType: 'gasto', collection: 'gastos' })),
+        ...costos.map(c => ({ ...c, dataType: 'costo', collection: 'costos' })),
+        ...legacyCostos.map(c => ({ ...c, dataType: 'costo', collection: 'gastos', isLegacy: true }))
+    ];
+
+    // Filter by type
+    if (currentFilter !== 'all') {
+        allData = allData.filter(item => item.dataType === currentFilter);
+    }
+
+    // Filter by search text
+    if (searchText) {
+        allData = allData.filter(item => {
+            const text = (
+                (item.descripcion || '') +
+                (item.raza || '') +
+                (item.categoria || '') +
+                (item.dataType || '')
+            ).toLowerCase();
+            return text.includes(searchText);
+        });
+    }
+
+    // Sort by date desc
+    allData.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+    // Render
+    tbody.innerHTML = allData.map(item => {
+        const dateStr = formatDate(item.fecha);
+        const tipoBadge = getBadge(item.dataType);
+
+        let detalleHtml = '';
+        let montoHtml = '';
+        let mobileDetailHtml = '';
+
+        // Use total, monto, or fallback
+        const amount = item.monto || item.total || 0;
+
+        if (item.dataType === 'venta') {
+            detalleHtml = `
+                <div><strong>${item.raza}</strong></div>
+                <div class="text-sm text-muted">${item.sexo || ''}, ${item.estado || ''}</div>
+                <div class="text-sm">Cant: ${item.cantidad}</div>
+            `;
+            montoHtml = `$${amount.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+            mobileDetailHtml = `
+                <p><strong>Raza:</strong> ${item.raza}</p>
+                <p><strong>Cant:</strong> ${item.cantidad}</p>
+                <p><strong>Precio:</strong> $${item.precio}</p>
+                <p><strong>Total:</strong> $${amount}</p>
+                <p><strong>Desc:</strong> ${item.descripcion || '-'}</p>
+            `;
+        } else if (item.dataType === 'gasto') {
+            detalleHtml = `
+                <div><strong>${item.categoria}</strong></div>
+            `;
+            montoHtml = `$${amount.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+            mobileDetailHtml = `
+                <p><strong>Categoría:</strong> ${item.categoria}</p>
+                <p><strong>Monto:</strong> $${amount}</p>
+                <p><strong>Desc:</strong> ${item.descripcion}</p>
+            `;
+        } else if (item.dataType === 'costo') {
+            detalleHtml = `
+                <div><em>${item.categoria || 'Costo Operativo'}</em></div>
+            `;
+            montoHtml = `$${amount.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+            mobileDetailHtml = `
+                <p><strong>Concepto:</strong> ${item.categoria || 'Costo'}</p>
+                <p><strong>Monto:</strong> $${amount}</p>
+                <p><strong>Desc:</strong> ${item.descripcion}</p>
+            `;
+        }
+
+        return `
+            <tr id="row-${item.id}">
+                <td>
+                    ${dateStr}
+                    <div class="mobile-only-row">
+                        ${tipoBadge}
+                    </div>
+                </td>
+                <td class="mobile-hidden">${tipoBadge}</td>
+                <td class="mobile-hidden">${item.descripcion || '-'}</td>
+                <td>${detalleHtml}</td>
+                <td class="mobile-hidden">${montoHtml}</td>
+                <td class="mobile-hidden">
+                    <button class="btn-delete" onclick="deleteItem('${item.id}', '${item.collection}')">×</button>
+                    ${!item.isLegacy && item.dataType !== 'costo' ? `<button class="btn-edit" onclick="editItem('${item.id}', '${item.dataType}')">✎</button>` : ''}
+                </td>
+                <td class="mobile-only-cell"> 
+                     <button id="btn-toggle-${item.id}" class="btn-toggle-mobile" onclick="toggleMobileRow('${item.id}')">▼</button>
+                </td>
+            </tr>
+            <tr id="detail-${item.id}" class="mobile-detail-row hidden">
+                <td colspan="6">
+                    <div class="mobile-detail-content">
+                        ${mobileDetailHtml}
+                        <div class="mobile-actions">
+                             <button class="btn-delete" onclick="deleteItem('${item.id}', '${item.collection}')">Eliminar</button>
+                             ${!item.isLegacy && item.dataType !== 'costo' ? `<button class="btn-edit" onclick="editItem('${item.id}', '${item.dataType}')">Editar</button>` : ''}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+
+    // Legacy filter function removal as we handle it above
+}
+
+function getBadge(type) {
+    if (type === 'venta') return '<span class="badge-venta">Venta</span>';
+    if (type === 'gasto') return '<span class="badge-gasto">Gasto</span>';
+    if (type === 'costo') return '<span class="badge-costo">Costo</span>';
+    return '';
+}
+
+function toggleMobileRow(id) {
+    const row = document.getElementById(`detail-${id}`);
+    const btn = document.getElementById(`btn-toggle-${id}`);
+    if (row && btn) {
+        row.classList.toggle('hidden');
+        btn.innerHTML = row.classList.contains('hidden') ? '▼' : '▲';
+    }
 }
 
 function formatDate(dateString) {
@@ -593,20 +694,19 @@ function formatDate(dateString) {
     return date.toLocaleDateString('es-VE');
 }
 
-async function deleteItem(id, tipo) {
+async function deleteItem(id, collection) {
     if (!confirm('¿Estás seguro de eliminar este registro?')) return;
 
     if (!window.db) {
         alert('Error: Firebase no está conectado. Por favor, recarga la página.');
-        console.error('window.db no está disponible');
         return;
     }
 
     try {
-        const collection = tipo === 'venta' ? 'ventas' : (tipo === 'gasto' ? 'gastos' : 'costos');
         console.log('Eliminando registro:', id, 'de', collection);
         await window.db.collection(collection).doc(id).delete();
         console.log('Registro eliminado correctamente');
+        // No need to alert, the listener will update the UI
     } catch (error) {
         console.error('Error eliminando registro:', error);
         alert('Error al eliminar el registro: ' + error.message);
@@ -740,6 +840,45 @@ style.textContent = `
         border-radius: 4px;
         font-size: 12px;
         font-weight: 600;
+    }
+    .badge-costo {
+        background: #ffea20;
+        color: #1a1a1a;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    /* Filter Tabs */
+    .filter-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+    .filter-tab {
+        background: #2a2a2a;
+        border: 1px solid #444;
+        color: #888;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+    .filter-tab.active {
+        background: #00b9ec;
+        color: white;
+        border-color: #00b9ec;
+    }
+    .filter-tab:hover:not(.active) {
+        background: #333;
+        color: #ccc;
+    }
+    .table-actions-bar {
+        margin-bottom: 15px;
     }
 `;
 document.head.appendChild(style);

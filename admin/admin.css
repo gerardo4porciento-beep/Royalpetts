@@ -27,137 +27,28 @@
 
 body {
     font-family: 'Skater Girls Rock', Arial, sans-serif;
-    background: var(--gray-light);
-    color: var(--black);
+    background: var(--color-azul);
+    /* Fondo Azul */
+    color: var(--white);
+    /* Texto blanco para contraste */
 }
 
 .hidden {
     display: none !important;
 }
 
-/* Login Panel */
-.login-panel {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--color-azul) 0%, var(--color-verde) 100%);
-}
-
-.login-container {
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-}
-
-.login-box {
-    background: var(--color-rosa);
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-}
-
-.login-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.logo-img-login {
-    max-width: 120px;
-    height: auto;
-    object-fit: contain;
-}
-
-.login-title {
-    font-size: 48px;
-    font-weight: 900;
-    text-align: center;
-    color: var(--white);
-    margin-bottom: 10px;
-}
-
-.login-subtitle {
-    font-size: 20px;
-    text-align: center;
-    color: var(--black);
-    margin-bottom: 30px;
-}
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.form-group label {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--black);
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    padding: 12px;
-    background: var(--white);
-    border: 2px solid var(--gray);
-    border-radius: 8px;
-    font-size: 16px;
-    font-family: Arial, sans-serif;
-    color: var(--black);
-    transition: border-color 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--color-azul);
-}
-
-.btn-login {
-    background: var(--white);
-    color: var(--black);
-    border: none;
-    padding: 14px;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Skater Girls Rock', Arial, sans-serif;
-}
-
-.btn-login:hover {
-    background: var(--gray-light);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.login-hint {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 12px;
-    color: var(--white);
-    font-family: Arial, sans-serif;
-}
+/* ... Login Panel styles skipped ... */
 
 /* Dashboard */
 .dashboard {
     min-height: 100vh;
-    background: var(--gray-light);
+    background: var(--color-azul);
+    /* Asegurar fondo azul */
 }
 
 .dashboard-header {
-    background: var(--color-azul);
+    background: var(--color-rosa);
+    /* Cinta Rosada */
     color: var(--white);
     padding: 20px 40px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -174,6 +65,17 @@ body {
 .dashboard-title {
     font-size: 32px;
     font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-logo {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    /* Volver blanco el logo */
 }
 
 .btn-logout {
@@ -203,18 +105,20 @@ body {
 /* Stats Grid */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
     margin-bottom: 30px;
 }
 
 .stat-card {
     background: var(--white);
     border-radius: 12px;
-    padding: 25px;
+    padding: 15px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 20px;
+    text-align: center;
+    gap: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
 }
@@ -224,20 +128,21 @@ body {
 }
 
 .stat-icon {
-    font-size: 48px;
+    font-size: 28px;
 }
 
 .stat-value {
-    font-size: 32px;
+    font-size: 20px;
     font-weight: 900;
     color: var(--color-azul);
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 
 .stat-label {
-    font-size: 14px;
+    font-size: 12px;
     color: var(--gray-dark);
     font-family: Arial, sans-serif;
+    line-height: 1.2;
 }
 
 /* Charts Grid */
@@ -529,9 +434,9 @@ body {
 /* Responsive Mobile Optimization */
 @media (max-width: 768px) {
 
-    /* Compact Stats Grid - 2 columns */
+    /* Compact Stats Grid - 2 columns or scrollable */
     .stats-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 8px;
     }
 

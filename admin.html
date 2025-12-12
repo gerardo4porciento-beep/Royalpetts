@@ -72,7 +72,10 @@
         <!-- Header -->
         <header class="dashboard-header">
             <div class="header-content">
-                <h1 class="dashboard-title">ROYALPETTS - Panel Administrativo</h1>
+                <h1 class="dashboard-title">
+                    <img src="SEPARACION 6/LOGO 3.png" alt="RoyalPetts Logo" class="header-logo">
+                    ROYALPETTS - Panel Administrativo
+                </h1>
                 <button id="logoutBtn" class="btn-logout">Cerrar Sesión</button>
             </div>
         </header>
@@ -116,6 +119,13 @@
                         <p class="stat-label">Ganancia Neta</p>
                     </div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💵</div>
+                    <div class="stat-info">
+                        <h3 class="stat-value" id="totalDisponible">$0</h3>
+                        <p class="stat-label">Disponible</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Charts Section -->
@@ -137,82 +147,40 @@
             </div>
 
             <!-- Data Table -->
-            <!-- Tablas de Registros -->
-            <div class="tables-container">
-                <!-- Tabla de Ventas -->
-                <div class="table-section">
-                    <div class="table-header">
-                        <h2 class="table-title">Registro de Ventas</h2>
-                        <input type="text" id="searchVentas" class="search-input" placeholder="Buscar ventas...">
-                    </div>
-                    <div class="table-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Tipo</th>
-                                    <th>Descripción</th>
-                                    <th>Raza</th>
-                                    <th>Cantidad</th>
-                                    <th>Precio</th>
-                                    <th>Total</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="ventasTableBody">
-                                <!-- Ventas will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
+            <!-- Data Table -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h2 class="table-title">Registro de Movimientos</h2>
                 </div>
 
-                <!-- Tabla de Costos -->
-                <div class="table-section">
-                    <div class="table-header">
-                        <h2 class="table-title">Registro de Costos</h2>
-                        <input type="text" id="searchCostos" class="search-input" placeholder="Buscar costos...">
-                    </div>
-                    <div class="table-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Tipo</th>
-                                    <th>Descripción</th>
-                                    <th>Monto</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="costosTableBody">
-                                <!-- Costos will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
+                <!-- Filter Tabs -->
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">Todo</button>
+                    <button class="filter-tab" data-filter="venta">Ventas</button>
+                    <button class="filter-tab" data-filter="costo">Costos</button>
+                    <button class="filter-tab" data-filter="gasto">Gastos</button>
                 </div>
 
-                <!-- Tabla de Gastos -->
-                <div class="table-section">
-                    <div class="table-header">
-                        <h2 class="table-title">Registro de Gastos</h2>
-                        <input type="text" id="searchGastos" class="search-input" placeholder="Buscar gastos...">
-                    </div>
-                    <div class="table-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Tipo</th>
-                                    <th>Descripción</th>
-                                    <th>Categoría</th>
-                                    <th>Monto</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="gastosTableBody">
-                                <!-- Gastos will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="table-actions-bar">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar...">
+                </div>
+
+                <div class="table-container">
+                    <table id="dataTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th>Detalle</th>
+                                <th class="mobile-hidden">Monto/Total</th>
+                                <th class="mobile-hidden">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>
