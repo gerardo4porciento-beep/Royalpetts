@@ -100,7 +100,7 @@ body {
 .form-group label {
     font-size: 14px;
     font-weight: 600;
-    color: var(--white);
+    color: var(--black);
 }
 
 .form-group input,
@@ -506,23 +506,22 @@ body {
     .charts-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .form-row {
         grid-template-columns: 1fr;
     }
-    
+
     .table-header {
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .data-table {
         font-size: 12px;
     }
-    
+
     .data-table th,
     .data-table td {
         padding: 8px;
     }
 }
-

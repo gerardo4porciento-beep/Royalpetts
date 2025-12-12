@@ -270,7 +270,11 @@ async function handleVentaSubmit(e) {
     const formData = new FormData(e.target);
     const cantidad = parseInt(formData.get('cantidad'));
     const precio = parseFloat(formData.get('precio'));
+    const costo = parseFloat(formData.get('costo')) || 0;
     const esCompartida = formData.get('compartida') === 'si';
+
+    // Si es compartida, el costo también se divide
+    const costoFinal = esCompartida ? (costo / 2) : costo;
     const total = esCompartida ? (cantidad * precio) / 2 : (cantidad * precio);
 
     const venta = {
@@ -280,6 +284,7 @@ async function handleVentaSubmit(e) {
         estado: formData.get('estado'),
         cantidad: cantidad,
         precio: precio,
+        costo: costoFinal, // Guardamos el costo (ya dividido si aplica)
         compartida: esCompartida,
         descripcion: formData.get('descripcion') || '',
         total: total,
@@ -290,6 +295,25 @@ async function handleVentaSubmit(e) {
         console.log('Guardando venta en Firebase...', venta);
         const docRef = await window.db.collection('ventas').add(venta);
         console.log('Venta guardada con ID:', docRef.id);
+
+        // Si hay costo, crear Gasto automáticamente
+        if (costoFinal > 0) {
+            const gastoAutomatico = {
+                tipo: 'gasto',
+                fecha: formData.get('fecha'),
+                categoria: 'Costo de Venta',
+                monto: costoFinal,
+                descripcion: `Costo asociado a venta de ${venta.raza} (${docRef.id})`,
+                total: costoFinal,
+                ventaId: docRef.id, // Referencia cruzada
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            console.log('Creando gasto automático por costo...', gastoAutomatico);
+            await window.db.collection('gastos').add(gastoAutomatico);
+            console.log('Gasto automático creado');
+        }
+
         closeModal('ventaModal');
         alert('Venta guardada correctamente');
     } catch (error) {
@@ -541,8 +565,12 @@ function editItem(id, tipo) {
             document.getElementById('ventaFecha').value = item.fecha;
             document.getElementById('ventaRaza').value = item.raza;
             if (document.getElementById('ventaEstado')) document.getElementById('ventaEstado').value = item.estado || '';
+            if (document.getElementById('ventaEstado')) document.getElementById('ventaEstado').value = item.estado || '';
             document.getElementById('ventaCantidad').value = item.cantidad;
             document.getElementById('ventaPrecio').value = item.precio;
+            // Costo: Si es compartida y tenía costo, mostrar el doble para reflejar el original (aproximado) o mostrar el guardado
+            // Nota: Guardamos costoFinal. Si queremos editar, mostramos ese.
+            if (document.getElementById('ventaCosto')) document.getElementById('ventaCosto').value = item.costo || '';
             if (document.getElementById('ventaCompartida')) document.getElementById('ventaCompartida').value = item.compartida ? 'si' : 'no';
             document.getElementById('ventaDescripcion').value = item.descripcion;
             openModal('ventaModal');
@@ -561,7 +589,11 @@ function editItem(id, tipo) {
                 const formData = new FormData(e.target);
                 const cantidad = parseInt(formData.get('cantidad'));
                 const precio = parseFloat(formData.get('precio'));
+                const costo = parseFloat(formData.get('costo')) || 0;
                 const esCompartida = formData.get('compartida') === 'si';
+
+                // Recalcular costo final
+                const costoFinal = esCompartida ? (costo / 2) : costo;
                 const total = esCompartida ? (cantidad * precio) / 2 : (cantidad * precio);
 
                 const updatedData = {
@@ -570,6 +602,7 @@ function editItem(id, tipo) {
                     estado: formData.get('estado'),
                     cantidad: cantidad,
                     precio: precio,
+                    costo: costoFinal,
                     compartida: esCompartida,
                     descripcion: formData.get('descripcion') || '',
                     total: total,
