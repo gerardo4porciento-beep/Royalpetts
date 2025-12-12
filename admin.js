@@ -268,15 +268,21 @@ async function handleVentaSubmit(e) {
     }
 
     const formData = new FormData(e.target);
+    const cantidad = parseInt(formData.get('cantidad'));
+    const precio = parseFloat(formData.get('precio'));
+    const esCompartida = formData.get('compartida') === 'si';
+    const total = esCompartida ? (cantidad * precio) / 2 : (cantidad * precio);
+
     const venta = {
         tipo: 'venta',
         fecha: formData.get('fecha'),
         raza: formData.get('raza'),
         estado: formData.get('estado'),
-        cantidad: parseInt(formData.get('cantidad')),
-        precio: parseFloat(formData.get('precio')),
+        cantidad: cantidad,
+        precio: precio,
+        compartida: esCompartida,
         descripcion: formData.get('descripcion') || '',
-        total: parseFloat(formData.get('cantidad')) * parseFloat(formData.get('precio')),
+        total: total,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
@@ -451,7 +457,7 @@ function updateTable() {
                     <td>${item.descripcion || '-'}</td>
                     <td>${item.raza} (${item.estado || 'N/A'})</td>
                     <td>${item.cantidad}</td>
-                    <td>$${item.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                    <td>$${item.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })} ${item.compartida ? '(50%)' : ''}</td>
                     <td>$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
                     <td>
                         <button class="btn-edit" onclick="editItem('${item.id}', 'venta')">Editar</button>
@@ -536,8 +542,8 @@ function editItem(id, tipo) {
             document.getElementById('ventaRaza').value = item.raza;
             if (document.getElementById('ventaEstado')) document.getElementById('ventaEstado').value = item.estado || '';
             document.getElementById('ventaCantidad').value = item.cantidad;
-            document.getElementById('ventaCantidad').value = item.cantidad;
             document.getElementById('ventaPrecio').value = item.precio;
+            if (document.getElementById('ventaCompartida')) document.getElementById('ventaCompartida').value = item.compartida ? 'si' : 'no';
             document.getElementById('ventaDescripcion').value = item.descripcion;
             openModal('ventaModal');
             // Modificar el submit para actualizar en lugar de crear
@@ -553,17 +559,20 @@ function editItem(id, tipo) {
                 }
 
                 const formData = new FormData(e.target);
+                const cantidad = parseInt(formData.get('cantidad'));
+                const precio = parseFloat(formData.get('precio'));
+                const esCompartida = formData.get('compartida') === 'si';
+                const total = esCompartida ? (cantidad * precio) / 2 : (cantidad * precio);
+
                 const updatedData = {
                     fecha: formData.get('fecha'),
                     raza: formData.get('raza'),
-                    fecha: formData.get('fecha'),
-                    raza: formData.get('raza'),
                     estado: formData.get('estado'),
-                    cantidad: parseInt(formData.get('cantidad')),
-                    cantidad: parseInt(formData.get('cantidad')),
-                    precio: parseFloat(formData.get('precio')),
+                    cantidad: cantidad,
+                    precio: precio,
+                    compartida: esCompartida,
                     descripcion: formData.get('descripcion') || '',
-                    total: parseFloat(formData.get('cantidad')) * parseFloat(formData.get('precio')),
+                    total: total,
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
 

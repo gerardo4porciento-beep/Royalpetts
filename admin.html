@@ -232,13 +232,20 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="ventaCantidad">Cantidad</label>
-                            <input type="number" id="ventaCantidad" name="cantidad" min="1" value="1" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="ventaPrecio">Precio Unitario ($)</label>
+                            <label for="ventaPrecio">Precio ($)</label>
                             <input type="number" id="ventaPrecio" name="precio" step="0.01" min="0" required>
                         </div>
+                        <div class="form-group">
+                            <label for="ventaCompartida">¿Venta Compartida?</label>
+                            <select id="ventaCompartida" name="compartida" required>
+                                <option value="no">No</option>
+                                <option value="si">Sí (50%)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ventaCantidad">Cantidad</label>
+                        <input type="number" id="ventaCantidad" name="cantidad" min="1" value="1" required>
                     </div>
                     <div class="form-group">
                         <label for="ventaDescripcion">Descripción</label>
