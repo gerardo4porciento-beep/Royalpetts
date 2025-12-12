@@ -438,7 +438,62 @@ function updateStats() {
 
 function updateCharts() {
     updateVentasMesChart();
+    updateVentasEstadoChart(); // New chart
     updateVentasRazaChart();
+}
+
+function updateVentasEstadoChart() {
+    const ctx = document.getElementById('ventasEstadoChart');
+    if (!ctx) return;
+
+    // Agrupar ventas por estado
+    const ventasPorEstado = {};
+    ventas.forEach(v => {
+        const estado = v.estado || 'Desconocido';
+        ventasPorEstado[estado] = (ventasPorEstado[estado] || 0) + v.cantidad;
+    });
+
+    const estados = Object.keys(ventasPorEstado);
+    const cantidades = estados.map(e => ventasPorEstado[e]);
+
+    // Labels with counts
+    const labelsWithCounts = estados.map((e, index) => `${e}: ${cantidades[index]}`);
+
+    if (window.ventasEstadoChartInstance) {
+        window.ventasEstadoChartInstance.destroy();
+    }
+
+    window.ventasEstadoChartInstance = new Chart(ctx, {
+        type: 'pie', // Using pie for variety/suitability
+        data: {
+            labels: labelsWithCounts,
+            datasets: [{
+                data: cantidades,
+                backgroundColor: [
+                    '#fe9e5b', // Orange
+                    '#32f4bb', // Green
+                    '#00b9ec', // Blue
+                    '#ff7db2', // Pink
+                    '#ffea20'  // Yellow
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        color: '#1A1A1A',
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
 function updateVentasMesChart() {
@@ -501,6 +556,9 @@ function updateVentasRazaChart() {
     const razas = Object.keys(ventasPorRaza);
     const cantidades = razas.map(raza => ventasPorRaza[raza]);
 
+    // Create labels with counts
+    const labelsWithCounts = razas.map((raza, index) => `${raza}: ${cantidades[index]}`);
+
     if (window.ventasRazaChartInstance) {
         window.ventasRazaChartInstance.destroy();
     }
@@ -508,7 +566,7 @@ function updateVentasRazaChart() {
     window.ventasRazaChartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: razas,
+            labels: labelsWithCounts,
             datasets: [{
                 data: cantidades,
                 backgroundColor: [
@@ -525,7 +583,13 @@ function updateVentasRazaChart() {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'bottom'
+                    position: 'right', // Legend on the right
+                    labels: {
+                        color: '#1A1A1A', // Ensure text is visible (Using dark gray/block)
+                        font: {
+                            size: 12
+                        }
+                    }
                 }
             }
         }
