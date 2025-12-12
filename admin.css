@@ -591,6 +591,11 @@ body {
         gap: 20px;
     }
 
+    /* Ocultar Ventas por Mes en Móvil (Solicitud Usuario) */
+    .chart-card:has(#ventasMesChart) {
+        display: none !important;
+    }
+
     .chart-card {
         min-height: 300px;
         /* Ensure charts have height */
