@@ -272,6 +272,7 @@ async function handleVentaSubmit(e) {
         tipo: 'venta',
         fecha: formData.get('fecha'),
         raza: formData.get('raza'),
+        ciudad: formData.get('ciudad'),
         cantidad: parseInt(formData.get('cantidad')),
         precio: parseFloat(formData.get('precio')),
         descripcion: formData.get('descripcion') || '',
@@ -446,7 +447,9 @@ function updateTable() {
                     <td>${formatDate(item.fecha)}</td>
                     <td><span class="badge-venta">Venta</span></td>
                     <td>${item.descripcion || '-'}</td>
-                    <td>${item.raza}</td>
+                    <td><span class="badge-venta">Venta</span></td>
+                    <td>${item.descripcion || '-'}</td>
+                    <td>${item.raza} (${item.ciudad || 'N/A'})</td>
                     <td>${item.cantidad}</td>
                     <td>$${item.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
                     <td>$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
@@ -529,6 +532,7 @@ function editItem(id, tipo) {
         if (item) {
             document.getElementById('ventaFecha').value = item.fecha;
             document.getElementById('ventaRaza').value = item.raza;
+            if (document.getElementById('ventaCiudad')) document.getElementById('ventaCiudad').value = item.ciudad || '';
             document.getElementById('ventaCantidad').value = item.cantidad;
             document.getElementById('ventaPrecio').value = item.precio;
             document.getElementById('ventaDescripcion').value = item.descripcion;
@@ -549,6 +553,7 @@ function editItem(id, tipo) {
                 const updatedData = {
                     fecha: formData.get('fecha'),
                     raza: formData.get('raza'),
+                    ciudad: formData.get('ciudad'),
                     cantidad: parseInt(formData.get('cantidad')),
                     precio: parseFloat(formData.get('precio')),
                     descripcion: formData.get('descripcion') || '',

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,13 +26,14 @@
     <script src="firebase-config.js"></script>
     <script>
         // Verificar que los scripts se cargaron
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             console.log('Página completamente cargada');
             console.log('Firebase disponible:', typeof firebase !== 'undefined');
             console.log('initFirebase disponible:', typeof initFirebase !== 'undefined');
         });
     </script>
 </head>
+
 <body>
     <!-- Login Panel -->
     <div id="loginPanel" class="login-panel">
@@ -171,27 +173,69 @@
                     </div>
                     <div class="form-group">
                         <label for="ventaRaza">Raza</label>
-                        <input type="text" id="ventaRaza" name="raza" placeholder="Ej: Golden Retriever" required>
+                        <input type="text" id="ventaRaza" name="raza" list="razas-lista"
+                            placeholder="Escribe o selecciona..." required>
+                        <datalist id="razas-lista">
+                            <option value="Golden Retriever">
+                            <option value="Bulldog Francés">
+                            <option value="Poodle (Caniche)">
+                            <option value="Husky Siberiano">
+                            <option value="Pastor Alemán">
+                            <option value="Yorkshire Terrier">
+                            <option value="Beagle">
+                            <option value="Rottweiler">
+                            <option value="Chihuahua">
+                            <option value="Shih Tzu">
+                            <option value="Pug (Carlino)">
+                            <option value="Schnauzer">
+                            <option value="Boxer">
+                            <option value="Doberman">
+                            <option value="Cocker Spaniel">
+                            <option value="Bichón Maltés">
+                            <option value="Pomerania">
+                            <option value="Labrador Retriever">
+                            <option value="Jack Russell">
+                            <option value="Border Collie">
+                        </datalist>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="ventaCantidad">Cantidad</label>
-                        <input type="number" id="ventaCantidad" name="cantidad" min="1" value="1" required>
+                        <label for="ventaCiudad">Ciudad de Venta</label>
+                        <select id="ventaCiudad" name="ciudad" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="Caracas">Caracas</option>
+                            <option value="Valencia">Valencia</option>
+                            <option value="Maracay">Maracay</option>
+                            <option value="Barquisimeto">Barquisimeto</option>
+                            <option value="Maracaibo">Maracaibo</option>
+                            <option value="San Cristóbal">San Cristóbal</option>
+                            <option value="Mérida">Mérida</option>
+                            <option value="Puerto La Cruz">Puerto La Cruz</option>
+                            <option value="Lechería">Lechería</option>
+                            <option value="Margarita">Margarita</option>
+                            <option value="Otra">Otra</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ventaCantidad">Cantidad</label>
+                            <input type="number" id="ventaCantidad" name="cantidad" min="1" value="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ventaPrecio">Precio Unitario ($)</label>
+                            <input type="number" id="ventaPrecio" name="precio" step="0.01" min="0" required>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="ventaPrecio">Precio Unitario ($)</label>
-                        <input type="number" id="ventaPrecio" name="precio" step="0.01" min="0" required>
+                        <label for="ventaDescripcion">Descripción</label>
+                        <textarea id="ventaDescripcion" name="descripcion" rows="3"
+                            placeholder="Descripción adicional..."></textarea>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="ventaDescripcion">Descripción</label>
-                    <textarea id="ventaDescripcion" name="descripcion" rows="3" placeholder="Descripción adicional..."></textarea>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" data-modal="ventaModal">Cancelar</button>
-                    <button type="submit" class="btn-save">Guardar Venta</button>
-                </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" data-modal="ventaModal">Cancelar</button>
+                        <button type="submit" class="btn-save">Guardar Venta</button>
+                    </div>
             </form>
         </div>
     </div>
@@ -229,7 +273,8 @@
                 </div>
                 <div class="form-group">
                     <label for="gastoDescripcion">Descripción</label>
-                    <textarea id="gastoDescripcion" name="descripcion" rows="3" placeholder="Descripción del gasto..." required></textarea>
+                    <textarea id="gastoDescripcion" name="descripcion" rows="3" placeholder="Descripción del gasto..."
+                        required></textarea>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" data-modal="gastoModal">Cancelar</button>
@@ -241,5 +286,5 @@
 
     <script src="admin.js"></script>
 </body>
-</html>
 
+</html>
