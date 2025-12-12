@@ -8,10 +8,10 @@ let ventasUnsubscribe, gastosUnsubscribe;
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM cargado, inicializando...');
-    
+
     // Configurar event listeners primero
     setupEventListeners();
-    
+
     // Esperar a que Firebase esté cargado
     if (typeof firebase !== 'undefined') {
         console.log('Firebase SDK detectado, inicializando...');
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 1000);
     }
-    
+
     if (isAuthenticated) {
         console.log('Usuario autenticado, mostrando dashboard');
         showDashboard();
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadDashboard();
             }
         }, 100);
-        
+
         // Timeout después de 5 segundos
         setTimeout(() => {
             clearInterval(checkDb);
@@ -78,46 +78,46 @@ function setupEventListeners() {
         if (loginForm) {
             loginForm.addEventListener('submit', handleLogin);
         }
-        
+
         // Logout
         const logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', handleLogout);
         }
-        
+
         // Modals
         const btnCargarVenta = document.getElementById('btnCargarVenta');
         if (btnCargarVenta) {
             btnCargarVenta.addEventListener('click', () => openModal('ventaModal'));
         }
-        
+
         const btnCargarGasto = document.getElementById('btnCargarGasto');
         if (btnCargarGasto) {
             btnCargarGasto.addEventListener('click', () => openModal('gastoModal'));
         }
-        
+
         // Forms
         const ventaForm = document.getElementById('ventaForm');
         if (ventaForm) {
             ventaForm.addEventListener('submit', handleVentaSubmit);
         }
-        
+
         const gastoForm = document.getElementById('gastoForm');
         if (gastoForm) {
             gastoForm.addEventListener('submit', handleGastoSubmit);
         }
-        
+
         // Filters
         const filterType = document.getElementById('filterType');
         if (filterType) {
             filterType.addEventListener('change', filterTable);
         }
-        
+
         const searchInput = document.getElementById('searchInput');
         if (searchInput) {
             searchInput.addEventListener('input', filterTable);
         }
-        
+
         // Modal close buttons
         document.querySelectorAll('.modal-close, .btn-cancel').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -136,19 +136,19 @@ function setupEventListeners() {
 function handleLogin(e) {
     e.preventDefault();
     console.log('Intento de login...');
-    
+
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    
+
     console.log('Usuario:', username);
-    
+
     // Credenciales simples (en producción usar autenticación real)
     if (username === 'admin' && password === 'admin123') {
         console.log('Credenciales correctas, iniciando sesión...');
         localStorage.setItem('isAuthenticated', 'true');
         isAuthenticated = true;
         showDashboard();
-        
+
         // Intentar cargar dashboard, esperar a que db esté listo si es necesario
         if (window.db) {
             console.log('Firebase listo, cargando dashboard...');
@@ -163,7 +163,7 @@ function handleLogin(e) {
                     loadDashboard();
                 }
             }, 100);
-            
+
             // Timeout después de 5 segundos
             setTimeout(() => {
                 clearInterval(checkDbInterval);
@@ -186,7 +186,7 @@ function handleLogout() {
     // Desconectar listeners de Firestore
     if (ventasUnsubscribe) ventasUnsubscribe();
     if (gastosUnsubscribe) gastosUnsubscribe();
-    
+
     localStorage.setItem('isAuthenticated', 'false');
     isAuthenticated = false;
     ventas = [];
@@ -225,7 +225,7 @@ function loadDashboard() {
         console.error('Firebase no está inicializado');
         return;
     }
-    
+
     // Listener en tiempo real para ventas
     ventasUnsubscribe = window.db.collection('ventas')
         .orderBy('fecha', 'desc')
@@ -240,7 +240,7 @@ function loadDashboard() {
         }, (error) => {
             console.error('Error cargando ventas:', error);
         });
-    
+
     // Listener en tiempo real para gastos
     gastosUnsubscribe = window.db.collection('gastos')
         .orderBy('fecha', 'desc')
@@ -260,25 +260,26 @@ function loadDashboard() {
 // Ventas
 async function handleVentaSubmit(e) {
     e.preventDefault();
-    
+
     if (!window.db) {
         alert('Error: Firebase no está conectado. Por favor, recarga la página.');
         console.error('window.db no está disponible');
         return;
     }
-    
+
     const formData = new FormData(e.target);
     const venta = {
         tipo: 'venta',
         fecha: formData.get('fecha'),
         raza: formData.get('raza'),
+        estado: formData.get('estado'),
         cantidad: parseInt(formData.get('cantidad')),
         precio: parseFloat(formData.get('precio')),
         descripcion: formData.get('descripcion') || '',
         total: parseFloat(formData.get('cantidad')) * parseFloat(formData.get('precio')),
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
-    
+
     try {
         console.log('Guardando venta en Firebase...', venta);
         const docRef = await window.db.collection('ventas').add(venta);
@@ -294,13 +295,13 @@ async function handleVentaSubmit(e) {
 // Gastos
 async function handleGastoSubmit(e) {
     e.preventDefault();
-    
+
     if (!window.db) {
         alert('Error: Firebase no está conectado. Por favor, recarga la página.');
         console.error('window.db no está disponible');
         return;
     }
-    
+
     const formData = new FormData(e.target);
     const gasto = {
         tipo: 'gasto',
@@ -311,7 +312,7 @@ async function handleGastoSubmit(e) {
         total: parseFloat(formData.get('monto')),
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
-    
+
     try {
         console.log('Guardando gasto en Firebase...', gasto);
         const docRef = await window.db.collection('gastos').add(gasto);
@@ -330,11 +331,11 @@ function updateStats() {
     const totalVentas = ventas.reduce((sum, v) => sum + v.total, 0);
     const totalGastos = gastos.reduce((sum, g) => sum + g.total, 0);
     const gananciaNeta = totalVentas - totalGastos;
-    
+
     document.getElementById('totalVendidos').textContent = totalVendidos;
-    document.getElementById('totalVentas').textContent = `$${totalVentas.toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
-    document.getElementById('totalGastos').textContent = `$${totalGastos.toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
-    document.getElementById('gananciaNeta').textContent = `$${gananciaNeta.toLocaleString('es-VE', {minimumFractionDigits: 2})}`;
+    document.getElementById('totalVentas').textContent = `$${totalVentas.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+    document.getElementById('totalGastos').textContent = `$${totalGastos.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+    document.getElementById('gananciaNeta').textContent = `$${gananciaNeta.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
 }
 
 function updateCharts() {
@@ -344,21 +345,21 @@ function updateCharts() {
 
 function updateVentasMesChart() {
     const ctx = document.getElementById('ventasMesChart');
-    
+
     // Agrupar ventas por mes
     const ventasPorMes = {};
     ventas.forEach(v => {
         const mes = new Date(v.fecha).toLocaleDateString('es-VE', { year: 'numeric', month: 'short' });
         ventasPorMes[mes] = (ventasPorMes[mes] || 0) + v.total;
     });
-    
+
     const meses = Object.keys(ventasPorMes).sort();
     const valores = meses.map(mes => ventasPorMes[mes]);
-    
+
     if (window.ventasMesChartInstance) {
         window.ventasMesChartInstance.destroy();
     }
-    
+
     window.ventasMesChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
@@ -391,20 +392,20 @@ function updateVentasMesChart() {
 
 function updateVentasRazaChart() {
     const ctx = document.getElementById('ventasRazaChart');
-    
+
     // Agrupar ventas por raza
     const ventasPorRaza = {};
     ventas.forEach(v => {
         ventasPorRaza[v.raza] = (ventasPorRaza[v.raza] || 0) + v.cantidad;
     });
-    
+
     const razas = Object.keys(ventasPorRaza);
     const cantidades = razas.map(raza => ventasPorRaza[raza]);
-    
+
     if (window.ventasRazaChartInstance) {
         window.ventasRazaChartInstance.destroy();
     }
-    
+
     window.ventasRazaChartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -435,10 +436,10 @@ function updateVentasRazaChart() {
 function updateTable() {
     const tbody = document.getElementById('tableBody');
     const allData = [
-        ...ventas.map(v => ({...v, tipo: 'venta'})),
-        ...gastos.map(g => ({...g, tipo: 'gasto'}))
+        ...ventas.map(v => ({ ...v, tipo: 'venta' })),
+        ...gastos.map(g => ({ ...g, tipo: 'gasto' }))
     ].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-    
+
     tbody.innerHTML = allData.map(item => {
         if (item.tipo === 'venta') {
             return `
@@ -446,10 +447,12 @@ function updateTable() {
                     <td>${formatDate(item.fecha)}</td>
                     <td><span class="badge-venta">Venta</span></td>
                     <td>${item.descripcion || '-'}</td>
-                    <td>${item.raza}</td>
+                    <td><span class="badge-venta">Venta</span></td>
+                    <td>${item.descripcion || '-'}</td>
+                    <td>${item.raza} (${item.estado || 'N/A'})</td>
                     <td>${item.cantidad}</td>
-                    <td>$${item.precio.toLocaleString('es-VE', {minimumFractionDigits: 2})}</td>
-                    <td>$${item.total.toLocaleString('es-VE', {minimumFractionDigits: 2})}</td>
+                    <td>$${item.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                    <td>$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
                     <td>
                         <button class="btn-edit" onclick="editItem('${item.id}', 'venta')">Editar</button>
                         <button class="btn-delete" onclick="deleteItem('${item.id}', 'venta')">Eliminar</button>
@@ -465,7 +468,7 @@ function updateTable() {
                     <td>${item.categoria}</td>
                     <td>-</td>
                     <td>-</td>
-                    <td>$${item.total.toLocaleString('es-VE', {minimumFractionDigits: 2})}</td>
+                    <td>$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
                     <td>
                         <button class="btn-edit" onclick="editItem('${item.id}', 'gasto')">Editar</button>
                         <button class="btn-delete" onclick="deleteItem('${item.id}', 'gasto')">Eliminar</button>
@@ -474,7 +477,7 @@ function updateTable() {
             `;
         }
     }).join('');
-    
+
     filterTable();
 }
 
@@ -482,17 +485,17 @@ function filterTable() {
     const filterType = document.getElementById('filterType').value;
     const searchText = document.getElementById('searchInput').value.toLowerCase();
     const rows = document.querySelectorAll('#tableBody tr');
-    
+
     rows.forEach(row => {
         const tipo = row.querySelector('td:nth-child(2)').textContent.trim();
         const texto = row.textContent.toLowerCase();
-        
-        const matchType = filterType === 'all' || 
-                         (filterType === 'venta' && tipo === 'Venta') ||
-                         (filterType === 'gasto' && tipo === 'Gasto');
-        
+
+        const matchType = filterType === 'all' ||
+            (filterType === 'venta' && tipo === 'Venta') ||
+            (filterType === 'gasto' && tipo === 'Gasto');
+
         const matchSearch = texto.includes(searchText);
-        
+
         row.style.display = (matchType && matchSearch) ? '' : 'none';
     });
 }
@@ -504,13 +507,13 @@ function formatDate(dateString) {
 
 async function deleteItem(id, tipo) {
     if (!confirm('¿Estás seguro de eliminar este registro?')) return;
-    
+
     if (!window.db) {
         alert('Error: Firebase no está conectado. Por favor, recarga la página.');
         console.error('window.db no está disponible');
         return;
     }
-    
+
     try {
         const collection = tipo === 'venta' ? 'ventas' : 'gastos';
         console.log('Eliminando registro:', id, 'de', collection);
@@ -529,6 +532,10 @@ function editItem(id, tipo) {
         if (item) {
             document.getElementById('ventaFecha').value = item.fecha;
             document.getElementById('ventaRaza').value = item.raza;
+            document.getElementById('ventaFecha').value = item.fecha;
+            document.getElementById('ventaRaza').value = item.raza;
+            if (document.getElementById('ventaEstado')) document.getElementById('ventaEstado').value = item.estado || '';
+            document.getElementById('ventaCantidad').value = item.cantidad;
             document.getElementById('ventaCantidad').value = item.cantidad;
             document.getElementById('ventaPrecio').value = item.precio;
             document.getElementById('ventaDescripcion').value = item.descripcion;
@@ -538,24 +545,28 @@ function editItem(id, tipo) {
             const originalSubmit = form.onsubmit;
             form.onsubmit = async (e) => {
                 e.preventDefault();
-                
+
                 if (!window.db) {
                     alert('Error: Firebase no está conectado. Por favor, recarga la página.');
                     console.error('window.db no está disponible');
                     return;
                 }
-                
+
                 const formData = new FormData(e.target);
                 const updatedData = {
                     fecha: formData.get('fecha'),
                     raza: formData.get('raza'),
+                    fecha: formData.get('fecha'),
+                    raza: formData.get('raza'),
+                    estado: formData.get('estado'),
+                    cantidad: parseInt(formData.get('cantidad')),
                     cantidad: parseInt(formData.get('cantidad')),
                     precio: parseFloat(formData.get('precio')),
                     descripcion: formData.get('descripcion') || '',
                     total: parseFloat(formData.get('cantidad')) * parseFloat(formData.get('precio')),
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
-                
+
                 try {
                     console.log('Actualizando venta en Firebase...', id, updatedData);
                     await window.db.collection('ventas').doc(id).update(updatedData);
@@ -580,13 +591,13 @@ function editItem(id, tipo) {
             const originalSubmit = form.onsubmit;
             form.onsubmit = async (e) => {
                 e.preventDefault();
-                
+
                 if (!window.db) {
                     alert('Error: Firebase no está conectado. Por favor, recarga la página.');
                     console.error('window.db no está disponible');
                     return;
                 }
-                
+
                 const formData = new FormData(e.target);
                 const updatedData = {
                     fecha: formData.get('fecha'),
@@ -596,7 +607,7 @@ function editItem(id, tipo) {
                     total: parseFloat(formData.get('monto')),
                     updatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
-                
+
                 try {
                     console.log('Actualizando gasto en Firebase...', id, updatedData);
                     await window.db.collection('gastos').doc(id).update(updatedData);

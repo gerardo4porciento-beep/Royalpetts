@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,7 @@
         frame-src 'self' https://*.firebaseapp.com;
     ">
     <title>Panel Administrativo - ROYALPETTS STORE</title>
-    <link rel="stylesheet" href="/admin.css">
+    <link rel="stylesheet" href="admin.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Skater+Girls+Rock&display=swap" rel="stylesheet">
@@ -22,34 +23,35 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
-    <script src="/admin/firebase-config.js"></script>
+    <script src="firebase-config.js"></script>
     <script>
         // Verificar que los scripts se cargaron
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             console.log('Página completamente cargada');
             console.log('Firebase disponible:', typeof firebase !== 'undefined');
             console.log('initFirebase disponible:', typeof initFirebase !== 'undefined');
         });
     </script>
 </head>
+
 <body>
     <!-- Login Panel -->
     <div id="loginPanel" class="login-panel">
         <div class="login-container">
             <div class="login-box">
                 <div class="login-logo">
-                    <img src="/SEPARACION 6/LOGO 1.png" alt="Logo" class="logo-img-login">
+                    <img src="../SEPARACION 6/LOGO 1.png" alt="Logo" class="logo-img-login">
                 </div>
                 <h1 class="login-title">ROYALPETTS</h1>
                 <h2 class="login-subtitle">Panel Administrativo</h2>
                 <form id="loginForm" class="login-form">
                     <div class="form-group">
                         <label for="username">Usuario</label>
-                        <input type="text" id="username" name="username" autocomplete="username" required>
+                        <input type="text" id="username" name="username" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Contraseña</label>
-                        <input type="password" id="password" name="password" autocomplete="current-password" required>
+                        <input type="password" id="password" name="password" required>
                     </div>
                     <button type="submit" class="btn-login">Iniciar Sesión</button>
                 </form>
@@ -167,31 +169,86 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="ventaFecha">Fecha</label>
-                        <input type="date" id="ventaFecha" name="fecha" autocomplete="off" required>
+                        <input type="date" id="ventaFecha" name="fecha" required>
                     </div>
                     <div class="form-group">
                         <label for="ventaRaza">Raza</label>
-                        <input type="text" id="ventaRaza" name="raza" placeholder="Ej: Golden Retriever" autocomplete="off" required>
+                        <input type="text" id="ventaRaza" name="raza" list="razas-lista"
+                            placeholder="Escribe o selecciona..." required>
+                        <datalist id="razas-lista">
+                            <option value="Golden Retriever">
+                            <option value="Bulldog Francés">
+                            <option value="Poodle (Caniche)">
+                            <option value="Husky Siberiano">
+                            <option value="Pastor Alemán">
+                            <option value="Yorkshire Terrier">
+                            <option value="Beagle">
+                            <option value="Rottweiler">
+                            <option value="Chihuahua">
+                            <option value="Shih Tzu">
+                            <option value="Pug (Carlino)">
+                            <option value="Schnauzer">
+                            <option value="Boxer">
+                            <option value="Doberman">
+                            <option value="Cocker Spaniel">
+                            <option value="Bichón Maltés">
+                            <option value="Pomerania">
+                            <option value="Labrador Retriever">
+                            <option value="Jack Russell">
+                            <option value="Border Collie">
+                        </datalist>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="ventaCantidad">Cantidad</label>
-                        <input type="number" id="ventaCantidad" name="cantidad" min="1" value="1" autocomplete="off" required>
+                        <label for="ventaEstado">Estado de Venta</label>
+                        <select id="ventaEstado" name="estado" required>
+                            <option value="">Seleccionar Estado...</option>
+                            <option value="Amazonas">Amazonas</option>
+                            <option value="Anzoátegui">Anzoátegui</option>
+                            <option value="Apure">Apure</option>
+                            <option value="Aragua">Aragua</option>
+                            <option value="Barinas">Barinas</option>
+                            <option value="Bolívar">Bolívar</option>
+                            <option value="Carabobo">Carabobo</option>
+                            <option value="Cojedes">Cojedes</option>
+                            <option value="Delta Amacuro">Delta Amacuro</option>
+                            <option value="Distrito Capital">Distrito Capital</option>
+                            <option value="Falcón">Falcón</option>
+                            <option value="Guárico">Guárico</option>
+                            <option value="La Guaira">La Guaira</option>
+                            <option value="Lara">Lara</option>
+                            <option value="Mérida">Mérida</option>
+                            <option value="Miranda">Miranda</option>
+                            <option value="Monagas">Monagas</option>
+                            <option value="Nueva Esparta">Nueva Esparta</option>
+                            <option value="Portuguesa">Portuguesa</option>
+                            <option value="Sucre">Sucre</option>
+                            <option value="Táchira">Táchira</option>
+                            <option value="Trujillo">Trujillo</option>
+                            <option value="Yaracuy">Yaracuy</option>
+                            <option value="Zulia">Zulia</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ventaCantidad">Cantidad</label>
+                            <input type="number" id="ventaCantidad" name="cantidad" min="1" value="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ventaPrecio">Precio Unitario ($)</label>
+                            <input type="number" id="ventaPrecio" name="precio" step="0.01" min="0" required>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="ventaPrecio">Precio Unitario ($)</label>
-                        <input type="number" id="ventaPrecio" name="precio" step="0.01" min="0" autocomplete="off" required>
+                        <label for="ventaDescripcion">Descripción</label>
+                        <textarea id="ventaDescripcion" name="descripcion" rows="3"
+                            placeholder="Descripción adicional..."></textarea>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="ventaDescripcion">Descripción</label>
-                    <textarea id="ventaDescripcion" name="descripcion" rows="3" placeholder="Descripción adicional..." autocomplete="off"></textarea>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" data-modal="ventaModal">Cancelar</button>
-                    <button type="submit" class="btn-save">Guardar Venta</button>
-                </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" data-modal="ventaModal">Cancelar</button>
+                        <button type="submit" class="btn-save">Guardar Venta</button>
+                    </div>
             </form>
         </div>
     </div>
@@ -207,11 +264,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="gastoFecha">Fecha</label>
-                        <input type="date" id="gastoFecha" name="fecha" autocomplete="off" required>
+                        <input type="date" id="gastoFecha" name="fecha" required>
                     </div>
                     <div class="form-group">
                         <label for="gastoCategoria">Categoría</label>
-                        <select id="gastoCategoria" name="categoria" autocomplete="off" required>
+                        <select id="gastoCategoria" name="categoria" required>
                             <option value="">Seleccionar...</option>
                             <option value="Alimentos">Alimentos</option>
                             <option value="Veterinaria">Veterinaria</option>
@@ -224,12 +281,13 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="gastoMonto">Monto ($)</label>
-                        <input type="number" id="gastoMonto" name="monto" step="0.01" min="0" autocomplete="off" required>
+                        <input type="number" id="gastoMonto" name="monto" step="0.01" min="0" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="gastoDescripcion">Descripción</label>
-                    <textarea id="gastoDescripcion" name="descripcion" rows="3" placeholder="Descripción del gasto..." autocomplete="off" required></textarea>
+                    <textarea id="gastoDescripcion" name="descripcion" rows="3" placeholder="Descripción del gasto..."
+                        required></textarea>
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn-cancel" data-modal="gastoModal">Cancelar</button>
@@ -239,7 +297,7 @@
         </div>
     </div>
 
-    <script src="/admin/admin.js"></script>
+    <script src="admin.js"></script>
 </body>
-</html>
 
+</html>
