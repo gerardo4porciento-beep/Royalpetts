@@ -2,8 +2,9 @@
 // db se declara en firebase-config.js como window.db
 let ventas = [];
 let gastos = [];
+let costos = [];
 let isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-let ventasUnsubscribe, gastosUnsubscribe;
+let ventasUnsubscribe, gastosUnsubscribe, costosUnsubscribe;
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.warn('Firebase no disponible, mostrando dashboard sin datos');
                 updateStats();
                 updateCharts();
-                updateTable();
+                updateTables();
             }
         }, 5000);
     } else {
@@ -107,16 +108,13 @@ function setupEventListeners() {
             gastoForm.addEventListener('submit', handleGastoSubmit);
         }
 
-        // Filters
-        const filterType = document.getElementById('filterType');
-        if (filterType) {
-            filterType.addEventListener('change', filterTable);
-        }
-
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.addEventListener('input', filterTable);
-        }
+        // Filters (Search inputs for each table)
+        ['searchVentas', 'searchCostos', 'searchGastos'].forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.addEventListener('input', (e) => filterTable(e.target.id));
+            }
+        });
 
         // Modal close buttons
         document.querySelectorAll('.modal-close, .btn-cancel').forEach(btn => {
@@ -170,9 +168,10 @@ function handleLogin(e) {
                 if (!window.db) {
                     console.warn('Firebase no está disponible, pero el login fue exitoso');
                     // Mostrar dashboard vacío
+                    // Mostrar dashboard vacío
                     updateStats();
                     updateCharts();
-                    updateTable();
+                    updateTables();
                 }
             }, 5000);
         }
@@ -186,11 +185,13 @@ function handleLogout() {
     // Desconectar listeners de Firestore
     if (ventasUnsubscribe) ventasUnsubscribe();
     if (gastosUnsubscribe) gastosUnsubscribe();
+    if (costosUnsubscribe) costosUnsubscribe();
 
     localStorage.setItem('isAuthenticated', 'false');
     isAuthenticated = false;
     ventas = [];
     gastos = [];
+    costos = [];
     showLogin();
 }
 
@@ -251,9 +252,24 @@ function loadDashboard() {
             });
             updateStats();
             updateCharts();
-            updateTable();
+            updateTables();
         }, (error) => {
             console.error('Error cargando gastos:', error);
+        });
+
+    // Listener en tiempo real para costos
+    costosUnsubscribe = window.db.collection('costos')
+        .orderBy('fecha', 'desc')
+        .onSnapshot((snapshot) => {
+            costos = [];
+            snapshot.forEach((doc) => {
+                costos.push({ id: doc.id, ...doc.data() });
+            });
+            updateStats();
+            updateCharts();
+            updateTables();
+        }, (error) => {
+            console.error('Error cargando costos:', error);
         });
 }
 
@@ -296,40 +312,36 @@ async function handleVentaSubmit(e) {
         const docRef = await window.db.collection('ventas').add(venta);
         console.log('Venta guardada con ID:', docRef.id);
 
-        // 1. Gasto por Costo (Automático)
+        // 1. Costo de Venta (A la colección costos)
         if (costo > 0) {
-            const gastoCosto = {
-                tipo: 'gasto',
+            const costoData = {
+                tipo: 'costo',
                 fecha: formData.get('fecha'),
-                categoria: 'Costo de Venta',
-                monto: costo,
                 descripcion: `Costo asociado a venta de ${venta.raza} (${docRef.id})`,
-                total: costo,
+                monto: costo,
                 ventaId: docRef.id,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
-            await window.db.collection('gastos').add(gastoCosto);
-            console.log('Gasto por costo creado');
+            await window.db.collection('costos').add(costoData);
+            console.log('Costo de venta creado');
         }
 
-        // 2. Gasto por Comisión Socio (Solo si es compartida)
+        // 2. Comisión Socio (A la colección costos)
         if (esCompartida) {
             const gananciaBruta = totalVenta - costo;
             const comisionSocio = gananciaBruta / 2;
 
             if (comisionSocio > 0) {
-                const gastoComision = {
-                    tipo: 'gasto',
+                const costoComision = {
+                    tipo: 'costo',
                     fecha: formData.get('fecha'),
-                    categoria: 'Comisión Socio',
-                    monto: comisionSocio,
                     descripcion: `Pago a socio (50% ganancia) por venta de ${venta.raza} (${docRef.id})`,
-                    total: comisionSocio,
+                    monto: comisionSocio,
                     ventaId: docRef.id,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
-                await window.db.collection('gastos').add(gastoComision);
-                console.log('Gasto por comisión socio creado');
+                await window.db.collection('costos').add(costoComision);
+                console.log('Costo por comisión socio creado');
             }
         }
 
@@ -379,11 +391,13 @@ function updateStats() {
     const totalVendidos = ventas.reduce((sum, v) => sum + v.cantidad, 0);
     const totalVentas = ventas.reduce((sum, v) => sum + v.total, 0);
     const totalGastos = gastos.reduce((sum, g) => sum + g.total, 0);
-    const gananciaNeta = totalVentas - totalGastos;
+    const totalCostos = costos.reduce((sum, c) => sum + c.monto, 0);
+    const gananciaNeta = totalVentas - totalGastos - totalCostos;
 
     document.getElementById('totalVendidos').textContent = totalVendidos;
     document.getElementById('totalVentas').textContent = `$${totalVentas.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
     document.getElementById('totalGastos').textContent = `$${totalGastos.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+    document.getElementById('totalCostos').textContent = `$${totalCostos.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
     document.getElementById('gananciaNeta').textContent = `$${gananciaNeta.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
 }
 
@@ -492,70 +506,85 @@ function toggleMobileRow(id) {
     }
 }
 
-function updateTable() {
-    const tbody = document.getElementById('tableBody');
-    const allData = [
-        ...ventas.map(v => ({ ...v, tipo: 'venta' })),
-        ...gastos.map(g => ({ ...g, tipo: 'gasto' }))
-    ].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+function updateTables() {
+    // Render Ventas
+    const ventasBody = document.getElementById('ventasTableBody');
+    ventasBody.innerHTML = ventas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+        .map(venta => `
+            <tr id="row-${venta.id}">
+                <td data-label="Fecha">${formatDate(venta.fecha)}</td>
+                <td data-label="Tipo"><span class="badge-venta">Venta</span></td>
+                <td data-label="Descripción">${venta.descripcion || '-'}</td>
+                <td data-label="Detalle"><strong>${venta.raza}</strong> <small>(${venta.sexo || '?'})</small><br><small>${venta.estado || ''}</small></td>
+                <td data-label="Cantidad">${venta.cantidad}</td>
+                <td data-label="Precio">$${venta.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                <td data-label="Total">$${venta.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                <td data-label="Acciones">
+                    <button class="btn-edit" onclick="editItem('${venta.id}', 'venta')">Editar</button>
+                    <button class="btn-delete" onclick="deleteItem('${venta.id}', 'venta')">Eliminar</button>
+                </td>
+            </tr>
+        `).join('');
 
-    tbody.innerHTML = allData.map(item => {
-        if (item.tipo === 'venta') {
-            return `
-                <tr id="row-${item.id}">
-                    <td data-label="Fecha" class="mobile-hidden">${formatDate(item.fecha)}</td>
-                    <td data-label="Tipo"><span class="badge-venta">Venta</span></td>
-                    <td data-label="Descripción" class="mobile-hidden">${item.descripcion || '-'}</td>
-                    <td data-label="Detalle"><strong>${item.raza}</strong> <small>(${item.sexo || '?'})</small><br><small>${item.estado || ''}</small></td>
-                    <td data-label="Cantidad" class="mobile-hidden">${item.cantidad}</td>
-                    <td data-label="Precio">$${item.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
-                    <td data-label="Total" class="mobile-hidden">$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
-                    <td data-label="Acciones" class="mobile-hidden">
-                        <button class="btn-edit" onclick="editItem('${item.id}', 'venta')">Editar</button>
-                        <button class="btn-delete" onclick="deleteItem('${item.id}', 'venta')">Eliminar</button>
-                    </td>
-                    <button id="btn-toggle-${item.id}" class="btn-toggle-mobile" onclick="toggleMobileRow('${item.id}')">▼ Ver Detalles</button>
-                </tr>
-            `;
-        } else {
-            return `
-                <tr id="row-${item.id}">
-                    <td data-label="Fecha" class="mobile-hidden">${formatDate(item.fecha)}</td>
-                    <td data-label="Tipo"><span class="badge-gasto">Gasto</span></td>
-                    <td data-label="Descripción" class="mobile-hidden">${item.descripcion}</td>
-                    <td data-label="Concepto"><strong>${item.categoria}</strong></td>
-                    <td data-label="-" class="mobile-hidden">-</td>
-                    <td data-label="-" class="mobile-hidden">-</td>
-                    <td data-label="Monto">$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
-                    <td data-label="Acciones" class="mobile-hidden">
-                        <button class="btn-edit" onclick="editItem('${item.id}', 'gasto')">Editar</button>
-                        <button class="btn-delete" onclick="deleteItem('${item.id}', 'gasto')">Eliminar</button>
-                    </td>
-                    <button id="btn-toggle-${item.id}" class="btn-toggle-mobile" onclick="toggleMobileRow('${item.id}')">▼ Ver Detalles</button>
-                </tr>
-            `;
-        }
-    }).join('');
+    // Render Costos
+    const costosBody = document.getElementById('costosTableBody');
+    costosBody.innerHTML = costos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+        .map(costo => `
+            <tr id="row-${costo.id}">
+                <td data-label="Fecha">${formatDate(costo.fecha)}</td>
+                <td data-label="Tipo"><span class="badge-costo" style="background: #ffea20; color: #1a1a1a; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Costo</span></td>
+                <td data-label="Descripción">${costo.descripcion}</td>
+                <td data-label="Monto">$${costo.monto.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                <td data-label="Acciones">
+                    <button class="btn-delete" onclick="deleteItem('${costo.id}', 'costo')">Eliminar</button>
+                </td>
+            </tr>
+        `).join('');
 
-    filterTable();
+    // Render Gastos
+    const gastosBody = document.getElementById('gastosTableBody');
+    gastosBody.innerHTML = gastos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+        .map(gasto => `
+            <tr id="row-${gasto.id}">
+                <td data-label="Fecha">${formatDate(gasto.fecha)}</td>
+                <td data-label="Tipo"><span class="badge-gasto">Gasto</span></td>
+                <td data-label="Descripción">${gasto.descripcion}</td>
+                <td data-label="Concepto"><strong>${gasto.categoria}</strong></td>
+                <td data-label="Monto">$${gasto.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                <td data-label="Acciones">
+                    <button class="btn-edit" onclick="editItem('${gasto.id}', 'gasto')">Editar</button>
+                    <button class="btn-delete" onclick="deleteItem('${gasto.id}', 'gasto')">Eliminar</button>
+                </td>
+            </tr>
+        `).join('');
+
+    // Apply filters
+    filterTable('searchVentas');
+    filterTable('searchCostos');
+    filterTable('searchGastos');
 }
 
-function filterTable() {
-    const filterType = document.getElementById('filterType').value;
-    const searchText = document.getElementById('searchInput').value.toLowerCase();
-    const rows = document.querySelectorAll('#tableBody tr');
+function filterTable(inputId) {
+    let tableType, rows;
+
+    if (inputId === 'searchVentas') {
+        rows = document.querySelectorAll('#ventasTableBody tr');
+    } else if (inputId === 'searchCostos') {
+        rows = document.querySelectorAll('#costosTableBody tr');
+    } else if (inputId === 'searchGastos') {
+        rows = document.querySelectorAll('#gastosTableBody tr');
+    } else {
+        return;
+    }
+
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    const searchText = input.value.toLowerCase();
 
     rows.forEach(row => {
-        const tipo = row.querySelector('td:nth-child(2)').textContent.trim();
         const texto = row.textContent.toLowerCase();
-
-        const matchType = filterType === 'all' ||
-            (filterType === 'venta' && tipo === 'Venta') ||
-            (filterType === 'gasto' && tipo === 'Gasto');
-
-        const matchSearch = texto.includes(searchText);
-
-        row.style.display = (matchType && matchSearch) ? '' : 'none';
+        row.style.display = texto.includes(searchText) ? '' : 'none';
     });
 }
 
@@ -574,7 +603,7 @@ async function deleteItem(id, tipo) {
     }
 
     try {
-        const collection = tipo === 'venta' ? 'ventas' : 'gastos';
+        const collection = tipo === 'venta' ? 'ventas' : (tipo === 'gasto' ? 'gastos' : 'costos');
         console.log('Eliminando registro:', id, 'de', collection);
         await window.db.collection(collection).doc(id).delete();
         console.log('Registro eliminado correctamente');
