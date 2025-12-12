@@ -272,7 +272,7 @@ async function handleVentaSubmit(e) {
         tipo: 'venta',
         fecha: formData.get('fecha'),
         raza: formData.get('raza'),
-        ciudad: formData.get('ciudad'),
+        estado: formData.get('estado'),
         cantidad: parseInt(formData.get('cantidad')),
         precio: parseFloat(formData.get('precio')),
         descripcion: formData.get('descripcion') || '',
@@ -449,7 +449,7 @@ function updateTable() {
                     <td>${item.descripcion || '-'}</td>
                     <td><span class="badge-venta">Venta</span></td>
                     <td>${item.descripcion || '-'}</td>
-                    <td>${item.raza} (${item.ciudad || 'N/A'})</td>
+                    <td>${item.raza} (${item.estado || 'N/A'})</td>
                     <td>${item.cantidad}</td>
                     <td>$${item.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
                     <td>$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
@@ -532,7 +532,10 @@ function editItem(id, tipo) {
         if (item) {
             document.getElementById('ventaFecha').value = item.fecha;
             document.getElementById('ventaRaza').value = item.raza;
-            if (document.getElementById('ventaCiudad')) document.getElementById('ventaCiudad').value = item.ciudad || '';
+            document.getElementById('ventaFecha').value = item.fecha;
+            document.getElementById('ventaRaza').value = item.raza;
+            if (document.getElementById('ventaEstado')) document.getElementById('ventaEstado').value = item.estado || '';
+            document.getElementById('ventaCantidad').value = item.cantidad;
             document.getElementById('ventaCantidad').value = item.cantidad;
             document.getElementById('ventaPrecio').value = item.precio;
             document.getElementById('ventaDescripcion').value = item.descripcion;
@@ -553,7 +556,10 @@ function editItem(id, tipo) {
                 const updatedData = {
                     fecha: formData.get('fecha'),
                     raza: formData.get('raza'),
-                    ciudad: formData.get('ciudad'),
+                    fecha: formData.get('fecha'),
+                    raza: formData.get('raza'),
+                    estado: formData.get('estado'),
+                    cantidad: parseInt(formData.get('cantidad')),
                     cantidad: parseInt(formData.get('cantidad')),
                     precio: parseFloat(formData.get('precio')),
                     descripcion: formData.get('descripcion') || '',
