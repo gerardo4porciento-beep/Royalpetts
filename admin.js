@@ -482,6 +482,16 @@ function updateVentasRazaChart() {
     });
 }
 
+function toggleMobileRow(id) {
+    const row = document.getElementById(`row-${id}`);
+    const btn = document.getElementById(`btn-toggle-${id}`);
+    if (row) {
+        row.classList.toggle('expanded');
+        const isExpanded = row.classList.contains('expanded');
+        if (btn) btn.innerHTML = isExpanded ? '▲ Ocultar Detalles' : '▼ Ver Detalles';
+    }
+}
+
 function updateTable() {
     const tbody = document.getElementById('tableBody');
     const allData = [
@@ -492,35 +502,36 @@ function updateTable() {
     tbody.innerHTML = allData.map(item => {
         if (item.tipo === 'venta') {
             return `
-                <tr>
-                    <td>${formatDate(item.fecha)}</td>
-                    <td><span class="badge-venta">Venta</span></td>
-                    <td>${item.descripcion || '-'}</td>
-                    <td>${item.raza} (${item.sexo || '?'}) <br> <small>${item.estado || 'N/A'}</small></td>
-                    <td>${item.cantidad}</td>
-                    <td>$${item.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
-                    <td>$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
-                    <td>
+                <tr id="row-${item.id}">
+                    <td data-label="Fecha" class="mobile-hidden">${formatDate(item.fecha)}</td>
+                    <td data-label="Tipo"><span class="badge-venta">Venta</span></td>
+                    <td data-label="Descripción" class="mobile-hidden">${item.descripcion || '-'}</td>
+                    <td data-label="Detalle"><strong>${item.raza}</strong> <small>(${item.sexo || '?'})</small><br><small>${item.estado || ''}</small></td>
+                    <td data-label="Cantidad" class="mobile-hidden">${item.cantidad}</td>
+                    <td data-label="Precio">$${item.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                    <td data-label="Total" class="mobile-hidden">$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                    <td data-label="Acciones" class="mobile-hidden">
                         <button class="btn-edit" onclick="editItem('${item.id}', 'venta')">Editar</button>
                         <button class="btn-delete" onclick="deleteItem('${item.id}', 'venta')">Eliminar</button>
                     </td>
+                    <button id="btn-toggle-${item.id}" class="btn-toggle-mobile" onclick="toggleMobileRow('${item.id}')">▼ Ver Detalles</button>
                 </tr>
-
             `;
         } else {
             return `
-                <tr>
-                    <td>${formatDate(item.fecha)}</td>
-                    <td><span class="badge-gasto">Gasto</span></td>
-                    <td>${item.descripcion}</td>
-                    <td>${item.categoria}</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
-                    <td>
+                <tr id="row-${item.id}">
+                    <td data-label="Fecha" class="mobile-hidden">${formatDate(item.fecha)}</td>
+                    <td data-label="Tipo"><span class="badge-gasto">Gasto</span></td>
+                    <td data-label="Descripción" class="mobile-hidden">${item.descripcion}</td>
+                    <td data-label="Concepto"><strong>${item.categoria}</strong></td>
+                    <td data-label="-" class="mobile-hidden">-</td>
+                    <td data-label="-" class="mobile-hidden">-</td>
+                    <td data-label="Monto">$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                    <td data-label="Acciones" class="mobile-hidden">
                         <button class="btn-edit" onclick="editItem('${item.id}', 'gasto')">Editar</button>
                         <button class="btn-delete" onclick="deleteItem('${item.id}', 'gasto')">Eliminar</button>
                     </td>
+                    <button id="btn-toggle-${item.id}" class="btn-toggle-mobile" onclick="toggleMobileRow('${item.id}')">▼ Ver Detalles</button>
                 </tr>
             `;
         }
