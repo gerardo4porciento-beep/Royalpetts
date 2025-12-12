@@ -273,24 +273,21 @@ async function handleVentaSubmit(e) {
     const costo = parseFloat(formData.get('costo')) || 0;
     const esCompartida = formData.get('compartida') === 'si';
 
-    // Si es compartida, el costo también se divide
-    const costoFinal = esCompartida ? (costo / 2) : costo;
-    const total = esCompartida ? (cantidad * precio) / 2 : (cantidad * precio);
+    // Venta y Costo siempre al 100%
+    const totalVenta = cantidad * precio;
 
     const venta = {
         tipo: 'venta',
-        fecha: formData.get('fecha'),
-        raza: formData.get('raza'),
         fecha: formData.get('fecha'),
         raza: formData.get('raza'),
         sexo: formData.get('sexo') || 'Macho',
         estado: formData.get('estado'),
         cantidad: cantidad,
         precio: precio,
-        costo: costoFinal, // Guardamos el costo (ya dividido si aplica)
+        costo: costo,
         compartida: esCompartida,
         descripcion: formData.get('descripcion') || '',
-        total: total,
+        total: totalVenta,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
@@ -299,22 +296,41 @@ async function handleVentaSubmit(e) {
         const docRef = await window.db.collection('ventas').add(venta);
         console.log('Venta guardada con ID:', docRef.id);
 
-        // Si hay costo, crear Gasto automáticamente
-        if (costoFinal > 0) {
-            const gastoAutomatico = {
+        // 1. Gasto por Costo (Automático)
+        if (costo > 0) {
+            const gastoCosto = {
                 tipo: 'gasto',
                 fecha: formData.get('fecha'),
                 categoria: 'Costo de Venta',
-                monto: costoFinal,
+                monto: costo,
                 descripcion: `Costo asociado a venta de ${venta.raza} (${docRef.id})`,
-                total: costoFinal,
-                ventaId: docRef.id, // Referencia cruzada
+                total: costo,
+                ventaId: docRef.id,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
+            await window.db.collection('gastos').add(gastoCosto);
+            console.log('Gasto por costo creado');
+        }
 
-            console.log('Creando gasto automático por costo...', gastoAutomatico);
-            await window.db.collection('gastos').add(gastoAutomatico);
-            console.log('Gasto automático creado');
+        // 2. Gasto por Comisión Socio (Solo si es compartida)
+        if (esCompartida) {
+            const gananciaBruta = totalVenta - costo;
+            const comisionSocio = gananciaBruta / 2;
+
+            if (comisionSocio > 0) {
+                const gastoComision = {
+                    tipo: 'gasto',
+                    fecha: formData.get('fecha'),
+                    categoria: 'Comisión Socio',
+                    monto: comisionSocio,
+                    descripcion: `Pago a socio (50% ganancia) por venta de ${venta.raza} (${docRef.id})`,
+                    total: comisionSocio,
+                    ventaId: docRef.id,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                await window.db.collection('gastos').add(gastoComision);
+                console.log('Gasto por comisión socio creado');
+            }
         }
 
         closeModal('ventaModal');
@@ -482,7 +498,7 @@ function updateTable() {
                     <td>${item.descripcion || '-'}</td>
                     <td>${item.raza} (${item.sexo || '?'}) <br> <small>${item.estado || 'N/A'}</small></td>
                     <td>${item.cantidad}</td>
-                    <td>$${item.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })} ${item.compartida ? '(50%)' : ''}</td>
+                    <td>$${item.precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
                     <td>$${item.total.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
                     <td>
                         <button class="btn-edit" onclick="editItem('${item.id}', 'venta')">Editar</button>
