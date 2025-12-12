@@ -585,18 +585,17 @@ body {
         gap: 10px;
     }
 
-    /* Hide Monthly Chart on Mobile */
-    #ventasMesChart {
-        display: none !important;
+    .charts-grid {
+        grid-template-columns: 1fr;
+        /* Stack charts vertically on mobile */
+        gap: 20px;
     }
 
-    .chart-card:has(#ventasMesChart) {
-        display: none;
-    }
-
-    /* Fallback */
-    .charts-grid .chart-card:last-child {
-        display: none;
+    .chart-card {
+        min-height: 300px;
+        /* Ensure charts have height */
+        display: block !important;
+        /* Force display */
     }
 
     .form-row {
