@@ -10,15 +10,17 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-let app, db, analytics;
+let app, analytics;
+// db se expone como variable global para evitar conflictos
+window.db = null;
 
 // Función para inicializar Firebase cuando los scripts estén cargados
 function initFirebase() {
     if (typeof firebase !== 'undefined') {
         app = firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore();
+        window.db = firebase.firestore();
         analytics = firebase.analytics();
-        return { app, db, analytics };
+        return { app, db: window.db, analytics };
     } else {
         console.error('Firebase SDK no está cargado');
         return null;
