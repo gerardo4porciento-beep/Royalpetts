@@ -677,11 +677,11 @@ function updateTable() {
     // Determine current filter from active tab
     let activeTab = document.querySelector('.filter-tab.active');
     if (!activeTab) {
-        // Default to 'all' if no active tab found
-        activeTab = document.querySelector('.filter-tab[data-filter="all"]');
+        // Default to 'venta' if no active tab found
+        activeTab = document.querySelector('.filter-tab[data-filter="venta"]');
         if (activeTab) activeTab.classList.add('active');
     }
-    currentFilter = activeTab ? activeTab.getAttribute('data-filter') : 'all';
+    currentFilter = activeTab ? activeTab.getAttribute('data-filter') : 'venta';
 
     // Split Gastos into True Gastos and Legacy Costs
     const trueGastos = [];
