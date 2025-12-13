@@ -295,7 +295,8 @@ body {
 }
 
 .btn-action {
-    background: var(--color-verde);
+    background: var(--color-rosa);
+    /* Changed to Pink as requested */
     color: var(--white);
     border: none;
     padding: 12px 24px;
