@@ -457,20 +457,29 @@ function updateStats() {
     // Pending Collections
     const totalCobrosPendientes = ventasPorCobrar.reduce((sum, v) => sum + v.total, 0);
 
-    // Get IDs of pending sales for filtering costs
-    const ventasPorCobrarIds = new Set(ventasPorCobrar.map(v => v.id));
+    // Map sales by ID for fast lookup and strict validation
+    const ventasMap = new Map(ventas.map(v => [v.id, v]));
 
     // Separar gastos reales de costos legacy (guardados como gastos)
     const trueGastos = gastos.filter(g => g.categoria !== 'Costo de Venta' && g.categoria !== 'Comisión Socio');
 
-    // Legacy Costs: Filter out if associated with a pending sale (if ventaId exists)
+    // Helper to check if a cost should be included
+    const shouldIncludeCost = (ventaId) => {
+        if (!ventaId) return true; // Legacy/Manual cost with no link -> Include (safest assumption)
+        const venta = ventasMap.get(ventaId);
+        // Only include if sale exists AND is NOT pending
+        // This handles race conditions (sale not loaded yet) and pending status
+        return venta && venta.estadoCobro !== 'por_cobrar';
+    };
+
+    // Legacy Costs
     const legacyCostos = gastos.filter(g =>
         (g.categoria === 'Costo de Venta' || g.categoria === 'Comisión Socio') &&
-        (!g.ventaId || !ventasPorCobrarIds.has(g.ventaId))
+        shouldIncludeCost(g.ventaId)
     );
 
-    // True Costs: Filter out if associated with a pending sale
-    const activeCostos = costos.filter(c => !c.ventaId || !ventasPorCobrarIds.has(c.ventaId));
+    // True Costos
+    const activeCostos = costos.filter(c => shouldIncludeCost(c.ventaId));
 
     const totalGastos = trueGastos.reduce((sum, g) => sum + g.total, 0);
     const totalCostos = activeCostos.reduce((sum, c) => sum + c.monto, 0) +
