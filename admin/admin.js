@@ -457,12 +457,23 @@ function updateStats() {
     // Pending Collections
     const totalCobrosPendientes = ventasPorCobrar.reduce((sum, v) => sum + v.total, 0);
 
+    // Get IDs of pending sales for filtering costs
+    const ventasPorCobrarIds = new Set(ventasPorCobrar.map(v => v.id));
+
     // Separar gastos reales de costos legacy (guardados como gastos)
     const trueGastos = gastos.filter(g => g.categoria !== 'Costo de Venta' && g.categoria !== 'Comisión Socio');
-    const legacyCostos = gastos.filter(g => g.categoria === 'Costo de Venta' || g.categoria === 'Comisión Socio');
+
+    // Legacy Costs: Filter out if associated with a pending sale (if ventaId exists)
+    const legacyCostos = gastos.filter(g =>
+        (g.categoria === 'Costo de Venta' || g.categoria === 'Comisión Socio') &&
+        (!g.ventaId || !ventasPorCobrarIds.has(g.ventaId))
+    );
+
+    // True Costs: Filter out if associated with a pending sale
+    const activeCostos = costos.filter(c => !c.ventaId || !ventasPorCobrarIds.has(c.ventaId));
 
     const totalGastos = trueGastos.reduce((sum, g) => sum + g.total, 0);
-    const totalCostos = costos.reduce((sum, c) => sum + c.monto, 0) +
+    const totalCostos = activeCostos.reduce((sum, c) => sum + c.monto, 0) +
         legacyCostos.reduce((sum, c) => sum + (c.monto || c.total), 0);
 
     // Solicitud usuario: No descontar gastos, solo costos y comisiones
