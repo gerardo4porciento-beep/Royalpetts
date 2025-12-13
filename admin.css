@@ -391,9 +391,16 @@ body {
 .chart-card {
     background: var(--white);
     color: var(--black);
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
 }
 
 .chart-title {
@@ -746,6 +753,73 @@ body {
     }
 }
 
+
+/* Global Touch Optimizations */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Enhanced Stat Values with Gradient */
+.stat-value {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 2px;
+    font-family: system-ui, sans-serif;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--black) 0%, #4a4a4a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Specific gradients for each card value to match icon */
+.stat-card:nth-child(1) .stat-value {
+    background: linear-gradient(135deg, var(--color-azul) 0%, #009ec9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-card:nth-child(2) .stat-value {
+    background: linear-gradient(135deg, #00c48c 0%, #009e70 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-card:nth-child(3) .stat-value {
+    background: linear-gradient(135deg, var(--color-rosa) 0%, #e66a9d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-card:nth-child(4) .stat-value {
+    background: linear-gradient(135deg, #dcb300 0%, #b39000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-card:nth-child(5) .stat-value {
+    background: linear-gradient(135deg, var(--color-naranja) 0%, #e58e52 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-card:nth-child(6) .stat-value {
+    background: linear-gradient(135deg, var(--gray-dark) 0%, #4a4a4a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-card:nth-child(7) .stat-value {
+    background: linear-gradient(135deg, #7b4fff 0%, #623ccb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
 /* Responsive Mobile Optimization */
 @media (max-width: 768px) {
 
@@ -777,38 +851,58 @@ body {
         margin-top: 5px;
     }
 
-    /* Compact Stats Grid - 2 columns or scrollable */
+    /* Horizontal Scroll Snap for Stats (App-like Carousel) */
     .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 15px;
+        padding-bottom: 20px;
+        /* Space for scrollbar or shadow */
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        -webkit-overflow-scrolling: touch;
+        /* Momentum scrolling */
+        scrollbar-width: none;
+        /* Hide scrollbar Firefox */
+    }
+
+    .stats-grid::-webkit-scrollbar {
+        display: none;
+        /* Hide scrollbar Chrome/Safari */
     }
 
     .stat-card {
-        padding: 10px;
+        min-width: 160px;
+        /* Fixed width for carousel items */
+        scroll-snap-align: center;
+        padding: 15px;
         flex-direction: column;
-        text-align: center;
-        gap: 4px;
-        min-height: 80px;
         justify-content: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    /* Center the first card nicely if desired, or keep left aligned */
+    .stat-card:first-child {
+        margin-left: 0;
     }
 
     .stat-icon {
-        font-size: 20px;
-        margin-bottom: 2px;
+        font-size: 24px;
+        width: 50px;
+        height: 50px;
     }
 
     .stat-value {
-        font-size: 18px;
+        font-size: 22px;
     }
 
     .stat-label {
-        font-size: 10px;
-        line-height: 1.2;
-    }
-
-    .charts-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
+        font-size: 12px;
+        white-space: nowrap;
     }
 
     .charts-grid {
@@ -816,6 +910,7 @@ body {
         /* Stack charts vertically on mobile */
         gap: 20px;
     }
+
 
     /* Ocultar Ventas por Mes en Móvil (Solicitud Usuario) */
     .chart-card:has(#ventasMesChart) {
