@@ -228,9 +228,8 @@ body {
 .stat-card {
     background: var(--white);
     color: var(--black);
-    border-radius: 16px;
-    /* Softer corners */
-    padding: 15px 10px;
+    border-radius: 20px;
+    padding: 15px 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -238,14 +237,17 @@ body {
     gap: 8px;
     box-shadow: var(--shadow-soft);
     border: 1px solid rgba(0, 0, 0, 0.02);
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
+    animation: fadeIn 0.6s ease-out forwards;
+    animation-delay: calc(var(--order) * 100ms);
 }
 
 .stat-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-8px) scale(1.02);
     box-shadow: var(--shadow-hover);
+    border-color: rgba(0, 185, 236, 0.1);
 }
 
 /* Decorative top border for cards */
@@ -261,19 +263,108 @@ body {
 }
 
 .stat-icon {
-    font-size: 24px;
-    background: var(--gray-light);
-    width: 40px;
-    height: 40px;
+    font-size: 22px;
+    width: 45px;
+    height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    border-radius: 12px;
     margin-bottom: 5px;
+    background: rgba(0, 185, 236, 0.1);
+    color: var(--color-azul);
+    transition: all 0.3s ease;
 }
 
+.stat-card:hover .stat-icon {
+    background: var(--color-azul);
+    color: var(--white);
+    transform: rotate(15deg);
+}
+
+/* Color variations for icons based on context (handled via nth-child logic or classes if available, 
+   but for now we rotate colors via css nth-child for visual variety) */
+.stat-card:nth-child(1) .stat-icon {
+    background: rgba(0, 185, 236, 0.1);
+    color: var(--color-azul);
+}
+
+/* Blue */
+.stat-card:nth-child(2) .stat-icon {
+    background: rgba(50, 244, 187, 0.1);
+    color: #00c48c;
+}
+
+/* Green */
+.stat-card:nth-child(3) .stat-icon {
+    background: rgba(255, 125, 178, 0.1);
+    color: var(--color-rosa);
+}
+
+/* Pink */
+.stat-card:nth-child(4) .stat-icon {
+    background: rgba(255, 234, 32, 0.1);
+    color: #dcb300;
+}
+
+/* Yellow */
+.stat-card:nth-child(5) .stat-icon {
+    background: rgba(254, 158, 91, 0.1);
+    color: var(--color-naranja);
+}
+
+/* Orange */
+.stat-card:nth-child(6) .stat-icon {
+    background: rgba(108, 117, 125, 0.1);
+    color: var(--gray-dark);
+}
+
+/* Gray */
+.stat-card:nth-child(7) .stat-icon {
+    background: rgba(0, 185, 236, 0.1);
+    color: #7b4fff;
+}
+
+/* Purple/Blue accent */
+
+.stat-card:nth-child(1):hover .stat-icon {
+    background: var(--color-azul);
+    color: white;
+}
+
+.stat-card:nth-child(2):hover .stat-icon {
+    background: #00c48c;
+    color: white;
+}
+
+.stat-card:nth-child(3):hover .stat-icon {
+    background: var(--color-rosa);
+    color: white;
+}
+
+.stat-card:nth-child(4):hover .stat-icon {
+    background: #dcb300;
+    color: white;
+}
+
+.stat-card:nth-child(5):hover .stat-icon {
+    background: var(--color-naranja);
+    color: white;
+}
+
+.stat-card:nth-child(6):hover .stat-icon {
+    background: var(--gray-dark);
+    color: white;
+}
+
+.stat-card:nth-child(7):hover .stat-icon {
+    background: #7b4fff;
+    color: white;
+}
+
+
 .stat-value {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 800;
     color: var(--black);
     margin-bottom: 2px;
@@ -603,6 +694,31 @@ body {
 .btn-save:hover {
     background: var(--color-naranja);
     transform: translateY(-2px);
+}
+
+/* Badges */
+.badge {
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.badge-success {
+    background: rgba(50, 244, 187, 0.15);
+    color: #00a86b;
+}
+
+.badge-warning {
+    background: rgba(254, 158, 91, 0.15);
+    color: #d65a18;
+}
+
+.badge-danger {
+    background: rgba(255, 125, 178, 0.15);
+    color: #d63d76;
 }
 
 /* Responsive */
