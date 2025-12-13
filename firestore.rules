@@ -10,6 +10,11 @@ service cloud.firestore {
     match /gastos/{gastoId} {
       allow read, write: if true; // Modo desarrollo - cambiar en producción
     }
+
+    // Reglas para costos
+    match /costos/{costoId} {
+        allow read, write: if true;
+    }
     
     // Denegar acceso a cualquier otra colección
     match /{document=**} {
