@@ -228,13 +228,16 @@ body {
 .stat-card {
     background: var(--white);
     color: var(--black);
-    border-radius: 20px;
-    padding: 15px 12px;
+    border-radius: 16px;
+    /* Slightly tighter radius */
+    padding: 10px 8px;
+    /* Reduced padding from 15px 12px */
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 8px;
+    gap: 4px;
+    /* Reduced gap from 8px */
     box-shadow: var(--shadow-soft);
     border: 1px solid rgba(0, 0, 0, 0.02);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
