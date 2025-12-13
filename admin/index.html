@@ -297,14 +297,14 @@
                     </div>
                     <div class="form-group">
                         <label>Estado de Cobro</label>
-                        <select id="ventaEstadoCobro" required onchange="toggleFechaCobro()">
+                        <select id="ventaEstadoCobro" name="estadoCobro" required onchange="toggleFechaCobro()">
                             <option value="cobrado">Cobrado</option>
                             <option value="por_cobrar">Por Cobrar</option>
                         </select>
                     </div>
                     <div class="form-group hidden" id="divFechaCobro">
                         <label>Fecha Estimada de Cobro</label>
-                        <input type="date" id="ventaFechaCobro">
+                        <input type="date" id="ventaFechaCobro" name="fechaCobro">
                     </div>
                     <div class="form-group">
                         <label>¿Venta Compartida?</label>
