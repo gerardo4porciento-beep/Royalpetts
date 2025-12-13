@@ -9,7 +9,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Skater Girls Rock', Arial, sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 :root {
@@ -20,17 +20,17 @@
     --color-amarillo: #ffea20;
     --white: #FFFFFF;
     --black: #1A1A1A;
-    --gray-light: #F5F5F5;
-    --gray: #E0E0E0;
-    --gray-dark: #999;
+    --gray-light: #F8F9FA;
+    --gray: #E9ECEF;
+    --gray-dark: #6C757D;
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 body {
-    font-family: 'Skater Girls Rock', Arial, sans-serif;
-    background: var(--color-azul);
-    /* Fondo Azul */
-    color: var(--white);
-    /* Texto blanco para contraste */
+    background: #f0f2f5;
+    /* Softer background */
+    color: var(--black);
 }
 
 .hidden {
@@ -177,10 +177,12 @@ body {
 
 .dashboard-title {
     font-size: 32px;
-    font-weight: 900;
+    font-weight: 400;
+    /* Font itself is bold */
     display: flex;
     align-items: center;
     gap: 15px;
+    font-family: 'Skater Girls Rock', cursive;
 }
 
 .header-logo {
@@ -219,41 +221,65 @@ body {
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    /* Compact gap */
+    gap: 12px;
     margin-bottom: 30px;
 }
 
 .stat-card {
     background: var(--white);
     color: var(--black);
-    border-radius: 12px;
-    padding: 8px;
-    /* Compact padding */
+    border-radius: 16px;
+    /* Softer corners */
+    padding: 15px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    gap: 8px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 .stat-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Decorative top border for cards */
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-azul), var(--color-verde));
+    opacity: 0.8;
 }
 
 .stat-icon {
-    font-size: 20px;
-    /* Smaller icon */
+    font-size: 24px;
+    background: var(--gray-light);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 5px;
 }
 
 .stat-value {
-    font-size: 16px;
-    /* Smaller font */
-    font-weight: 900;
-    color: var(--color-azul);
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--black);
     margin-bottom: 2px;
+    font-family: system-ui, sans-serif;
+    /* Clean numbers */
+    letter-spacing: -0.5px;
 }
 
 .stat-label {
@@ -299,130 +325,181 @@ body {
 }
 
 .btn-action {
-    background: var(--color-rosa);
-    /* Changed to Pink as requested */
+    background: linear-gradient(135deg, var(--color-rosa) 0%, #ff6b9d 100%);
     color: var(--white);
     border: none;
     padding: 12px 24px;
-    border-radius: 8px;
+    border-radius: 50px;
+    /* Pill shape */
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-family: 'Skater Girls Rock', Arial, sans-serif;
+    font-family: 'Skater Girls Rock', cursive;
+    box-shadow: 0 4px 15px rgba(255, 125, 178, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .btn-action:hover {
-    background: var(--color-naranja);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 25px rgba(255, 125, 178, 0.6);
 }
 
 /* Table Section */
 .table-section {
     background: var(--white);
     color: var(--black);
-    /* Fix: Ensure text is black on white background */
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0, 0, 0, 0.02);
 }
 
 .table-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 20px;
 }
 
 .table-title {
     font-size: 24px;
-    font-weight: 900;
+    font-weight: 400;
     color: var(--black);
+    font-family: 'Skater Girls Rock', cursive;
 }
 
-.table-filters {
+/* Segmented Control Filters */
+.filter-tabs {
     display: flex;
-    gap: 10px;
+    background: var(--gray-light);
+    padding: 5px;
+    border-radius: 50px;
+    gap: 5px;
+}
+
+.filter-tab {
+    padding: 8px 20px;
+    border: none;
+    background: transparent;
+    color: var(--gray-dark);
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    font-family: system-ui, sans-serif;
+}
+
+.filter-tab.active {
+    background: var(--white);
+    color: var(--color-azul);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-tab:hover:not(.active) {
+    color: var(--black);
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .filter-select,
 .search-input {
-    padding: 8px 12px;
-    border: 2px solid var(--gray);
-    border-radius: 8px;
+    padding: 10px 15px;
+    border: 1px solid var(--gray);
+    border-radius: 50px;
     font-size: 14px;
-    font-family: Arial, sans-serif;
+    font-family: system-ui, sans-serif;
+    color: var(--black);
+    background: var(--gray-light);
 }
 
-.search-input {
-    min-width: 200px;
+.search-input:focus {
+    background: var(--white);
+    border-color: var(--color-azul);
+    box-shadow: 0 0 0 3px rgba(0, 185, 236, 0.1);
 }
 
 .table-container {
     overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--gray);
 }
 
 .data-table {
     width: 100%;
     border-collapse: collapse;
-    font-family: Arial, sans-serif;
+    font-family: system-ui, sans-serif;
     font-size: 14px;
 }
 
 .data-table thead {
-    background: var(--color-azul);
-    color: var(--white);
+    background: var(--gray-light);
+    color: var(--black);
 }
 
 .data-table th {
-    padding: 12px;
+    padding: 15px;
     text-align: left;
     font-weight: 700;
-    font-size: 14px;
-    white-space: nowrap;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-dark);
+    border-bottom: 2px solid var(--gray);
 }
 
 .data-table td {
-    padding: 12px;
+    padding: 15px;
     border-bottom: 1px solid var(--gray);
+    vertical-align: middle;
 }
 
 .data-table tbody tr:hover {
-    background: var(--gray-light);
+    background: #f8fbff;
 }
 
-.data-table tbody tr:nth-child(even) {
-    background: rgba(0, 185, 236, 0.05);
+.data-table tbody tr:last-child td {
+    border-bottom: none;
 }
 
 .btn-edit,
 .btn-delete {
-    padding: 6px 12px;
+    padding: 8px 12px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 12px;
+    font-weight: 600;
     cursor: pointer;
     margin-right: 5px;
-    font-family: Arial, sans-serif;
+    font-family: system-ui, sans-serif;
     transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .btn-edit {
+    background: rgba(255, 234, 32, 0.2);
+    color: #bfa600;
+}
+
+.btn-edit:hover {
     background: var(--color-amarillo);
     color: var(--black);
 }
 
 .btn-delete {
-    background: var(--color-rosa);
-    color: var(--white);
+    background: rgba(255, 125, 178, 0.15);
+    color: #d63d76;
 }
 
-.btn-edit:hover,
 .btn-delete:hover {
-    transform: scale(1.05);
+    background: var(--color-rosa);
+    color: var(--white);
 }
 
 /* Modal */
