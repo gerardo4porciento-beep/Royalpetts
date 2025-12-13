@@ -551,6 +551,34 @@ body {
 /* Responsive Mobile Optimization */
 @media (max-width: 768px) {
 
+    /* Compact UI for Mobile Header */
+    .dashboard-header {
+        padding: 15px 20px;
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .dashboard-title {
+        font-size: 20px;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .header-logo {
+        height: 40px;
+    }
+
+    .btn-logout {
+        width: 100%;
+        padding: 8px;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
     /* Compact Stats Grid - 2 columns or scrollable */
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
