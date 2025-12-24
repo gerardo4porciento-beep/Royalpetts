@@ -156,6 +156,8 @@
             <div class="actions-section">
                 <button id="btnCargarVenta" class="btn-action">➕ Cargar Venta</button>
                 <button id="btnCargarGasto" class="btn-action">➖ Cargar Gasto</button>
+                <button id="btnGenerarReporte" class="btn-action"
+                    style="background: linear-gradient(135deg, #00b9ec 0%, #008eb5 100%);">📊 Generar Reporte</button>
             </div>
 
             <!-- Data Table -->
@@ -180,6 +182,7 @@
                     <table id="dataTable" class="data-table">
                         <thead>
                             <tr>
+                                <th style="width: 40px;"><input type="checkbox" id="selectAll"></th>
                                 <th>Fecha</th>
                                 <th>Tipo</th>
                                 <th>Descripción</th>
@@ -313,10 +316,14 @@
                     </div>
                     <div class="form-group">
                         <label>¿Venta Compartida?</label>
-                        <select id="ventaCompartida" name="compartida" required>
+                        <select id="ventaCompartida" name="compartida" required onchange="toggleSocioInput()">
                             <option value="no">No</option>
                             <option value="si">Sí (50%)</option>
                         </select>
+                    </div>
+                    <div class="form-group hidden" id="divSocio">
+                        <label>Nombre del Socio</label>
+                        <input type="text" id="ventaSocio" name="socio" placeholder="Nombre...">
                     </div>
                 </div>
 

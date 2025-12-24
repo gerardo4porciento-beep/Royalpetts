@@ -143,6 +143,18 @@ function setupEventListeners() {
                 }
             });
         });
+
+        // Report Button
+        const btnGenerarReporte = document.getElementById('btnGenerarReporte');
+        if (btnGenerarReporte) {
+            btnGenerarReporte.addEventListener('click', handleGenerateReport);
+        }
+
+        // Select All Checkbox
+        const selectAll = document.getElementById('selectAll');
+        if (selectAll) {
+            selectAll.addEventListener('change', toggleSelectAll);
+        }
     } catch (error) {
         console.error('Error configurando event listeners:', error);
     }
@@ -300,7 +312,7 @@ function loadDashboard() {
 
 // Helper to toggle date input visibility
 function toggleFechaCobro() {
-    const estado = document.getElementById('ventaEstadoCobro').value;
+    const estado = document.getElementById('ventaEstadoCobro')?.value;
     const divFecha = document.getElementById('divFechaCobro');
     const inputFecha = document.getElementById('ventaFechaCobro');
 
@@ -314,8 +326,25 @@ function toggleFechaCobro() {
     }
 }
 
+// Helper to toggle Socio input visibility
+function toggleSocioInput() {
+    const compartido = document.getElementById('ventaCompartida')?.value;
+    const divSocio = document.getElementById('divSocio');
+    const inputSocio = document.getElementById('ventaSocio');
+
+    if (compartido === 'si') {
+        divSocio.classList.remove('hidden');
+        inputSocio.required = true;
+    } else {
+        divSocio.classList.add('hidden');
+        inputSocio.required = false;
+        inputSocio.value = '';
+    }
+}
+
 // Make sure it's globally available
 window.toggleFechaCobro = toggleFechaCobro;
+window.toggleSocioInput = toggleSocioInput;
 
 // Ventas
 async function handleVentaSubmit(e) {
@@ -789,7 +818,12 @@ function updateTable() {
         }
 
         return `
-            <tr id="row-${item.id}">
+            <tr id="row-${item.id}" class="${item.selected ? 'selected' : ''}">
+                <td style="text-align: center;">
+                    ${item.dataType === 'venta'
+                ? `<input type="checkbox" class="row-checkbox" value="${item.id}" onchange="handleRowSelection('${item.id}')">`
+                : ''}
+                </td>
                 <td>
                     ${dateStr}
                     <div class="mobile-only-row">
@@ -1129,4 +1163,52 @@ style.textContent = `
         margin-bottom: 15px;
     }
 `;
-document.head.appendChild(style);
+
+// Selection Logic
+function toggleSelectAll(e) {
+    const isChecked = e.target.checked;
+    const checkboxes = document.querySelectorAll('.row-checkbox');
+    checkboxes.forEach(cb => {
+        cb.checked = isChecked;
+        handleRowSelection(cb.value, isChecked);
+    });
+}
+
+function handleRowSelection(id, forcedState = null) {
+    const row = document.getElementById(`row-${id}`);
+    const checkbox = row.querySelector('.row-checkbox');
+    const isChecked = forcedState !== null ? forcedState : checkbox.checked;
+
+    if (row) {
+        if (isChecked) {
+            row.classList.add('selected');
+        } else {
+            row.classList.remove('selected');
+        }
+    }
+}
+
+// Report Generation
+function handleGenerateReport() {
+    // Get all selected IDs
+    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
+    if (checkboxes.length === 0) {
+        alert('Por favor selecciona al menos una venta para generar el reporte.');
+        return;
+    }
+
+    const selectedIds = Array.from(checkboxes).map(cb => cb.value);
+
+    // Filter sales data
+    const selectedSales = ventas.filter(v => selectedIds.includes(v.id));
+
+    // Save to localStorage
+    localStorage.setItem('reportData', JSON.stringify(selectedSales));
+
+    // Open report page
+    window.open('report.html', '_blank');
+}
+
+// Expose functions
+window.handleRowSelection = handleRowSelection;
+window.toggleSelectAll = toggleSelectAll;

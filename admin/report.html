@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Ventas - RoyalPetts</title>
+    <!-- Facicon -->
+    <link rel="icon" type="image/png" href="../SEPARACION 6/LOGO 3.png">
+
+    <!-- Reuse Admin CSS but minimal -->
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        body {
+            background: #ffffff;
+            font-family: system-ui, sans-serif;
+            color: #1a1a1a;
+            padding: 40px;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-img {
+            height: 60px;
+            width: auto;
+        }
+
+        .report-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a1a1a;
+        }
+
+        .report-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .report-grid {
+            margin-bottom: 40px;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .report-table th {
+            text-align: left;
+            background: #f4f6f8;
+            padding: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+            color: #555;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .report-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .partners-summary {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 30px;
+            border: 1px solid #eee;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .partner-card {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed #ddd;
+            font-size: 15px;
+        }
+
+        .partner-card:last-child {
+            border-bottom: none;
+        }
+
+        .amount-positive {
+            color: #00a86b;
+            font-weight: 700;
+        }
+
+        .btn-print {
+            padding: 10px 20px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-print:hover {
+            background: #000;
+        }
+
+        @media print {
+            .btn-print {
+                display: none;
+            }
+
+            body {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="report-header">
+        <div class="logo-section">
+            <img src="../SEPARACION 6/LOGO 3.png" alt="Logo" class="logo-img">
+            <div>
+                <h1 class="report-title">Reporte de Ventas</h1>
+                <p class="report-date" id="reportDate"></p>
+            </div>
+        </div>
+        <button onclick="window.print()" class="btn-print">🖨️ Imprimir PDF</button>
+    </header>
+
+    <main>
+        <div class="report-grid">
+            <h2 style="margin-bottom: 20px;">Detalle de Cachorros Vendidos</h2>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Raza</th>
+                        <th>Sexo / Estado</th>
+                        <th>Descripción</th>
+                        <th style="text-align: right;">Precio Venta</th>
+                        <th style="text-align: right;">Costo</th>
+                        <th style="text-align: right;">Ganancia Neta</th>
+                        <th style="text-align: right;">Part. Socio</th>
+                    </tr>
+                </thead>
+                <tbody id="reportBody">
+                    <!-- JS Injected -->
+                </tbody>
+                <tfoot>
+                    <tr style="font-weight: 700; background: #fafafa;">
+                        <td colspan="4" style="text-align: right; padding-right: 20px;">TOTALES</td>
+                        <td style="text-align: right;" id="totalVenta"></td>
+                        <td style="text-align: right;" id="totalCosto"></td>
+                        <td style="text-align: right;" id="totalGanancia"></td>
+                        <td style="text-align: right;" id="totalPart"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="partners-summary">
+            <h3 class="summary-title">Resumen de Ganancias por Socio</h3>
+            <div id="partnersContainer">
+                <!-- JS Injected -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateSpan = document.getElementById('reportDate');
+            dateSpan.textContent = new Date().toLocaleDateString('es-VE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+            const rawData = localStorage.getItem('reportData');
+            if (!rawData) {
+                alert('No hay datos para generar el reporte.');
+                return;
+            }
+
+            const sales = JSON.parse(rawData);
+            const tbody = document.getElementById('reportBody');
+            const partnersContainer = document.getElementById('partnersContainer');
+
+            let grandTotalVenta = 0;
+            let grandTotalCosto = 0;
+            let grandTotalGanancia = 0;
+            let grandTotalPart = 0;
+
+            const partnersMap = new Map(); // Name -> Amount
+
+            sales.forEach(sale => {
+                const precio = parseFloat(sale.precio) || 0;
+                const costo = parseFloat(sale.costo) || 0; // Legacy cost field or 0
+
+                // Profit Calculation
+                // Rule: Ganancia = Precio - Costo
+                const ganancia = precio - costo;
+
+                // Partner Split Logic
+                // If compartida === true
+                let partnerAmount = 0;
+                let partnerName = '-';
+
+                if (sale.compartida) {
+                    partnerAmount = ganancia / 2;
+                    partnerName = sale.socio || 'Socio (Sin Nombre)';
+
+                    // Accumulate for partner
+                    const currentVal = partnersMap.get(partnerName) || 0;
+                    partnersMap.set(partnerName, currentVal + partnerAmount);
+                }
+
+                // Accumulate Globals
+                grandTotalVenta += precio;
+                grandTotalCosto += costo;
+                grandTotalGanancia += ganancia;
+                grandTotalPart += partnerAmount;
+
+                // Render Rate
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${new Date(sale.fecha).toLocaleDateString('es-VE')}</td>
+                    <td><strong>${sale.raza}</strong></td>
+                    <td>${sale.sexo}, ${sale.estado}</td>
+                    <td>${sale.descripcion || ''}</td>
+                    <td style="text-align: right;">$${precio.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                    <td style="text-align: right; color: #d63d76;">$${costo.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                    <td style="text-align: right; color: #00a86b;">$${ganancia.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</td>
+                    <td style="text-align: right;">${sale.compartida ? `<span style="color: #ff9800;">$${partnerAmount.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</span><br><small>${partnerName}</small>` : '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Set Totals
+            document.getElementById('totalVenta').textContent = `$${grandTotalVenta.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+            document.getElementById('totalCosto').textContent = `$${grandTotalCosto.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+            document.getElementById('totalGanancia').textContent = `$${grandTotalGanancia.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+            document.getElementById('totalPart').textContent = `$${grandTotalPart.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+
+            // Render Partners Summary
+            if (partnersMap.size === 0) {
+                partnersContainer.innerHTML = '<p>No hay ventas compartidas con socios en este reporte.</p>';
+            } else {
+                // Add "Casa/Negocio" share (Total Profit - Total Partner Payouts)
+                // Actually, the "Business" usually keeps 50% of shared + 100% of non-shared.
+                // Let's calculate Business Share explicitly.
+                const businessShare = grandTotalGanancia - grandTotalPart;
+
+                let html = '';
+
+                // Sort partners by amount desc
+                const sortedPartners = [...partnersMap.entries()].sort((a, b) => b[1] - a[1]);
+
+                sortedPartners.forEach(([name, amount]) => {
+                    html += `
+                        <div class="partner-card">
+                            <span>👤 <strong>${name}</strong></span>
+                            <span class="amount-positive">$${amount.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</span>
+                        </div>
+                    `;
+                });
+
+                // Add Business
+                html += `
+                    <div class="partner-card" style="border-top: 1px solid #ddd; margin-top: 10px; padding-top: 10px;">
+                        <span>🏢 <strong>RoyalPetts (Negocio)</strong></span>
+                        <span class="amount-positive">$${businessShare.toLocaleString('es-VE', { minimumFractionDigits: 2 })}</span>
+                    </div>
+                `;
+
+                partnersContainer.innerHTML = html;
+            }
+        });
+    </script>
+</body>
+
+</html>
