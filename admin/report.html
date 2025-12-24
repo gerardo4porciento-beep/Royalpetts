@@ -158,7 +158,7 @@
                         <th style="text-align: right;">Precio Venta</th>
                         <th style="text-align: right;">Costo</th>
                         <th style="text-align: right;">Ganancia Neta</th>
-                        <th style="text-align: right;">Part. Socio</th>
+                        <th style="text-align: right;">Part. Proveedor</th>
                     </tr>
                 </thead>
                 <tbody id="reportBody">
@@ -177,7 +177,7 @@
         </div>
 
         <div class="partners-summary">
-            <h3 class="summary-title">Resumen de Ganancias por Socio</h3>
+            <h3 class="summary-title">Ganancias por Proveedor</h3>
             <div id="partnersContainer">
                 <!-- JS Injected -->
             </div>
@@ -221,7 +221,7 @@
 
                 if (sale.compartida) {
                     partnerAmount = ganancia / 2;
-                    partnerName = sale.socio || 'Socio (Sin Nombre)';
+                    partnerName = sale.socio || 'Proveedor';
 
                     // Accumulate for partner
                     const currentVal = partnersMap.get(partnerName) || 0;
