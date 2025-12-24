@@ -234,10 +234,14 @@
                 grandTotalGanancia += ganancia;
                 grandTotalPart += partnerAmount;
 
+                // Date formatting without timezone issues
+                const [year, month, day] = sale.fecha.split('-');
+                const formattedDate = `${day}/${month}/${year}`;
+
                 // Render Rate
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${new Date(sale.fecha).toLocaleDateString('es-VE')}</td>
+                    <td>${formattedDate}</td>
                     <td><strong>${sale.raza}</strong></td>
                     <td>${sale.sexo}, ${sale.estado}</td>
                     <td>${sale.descripcion || ''}</td>

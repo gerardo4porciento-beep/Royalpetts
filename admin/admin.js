@@ -929,8 +929,11 @@ function toggleMobileRow(id) {
 }
 
 function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('es-VE');
+    if (!dateString) return '-';
+    // dateString comes as "YYYY-MM-DD" from input type="date"
+    // We split it directly to avoid timezone issues with Date() object
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
 }
 
 async function deleteItem(id, collection) {
