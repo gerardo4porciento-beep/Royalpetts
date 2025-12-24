@@ -5,6 +5,8 @@ let gastos = [];
 let costos = [];
 let isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 let ventasUnsubscribe, gastosUnsubscribe, costosUnsubscribe;
+let currentPage = 1;
+const itemsPerPage = 8; // Showing 8 items per page for better visibility
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
@@ -141,6 +143,18 @@ function setupEventListeners() {
                 }
             });
         });
+
+        // Report Button
+        const btnGenerarReporte = document.getElementById('btnGenerarReporte');
+        if (btnGenerarReporte) {
+            btnGenerarReporte.addEventListener('click', handleGenerateReport);
+        }
+
+        // Select All Checkbox
+        const selectAll = document.getElementById('selectAll');
+        if (selectAll) {
+            selectAll.addEventListener('change', toggleSelectAll);
+        }
     } catch (error) {
         console.error('Error configurando event listeners:', error);
     }
@@ -298,7 +312,7 @@ function loadDashboard() {
 
 // Helper to toggle date input visibility
 function toggleFechaCobro() {
-    const estado = document.getElementById('ventaEstadoCobro').value;
+    const estado = document.getElementById('ventaEstadoCobro')?.value;
     const divFecha = document.getElementById('divFechaCobro');
     const inputFecha = document.getElementById('ventaFechaCobro');
 
@@ -312,8 +326,25 @@ function toggleFechaCobro() {
     }
 }
 
+// Helper to toggle Socio input visibility
+function toggleSocioInput() {
+    const compartido = document.getElementById('ventaCompartida')?.value;
+    const divSocio = document.getElementById('divSocio');
+    const inputSocio = document.getElementById('ventaSocio');
+
+    if (compartido === 'si') {
+        divSocio.classList.remove('hidden');
+        inputSocio.required = true;
+    } else {
+        divSocio.classList.add('hidden');
+        inputSocio.required = false;
+        inputSocio.value = '';
+    }
+}
+
 // Make sure it's globally available
 window.toggleFechaCobro = toggleFechaCobro;
+window.toggleSocioInput = toggleSocioInput;
 
 // Ventas
 async function handleVentaSubmit(e) {
@@ -724,8 +755,18 @@ function updateTable() {
     // Sort by date desc
     allData.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
+    // Pagination Logic
+    const totalPages = Math.ceil(allData.length / itemsPerPage) || 1;
+
+    // Validate current page
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedData = allData.slice(startIndex, startIndex + itemsPerPage);
+
     // Render
-    tbody.innerHTML = allData.map(item => {
+    tbody.innerHTML = paginatedData.map(item => {
         const dateStr = formatDate(item.fecha);
         const tipoBadge = getBadge(item.dataType);
 
@@ -777,7 +818,12 @@ function updateTable() {
         }
 
         return `
-            <tr id="row-${item.id}">
+            <tr id="row-${item.id}" class="${item.selected ? 'selected' : ''}">
+                <td style="text-align: center;">
+                    ${item.dataType === 'venta'
+                ? `<input type="checkbox" class="row-checkbox" value="${item.id}" onchange="handleRowSelection('${item.id}')">`
+                : ''}
+                </td>
                 <td>
                     ${dateStr}
                     <div class="mobile-only-row">
@@ -798,20 +844,63 @@ function updateTable() {
             </tr>
             <tr id="detail-${item.id}" class="mobile-detail-row hidden">
                 <td colspan="6">
-                    <div class="mobile-detail-content">
-                        ${mobileDetailHtml}
-                        <div class="mobile-actions">
-                             <button class="btn-delete" onclick="deleteItem('${item.id}', '${item.collection}')">Eliminar</button>
-                             ${!item.isLegacy && item.dataType !== 'costo' ? `<button class="btn-edit" onclick="editItem('${item.id}', '${item.dataType}')">Editar</button>` : ''}
-                        </div>
+                    ${mobileDetailHtml}
+                    <div style="margin-top: 10px; text-align: right;">
+                        <button class="btn-delete" onclick="deleteItem('${item.id}', '${item.collection}')">Eliminar</button>
+                        ${!item.isLegacy && item.dataType !== 'costo' ? `<button class="btn-edit" onclick="editItem('${item.id}', '${item.dataType}')">Editar</button>` : ''}
                     </div>
                 </td>
             </tr>
         `;
     }).join('');
 
-    // Legacy filter function removal as we handle it above
+    // Update Pagination Controls
+    renderPagination(totalPages);
 }
+
+function renderPagination(totalPages) {
+    const container = document.getElementById('paginationControls');
+    if (!container) return;
+
+    // Don't show controls if only 1 page
+    if (totalPages <= 1) {
+        container.innerHTML = '';
+        container.style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'flex';
+
+    container.innerHTML = `
+        <button class="pagination-btn" 
+            onclick="changePage(${currentPage - 1})" 
+            ${currentPage === 1 ? 'disabled' : ''}>
+            Anterior
+        </button>
+        <span class="pagination-info">
+            Página ${currentPage} de ${totalPages}
+        </span>
+        <button class="pagination-btn" 
+            onclick="changePage(${currentPage + 1})" 
+            ${currentPage === totalPages ? 'disabled' : ''}>
+            Siguiente
+        </button>
+    `;
+}
+
+function changePage(newPage) {
+    currentPage = newPage;
+    updateTable();
+    // Scroll to the top of the table section
+    const tableSection = document.querySelector('.table-section');
+    if (tableSection) {
+        tableSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+// Make changePage globally available
+window.changePage = changePage;
+
 
 function getBadge(type) {
     if (type === 'venta') return '<span class="badge-venta">Venta</span>';
@@ -1074,4 +1163,52 @@ style.textContent = `
         margin-bottom: 15px;
     }
 `;
-document.head.appendChild(style);
+
+// Selection Logic
+function toggleSelectAll(e) {
+    const isChecked = e.target.checked;
+    const checkboxes = document.querySelectorAll('.row-checkbox');
+    checkboxes.forEach(cb => {
+        cb.checked = isChecked;
+        handleRowSelection(cb.value, isChecked);
+    });
+}
+
+function handleRowSelection(id, forcedState = null) {
+    const row = document.getElementById(`row-${id}`);
+    const checkbox = row.querySelector('.row-checkbox');
+    const isChecked = forcedState !== null ? forcedState : checkbox.checked;
+
+    if (row) {
+        if (isChecked) {
+            row.classList.add('selected');
+        } else {
+            row.classList.remove('selected');
+        }
+    }
+}
+
+// Report Generation
+function handleGenerateReport() {
+    // Get all selected IDs
+    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
+    if (checkboxes.length === 0) {
+        alert('Por favor selecciona al menos una venta para generar el reporte.');
+        return;
+    }
+
+    const selectedIds = Array.from(checkboxes).map(cb => cb.value);
+
+    // Filter sales data
+    const selectedSales = ventas.filter(v => selectedIds.includes(v.id));
+
+    // Save to localStorage
+    localStorage.setItem('reportData', JSON.stringify(selectedSales));
+
+    // Open report page
+    window.open('/admin/report.html', '_blank');
+}
+
+// Expose functions
+window.handleRowSelection = handleRowSelection;
+window.toggleSelectAll = toggleSelectAll;

@@ -1206,7 +1206,7 @@ function handleGenerateReport() {
     localStorage.setItem('reportData', JSON.stringify(selectedSales));
 
     // Open report page
-    window.open('report.html', '_blank');
+    window.open('/admin/report.html', '_blank');
 }
 
 // Expose functions
