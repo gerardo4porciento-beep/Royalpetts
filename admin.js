@@ -7,6 +7,7 @@ let isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 let ventasUnsubscribe, gastosUnsubscribe, costosUnsubscribe;
 let currentPage = 1;
 const itemsPerPage = 8; // Showing 8 items per page for better visibility
+let selectedIds = new Set();
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
@@ -827,10 +828,10 @@ function updateTable() {
         }
 
         return `
-            <tr id="row-${item.id}" class="${item.selected ? 'selected' : ''}">
+            <tr id="row-${item.id}" class="${selectedIds.has(item.id) ? 'selected' : ''}">
                 <td style="text-align: center;">
                     ${item.dataType === 'venta'
-                ? `<input type="checkbox" class="row-checkbox" value="${item.id}" onchange="handleRowSelection('${item.id}')">`
+                ? `<input type="checkbox" class="row-checkbox" value="${item.id}" onchange="handleRowSelection('${item.id}')" ${selectedIds.has(item.id) ? 'checked' : ''}>`
                 : ''}
                 </td>
                 <td>
@@ -1185,31 +1186,52 @@ function toggleSelectAll(e) {
 
 function handleRowSelection(id, forcedState = null) {
     const row = document.getElementById(`row-${id}`);
-    const checkbox = row.querySelector('.row-checkbox');
-    const isChecked = forcedState !== null ? forcedState : checkbox.checked;
+    const checkbox = row ? row.querySelector('.row-checkbox') : null;
+    // Determine state: if forcedState is provided, use it; otherwise toggle existing presence in Set
+    // However, the original logic was driven by onchange.
 
-    if (row) {
-        if (isChecked) {
-            row.classList.add('selected');
-        } else {
-            row.classList.remove('selected');
-        }
+    // Simplification:
+    // If called from onchange, just read the checkbox or toggle.
+    // If called from SelectAll with forcedState, use that.
+
+    let isChecked;
+    if (forcedState !== null) {
+        isChecked = forcedState;
+    } else if (checkbox) {
+        isChecked = checkbox.checked;
+    } else {
+        // Fallback or external call without checking DOM?
+        // Ideally we trust the Set if row is not rendered, but here we are acting on user interaction.
+        // If row is invalid, we can't determine "checked" from DOM.
+        // But handleRowSelection is triggered by DOM events.
+        isChecked = !selectedIds.has(id); // Toggle logic if no DOM state?
+    }
+
+    if (isChecked) {
+        selectedIds.add(id);
+        if (row) row.classList.add('selected');
+        // Also check input if not checked (case of programmatic call)
+        if (checkbox && !checkbox.checked) checkbox.checked = true;
+    } else {
+        selectedIds.delete(id);
+        if (row) row.classList.remove('selected');
+        if (checkbox && checkbox.checked) checkbox.checked = false;
     }
 }
 
 // Report Generation
 function handleGenerateReport() {
-    // Get all selected IDs
-    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
-    if (checkboxes.length === 0) {
+    // Get ALL selected IDs from the Set
+    if (selectedIds.size === 0) {
         alert('Por favor selecciona al menos una venta para generar el reporte.');
         return;
     }
 
-    const selectedIds = Array.from(checkboxes).map(cb => cb.value);
+    const selectedIdArray = Array.from(selectedIds);
 
-    // Filter sales data
-    const selectedSales = ventas.filter(v => selectedIds.includes(v.id));
+    // Filter sales data from GLOBAL ventas array
+    // Assuming 'ventas' is a globally accessible array of all sales data
+    const selectedSales = ventas.filter(v => selectedIds.has(v.id));
 
     // Save to localStorage
     localStorage.setItem('reportData', JSON.stringify(selectedSales));
