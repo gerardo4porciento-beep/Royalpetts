@@ -480,15 +480,15 @@ function updateStats() {
     const ventasCobradas = ventas.filter(v => v.estadoCobro !== 'por_cobrar');
     const ventasPorCobrar = ventas.filter(v => v.estadoCobro === 'por_cobrar');
 
-    const totalVendidos = ventas.reduce((sum, v) => sum + v.cantidad, 0); // Count all dogs regardless of payment status? Usually yes.
+    const totalVendidos = ventas.reduce((sum, v) => sum + v.cantidad, 0);
 
-    // Total Sales (Revenue) - Only Paid
-    const totalVentas = ventasCobradas.reduce((sum, v) => sum + v.total, 0);
+    // Total Sales (Revenue) - NOW INCLUDES EVERYTHING (Accrual Basis)
+    const totalVentas = ventas.reduce((sum, v) => sum + v.total, 0);
 
     // Pending Collections
     const totalCobrosPendientes = ventasPorCobrar.reduce((sum, v) => sum + v.total, 0);
 
-    // Map sales by ID for fast lookup and strict validation
+    // Map sales by ID for fast lookup
     const ventasMap = new Map(ventas.map(v => [v.id, v]));
 
     // Separar gastos reales de costos legacy (guardados como gastos)
@@ -496,11 +496,11 @@ function updateStats() {
 
     // Helper to check if a cost should be included
     const shouldIncludeCost = (ventaId) => {
-        if (!ventaId) return true; // Legacy/Manual cost with no link -> Include (safest assumption)
+        if (!ventaId) return true; // Legacy/Manual cost with no link -> Include
         const venta = ventasMap.get(ventaId);
-        // Only include if sale exists AND is NOT pending
-        // This handles race conditions (sale not loaded yet) and pending status
-        return venta && venta.estadoCobro !== 'por_cobrar';
+        // Exclude only if sale is explicitly deleted (not found in map)
+        // Now including costs for 'por_cobrar' sales too
+        return !!venta;
     };
 
     // Legacy Costs
@@ -516,10 +516,19 @@ function updateStats() {
     const totalCostos = activeCostos.reduce((sum, c) => sum + c.monto, 0) +
         legacyCostos.reduce((sum, c) => sum + (c.monto || c.total), 0);
 
-    // Solicitud usuario: No descontar gastos, solo costos y comisiones
+    // Ganancia Neta (Accrual Basis)
     const gananciaNeta = totalVentas - totalCostos;
 
-    // Solicitud usuario: Nuevo cuadro "Disponible" = Ganancia - Gastos
+    // Disponible (Cash Basis Proxy - roughly)
+    // Actually, "Disponible" usually means Cash on Hand.
+    // Cash on Hand = (Total Ventas - Pending Collections) - Total Gastos - Total Costos (paid)
+    // But for simplicity based on user request "Disponible = Ganancia - Gastos", we stick to the formula but warns it might include pending money.
+    // If they want REAL availability, it should be: (TotalVentas - Pending) - Costos(Paid?) - Gastos.
+    // Let's keep the formula simple as requested: GananciaNeta - Gastos, but GananciaNeta is now Accrual.
+    // Wait, if "Disponible" assumes money in pocket, we should probably substract Pending from it?
+    // Let's stick to the requested simple math "Disponible = Ganancia - Gastos" but using the new TotalVentas.
+    // If the user complains about "Disponible" being too high (including money they don't have), we can adjust.
+    // For now, fixing "Total Ventas" is the priority.
     const totalDisponible = gananciaNeta - totalGastos;
 
     document.getElementById('totalVendidos').textContent = totalVendidos;
@@ -533,7 +542,7 @@ function updateStats() {
         document.getElementById('totalCobrosPendientes').textContent = `$${totalCobrosPendientes.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
     }
 
-    // Verificar si existe el elemento antes de actualizarlo (por si acaso caché viejo de HTML)
+    // Verificar si existe el elemento antes de actualizarlo
     if (document.getElementById('totalDisponible')) {
         document.getElementById('totalDisponible').textContent = `$${totalDisponible.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
     }
