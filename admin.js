@@ -5,6 +5,8 @@ let gastos = [];
 let costos = [];
 let isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 let ventasUnsubscribe, gastosUnsubscribe, costosUnsubscribe;
+let currentPage = 1;
+const itemsPerPage = 8; // Showing 8 items per page for better visibility
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
@@ -724,8 +726,18 @@ function updateTable() {
     // Sort by date desc
     allData.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
+    // Pagination Logic
+    const totalPages = Math.ceil(allData.length / itemsPerPage) || 1;
+
+    // Validate current page
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedData = allData.slice(startIndex, startIndex + itemsPerPage);
+
     // Render
-    tbody.innerHTML = allData.map(item => {
+    tbody.innerHTML = paginatedData.map(item => {
         const dateStr = formatDate(item.fecha);
         const tipoBadge = getBadge(item.dataType);
 
@@ -798,20 +810,63 @@ function updateTable() {
             </tr>
             <tr id="detail-${item.id}" class="mobile-detail-row hidden">
                 <td colspan="6">
-                    <div class="mobile-detail-content">
-                        ${mobileDetailHtml}
-                        <div class="mobile-actions">
-                             <button class="btn-delete" onclick="deleteItem('${item.id}', '${item.collection}')">Eliminar</button>
-                             ${!item.isLegacy && item.dataType !== 'costo' ? `<button class="btn-edit" onclick="editItem('${item.id}', '${item.dataType}')">Editar</button>` : ''}
-                        </div>
+                    ${mobileDetailHtml}
+                    <div style="margin-top: 10px; text-align: right;">
+                        <button class="btn-delete" onclick="deleteItem('${item.id}', '${item.collection}')">Eliminar</button>
+                        ${!item.isLegacy && item.dataType !== 'costo' ? `<button class="btn-edit" onclick="editItem('${item.id}', '${item.dataType}')">Editar</button>` : ''}
                     </div>
                 </td>
             </tr>
         `;
     }).join('');
 
-    // Legacy filter function removal as we handle it above
+    // Update Pagination Controls
+    renderPagination(totalPages);
 }
+
+function renderPagination(totalPages) {
+    const container = document.getElementById('paginationControls');
+    if (!container) return;
+
+    // Don't show controls if only 1 page
+    if (totalPages <= 1) {
+        container.innerHTML = '';
+        container.style.display = 'none';
+        return;
+    }
+
+    container.style.display = 'flex';
+
+    container.innerHTML = `
+        <button class="pagination-btn" 
+            onclick="changePage(${currentPage - 1})" 
+            ${currentPage === 1 ? 'disabled' : ''}>
+            Anterior
+        </button>
+        <span class="pagination-info">
+            Página ${currentPage} de ${totalPages}
+        </span>
+        <button class="pagination-btn" 
+            onclick="changePage(${currentPage + 1})" 
+            ${currentPage === totalPages ? 'disabled' : ''}>
+            Siguiente
+        </button>
+    `;
+}
+
+function changePage(newPage) {
+    currentPage = newPage;
+    updateTable();
+    // Scroll to the top of the table section
+    const tableSection = document.querySelector('.table-section');
+    if (tableSection) {
+        tableSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+// Make changePage globally available
+window.changePage = changePage;
+
 
 function getBadge(type) {
     if (type === 'venta') return '<span class="badge-venta">Venta</span>';

@@ -81,3 +81,5 @@ Cada documento contiene:
 - Cualquier cambio se verá reflejado en tiempo real en todos los dispositivos conectados
 - Asegúrate de tener conexión a internet para que funcione correctamente
 
+
+
