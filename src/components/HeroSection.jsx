@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, Suspense } from 'react';
+import React, { useRef, useEffect, Suspense, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import {
     Environment,
