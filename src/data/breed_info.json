@@ -1,0 +1,72 @@
+{
+    "Biewer": {
+        "description": "El Biewer Terrier es una raza elegante y tricolor, conocida por su pelaje sedoso y su personalidad encantadora. A pesar de su tamaño pequeño, tiene un carácter 'más grande que la vida', siendo leal, juguetón y muy inteligente. Son excelentes compañeros familiares que se llevan bien con todos.",
+        "size": "Pequeño (18-28 cm)",
+        "origin": "Alemania (1984)",
+        "lifeExpectancy": "14-16 años",
+        "temperament": "Juguetón, Leal, Inteligente"
+    },
+    "Bichon Maltes": {
+        "description": "El Bichón Maltés es un perro de juguete con un manto blanco puro y sedoso. Son perros gentiles, afectuosos y muy inteligentes. Aunque pequeños, son valientes y alertas, lo que los convierte en buenos perros guardianes además de ser compañeros devotos que adoran estar con sus dueños.",
+        "size": "Pequeño (20-25 cm)",
+        "origin": "Cuenca del Mediterráneo",
+        "lifeExpectancy": "12-15 años",
+        "temperament": "Gentil, Cariñoso, Juguetón"
+    },
+    "Bulldog Frances": {
+        "description": "Inconfundible por sus orejas de murciélago, el Bulldog Francés es un perro robusto y compacto. Son conocidos por ser payasos naturales, cariñosos y muy adaptables a la vida en apartamentos. Rara vez ladran sin razón, pero son excelentes alertando a sus dueños.",
+        "size": "Mediano (28-33 cm)",
+        "origin": "Francia",
+        "lifeExpectancy": "10-12 años",
+        "temperament": "Sociable, Payaso, Paciente"
+    },
+    "Caniche": {
+        "description": "El Caniche (Poodle) es famoso por su inteligencia superior y elegancia. Es una de las razas más fáciles de entrenar y destaca en obediencia. Son activos, orgullosos y muy orientados a las personas, siendo excelentes perros para familias activas.",
+        "size": "Variable (Toy, Enano, Mediano)",
+        "origin": "Alemania/Francia",
+        "lifeExpectancy": "12-15 años",
+        "temperament": "Muy Inteligente, Activo, Leal"
+    },
+    "Golden Retriever": {
+        "description": "El Golden Retriever es la definición de un perro familiar perfecto: amigable, tolerante y confiable. Originalmente criados para recuperar caza, hoy son amados por su naturaleza gentil y su deseo de complacer. Son excelentes con niños y otras mascotas.",
+        "size": "Grande (51-61 cm)",
+        "origin": "Escocia",
+        "lifeExpectancy": "10-12 años",
+        "temperament": "Amigable, Confiable, Devoto"
+    },
+    "Pomerania": {
+        "description": "El Pomerania es un perro pequeño con una gran actitud. Con su cara de zorro y pelaje esponjoso, es imposible de ignorar. Son extrovertidos, inteligentes y vivaces, a menudo actuando como si fueran mucho más grandes de lo que son. Excelentes compañeros de alerta.",
+        "size": "Toy (18-30 cm)",
+        "origin": "Alemania/Polonia",
+        "lifeExpectancy": "12-16 años",
+        "temperament": "Vivaz, Extrovertido, Audaz"
+    },
+    "Shihtzu": {
+        "description": "Criado originalmente para la realeza china, el Shih Tzu es un perro faldero por excelencia. Son conocidos por ser afectuosos, felices y extrovertidos. Su nombre significa 'Perro León', pero su temperamento es todo amor y compañía.",
+        "size": "Pequeño (20-28 cm)",
+        "origin": "Tíbet/China",
+        "lifeExpectancy": "10-16 años",
+        "temperament": "Cariñoso, Juguetón, Extrovertido"
+    },
+    "Yorkshire": {
+        "description": "El Yorkshire Terrier es un perro pequeño con una gran personalidad de terrier. Son valientes, decididos y enérgicos. Sus pelajes largos y sedosos son su sello distintivo. A pesar de su tamaño, son excelentes perros guardianes y compañeros leales.",
+        "size": "Toy (17-20 cm)",
+        "origin": "Reino Unido",
+        "lifeExpectancy": "11-15 años",
+        "temperament": "Tenaz, Valiente, Cariñoso"
+    },
+    "Teckel Pelo Largo": {
+        "description": "El Teckel de pelo largo combina la tenacidad del perro salchicha con una elegancia única. Suelen ser un poco más tranquilos que los de pelo corto, pero siguen siendo curiosos y valientes. Son compañeros leales con un fuerte instinto de caza.",
+        "size": "Pequeño (Estándar/Miniatura)",
+        "origin": "Alemania",
+        "lifeExpectancy": "12-16 años",
+        "temperament": "Curioso, Valiente, Devoto"
+    },
+    "Beagle": {
+        "description": "El Beagle es un sabueso compacto, robusto y alegre. Son conocidos por su increíble olfato y su naturaleza amistosa. Se llevan bien con otros perros y niños, siendo excelentes mascotas familiares, aunque su nariz a veces puede distraerlos.",
+        "size": "Mediano (33-41 cm)",
+        "origin": "Reino Unido",
+        "lifeExpectancy": "12-15 años",
+        "temperament": "Alegre, Curioso, Amigable"
+    }
+}

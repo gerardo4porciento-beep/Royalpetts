@@ -1,0 +1,386 @@
+[
+  {
+    "title": "Beagle",
+    "subtitle": "Rockstar",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/beagle1.webp"
+  },
+  {
+    "title": "Beagle",
+    "subtitle": "Cute & Wild",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/beagle2.webp"
+  },
+  {
+    "title": "Bichon Maltes",
+    "subtitle": "Royal Star",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/bichonmaltes1.webp"
+  },
+  {
+    "title": "Biewer",
+    "subtitle": "Best Friend",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/biewer1.webp"
+  },
+  {
+    "title": "Bulldog Frances",
+    "subtitle": "Puppy Love",
+    "color": "#32f4bb",
+    "image": "/gallery_optimized/bulldogfrances1.webp"
+  },
+  {
+    "title": "Bulldog Frances",
+    "subtitle": "Rockstar",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/bulldogfrances2.webp"
+  },
+  {
+    "title": "Bulldog Frances",
+    "subtitle": "Cute & Wild",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/bulldogfrances3.webp"
+  },
+  {
+    "title": "Bulldog Frances",
+    "subtitle": "Best Friend",
+    "color": "#fe9e5b",
+    "image": "/gallery_optimized/bulldogfrances4.webp"
+  },
+  {
+    "title": "Bulldog Frances",
+    "subtitle": "Puppy Love",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/bulldogfrances5.webp"
+  },
+  {
+    "title": "Bulldog Frances",
+    "subtitle": "Best Friend",
+    "color": "#32f4bb",
+    "image": "/gallery_optimized/bulldogfrances6.webp"
+  },
+  {
+    "title": "Bulldog Frances",
+    "subtitle": "Best Friend",
+    "color": "#fe9e5b",
+    "image": "/gallery_optimized/bulldogfrances7.webp"
+  },
+  {
+    "title": "Bulldog Frances",
+    "subtitle": "Rockstar",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/bulldogfrances8.webp"
+  },
+  {
+    "title": "Canecorso",
+    "subtitle": "Best Friend",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/canecorso1.webp"
+  },
+  {
+    "title": "Canecorso",
+    "subtitle": "Best Friend",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/canecorso2.webp"
+  },
+  {
+    "title": "Caniche Toy Rojo",
+    "subtitle": "Best Friend",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/canichetoyrojo1.webp"
+  },
+  {
+    "title": "Caniche Toy Rojo",
+    "subtitle": "Rockstar",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/canichetoyrojo2.webp"
+  },
+  {
+    "title": "Caniche Toy Rojo",
+    "subtitle": "Royal Star",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/canichetoyrojo3.webp"
+  },
+  {
+    "title": "Chihuahua",
+    "subtitle": "Puppy Love",
+    "color": "#32f4bb",
+    "image": "/gallery_optimized/chihuahua1.webp"
+  },
+  {
+    "title": "Chihuahua",
+    "subtitle": "Best Friend",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/chihuahua2.webp"
+  },
+  {
+    "title": "Chihuahua",
+    "subtitle": "Cute & Wild",
+    "color": "#32f4bb",
+    "image": "/gallery_optimized/chihuahua3.webp"
+  },
+  {
+    "title": "Chihuahua",
+    "subtitle": "Royal Star",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/chihuahua4.webp"
+  },
+  {
+    "title": "Chihuahua",
+    "subtitle": "Royal Star",
+    "color": "#fe9e5b",
+    "image": "/gallery_optimized/chihuahua5.webp"
+  },
+  {
+    "title": "Chihuahua",
+    "subtitle": "Royal Star",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/chihuahua6.webp"
+  },
+  {
+    "title": "Chihuahua",
+    "subtitle": "Puppy Love",
+    "color": "#fe9e5b",
+    "image": "/gallery_optimized/chihuahua7.webp"
+  },
+  {
+    "title": "Cocker Spaniel",
+    "subtitle": "Best Friend",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/cockerspaniel1.webp"
+  },
+  {
+    "title": "Doberman",
+    "subtitle": "Best Friend",
+    "color": "#fe9e5b",
+    "image": "/gallery_optimized/doberman1.webp"
+  },
+  {
+    "title": "Doberman",
+    "subtitle": "Best Friend",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/doberman2.webp"
+  },
+  {
+    "title": "Gato Persa",
+    "subtitle": "Best Friend",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/gatopersa1.webp"
+  },
+  {
+    "title": "Gato Persa",
+    "subtitle": "Cute & Wild",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/gatopersa2.webp"
+  },
+  {
+    "title": "Gato Persa",
+    "subtitle": "Rockstar",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/gatopersa3.webp"
+  },
+  {
+    "title": "Gato Persa",
+    "subtitle": "Best Friend",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/gatopersa4.webp"
+  },
+  {
+    "title": "Golden Retriever",
+    "subtitle": "Puppy Love",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/goldenretriever1.webp"
+  },
+  {
+    "title": "Golden Retriever",
+    "subtitle": "Puppy Love",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/goldenretriever2.webp"
+  },
+  {
+    "title": "Goldendoodle",
+    "subtitle": "Rockstar",
+    "color": "#fe9e5b",
+    "image": "/gallery_optimized/goldendoodle1.webp"
+  },
+  {
+    "title": "Goldendoodle",
+    "subtitle": "Cute & Wild",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/goldendoodle2.webp"
+  },
+  {
+    "title": "Goldendoodle",
+    "subtitle": "Puppy Love",
+    "color": "#fe9e5b",
+    "image": "/gallery_optimized/goldendoodle3.webp"
+  },
+  {
+    "title": "Husky",
+    "subtitle": "Rockstar",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/husky1.webp"
+  },
+  {
+    "title": "Husky",
+    "subtitle": "Puppy Love",
+    "color": "#32f4bb",
+    "image": "/gallery_optimized/husky2.webp"
+  },
+  {
+    "title": "Husky",
+    "subtitle": "Best Friend",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/husky3.webp"
+  },
+  {
+    "title": "Labrador",
+    "subtitle": "Puppy Love",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/labrador1.webp"
+  },
+  {
+    "title": "Maltipoo",
+    "subtitle": "Cute & Wild",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/maltipoo1.webp"
+  },
+  {
+    "title": "Pomerania",
+    "subtitle": "Puppy Love",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/pomerania1.webp"
+  },
+  {
+    "title": "Pomerania",
+    "subtitle": "Cute & Wild",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/pomerania2.webp"
+  },
+  {
+    "title": "Pomerania",
+    "subtitle": "Best Friend",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/pomerania3.webp"
+  },
+  {
+    "title": "Pomerania",
+    "subtitle": "Best Friend",
+    "color": "#32f4bb",
+    "image": "/gallery_optimized/pomerania4.webp"
+  },
+  {
+    "title": "Pomerania",
+    "subtitle": "Cute & Wild",
+    "color": "#32f4bb",
+    "image": "/gallery_optimized/pomerania5.webp"
+  },
+  {
+    "title": "Pomerania",
+    "subtitle": "Puppy Love",
+    "color": "#fe9e5b",
+    "image": "/gallery_optimized/pomerania6.webp"
+  },
+  {
+    "title": "Pomerania",
+    "subtitle": "Cute & Wild",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/pomerania7.webp"
+  },
+  {
+    "title": "Pomerania",
+    "subtitle": "Best Friend",
+    "color": "#fe9e5b",
+    "image": "/gallery_optimized/pomerania8.webp"
+  },
+  {
+    "title": "Pomerania",
+    "subtitle": "Cute & Wild",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/WhatsApp Image 2025-12-15 at 11.59.37_8b0a48d8.webp"
+  },
+  {
+    "title": "ShiTzu",
+    "subtitle": "Cute & Wild",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/IMG-20251215-WA0009.webp"
+  },
+  {
+    "title": "ShiTzu",
+    "subtitle": "Royal Star",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/IMG-20251215-WA0010.webp"
+  },
+  {
+    "title": "ShiTzu",
+    "subtitle": "Cute & Wild",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/IMG-20251215-WA0011.webp"
+  },
+  {
+    "title": "ShiTzu",
+    "subtitle": "Cute & Wild",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/IMG-20251215-WA0012.webp"
+  },
+  {
+    "title": "ShiTzu",
+    "subtitle": "Puppy Love",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/IMG-20251215-WA0013.webp"
+  },
+  {
+    "title": "ShiTzu",
+    "subtitle": "Best Friend",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/IMG-20251215-WA0014.webp"
+  },
+  {
+    "title": "ShiTzu",
+    "subtitle": "Best Friend",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/shitzu1.webp"
+  },
+  {
+    "title": "ShiTzu",
+    "subtitle": "Puppy Love",
+    "color": "#ff7db2",
+    "image": "/gallery_optimized/shitzu2.webp"
+  },
+  {
+    "title": "ShiTzu",
+    "subtitle": "Best Friend",
+    "color": "#32f4bb",
+    "image": "/gallery_optimized/shitzu3.webp"
+  },
+  {
+    "title": "Teckel Merle",
+    "subtitle": "Rockstar",
+    "color": "#32f4bb",
+    "image": "/gallery_optimized/teckelmerle1.webp"
+  },
+  {
+    "title": "Teckel Merle",
+    "subtitle": "Cute & Wild",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/teckelmerle2.webp"
+  },
+  {
+    "title": "Teckel Merle",
+    "subtitle": "Puppy Love",
+    "color": "#ffea20",
+    "image": "/gallery_optimized/teckelmerle3.webp"
+  },
+  {
+    "title": "Teckel Pelo Largo",
+    "subtitle": "Puppy Love",
+    "color": "#00b9ec",
+    "image": "/gallery_optimized/teckelpelolargo1.webp"
+  },
+  {
+    "title": "Teckel Pelo Largo",
+    "subtitle": "Rockstar",
+    "color": "#fe9e5b",
+    "image": "/gallery_optimized/teckelpelolargo2.webp"
+  }
+]

@@ -1,0 +1,83 @@
+@font-face {
+  font-family: 'FinalFont';
+  src: url('/rockstargirl.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+  animation-delay: 1s;
+}
+
+/* Custom styles */
+body {
+  background-color: #ffffff;
+  font-family: 'FinalFont', sans-serif !important;
+}
+
+/* Custom Cursor for Interactive Elements */
+a,
+button,
+.cursor-pointer,
+input[type="submit"],
+input[type="button"] {
+  cursor: url('/paw_cursor.svg') 16 16, pointer !important;
+}
+
+a:hover,
+button:hover,
+.cursor-pointer:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+  cursor: url('/paw_cursor.svg') 16 16, pointer !important;
+}
+
+/* Infinite Scroll Animation */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-ticker {
+  display: flex;
+  /* Ensure flex for children */
+  width: max-content;
+  /* Allow content to overflow for scrolling */
+  animation: scroll-left 25s linear infinite;
+}
+
+/* Pause on hover optional */
+.animate-scroll-ticker:hover {
+  animation-play-state: paused;
+}

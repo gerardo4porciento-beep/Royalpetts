@@ -1,0 +1,55 @@
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const targetDir = path.join(__dirname, '../public/assets/sequence');
+
+// Ensure directory exists
+if (!fs.existsSync(targetDir)) {
+    fs.mkdirSync(targetDir, { recursive: true });
+}
+
+const frameCount = 60;
+
+console.log(`Generating ${frameCount} frames in ${targetDir}...`);
+
+for (let i = 1; i <= frameCount; i++) {
+    const progress = i / frameCount;
+    // Animate a circle moving from left to right and changing color
+    const cx = 100 + (progress * 800); // Move across 1000px wide canvas
+    const cy = 500;
+    const r = 100 + (Math.sin(progress * Math.PI * 4) * 20); // Pulse size
+
+    // Color transition from Blue to Green
+    const rVal = Math.floor(0 + (50 * progress));
+    const gVal = Math.floor(185 + (59 * progress));
+    const bVal = Math.floor(236 - (49 * progress));
+    const color = `rgb(${rVal}, ${gVal}, ${bVal})`;
+
+    const svgContent = `
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#F8F9FA"/>
+  
+  <!-- Grid background for motion reference -->
+  <line x1="0" y1="200" x2="1920" y2="200" stroke="#ddd" stroke-width="2"/>
+  <line x1="0" y1="800" x2="1920" y2="800" stroke="#ddd" stroke-width="2"/>
+  <line x1="500" y1="0" x2="500" y2="1080" stroke="#ddd" stroke-width="2"/>
+  <line x1="1400" y1="0" x2="1400" y2="1080" stroke="#ddd" stroke-width="2"/>
+
+  <!-- Moving Object -->
+  <circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}" />
+  
+  <!-- Frame Number -->
+  <text x="50" y="100" font-family="Arial" font-size="60" fill="#1A1A1A">Frame ${i} / ${frameCount}</text>
+  <text x="50" y="180" font-family="Arial" font-size="40" fill="#666">RoyalPetts Demo Sequence</text>
+</svg>`;
+
+    const fileName = `frame_${i.toString().padStart(3, '0')}.svg`;
+    fs.writeFileSync(path.join(targetDir, fileName), svgContent);
+}
+
+console.log('Done!');

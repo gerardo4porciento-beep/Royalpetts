@@ -166,8 +166,8 @@ function handleLogin(e) {
     e.preventDefault();
     console.log('Intento de login...');
 
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
 
     console.log('Usuario:', username);
 

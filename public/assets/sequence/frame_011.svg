@@ -1,0 +1,17 @@
+
+<svg width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#F8F9FA"/>
+  
+  <!-- Grid background for motion reference -->
+  <line x1="0" y1="200" x2="1920" y2="200" stroke="#ddd" stroke-width="2"/>
+  <line x1="0" y1="800" x2="1920" y2="800" stroke="#ddd" stroke-width="2"/>
+  <line x1="500" y1="0" x2="500" y2="1080" stroke="#ddd" stroke-width="2"/>
+  <line x1="1400" y1="0" x2="1400" y2="1080" stroke="#ddd" stroke-width="2"/>
+
+  <!-- Moving Object -->
+  <circle cx="246.66666666666666" cy="500" r="114.8628965095479" fill="rgb(9, 195, 227)" />
+  
+  <!-- Frame Number -->
+  <text x="50" y="100" font-family="Arial" font-size="60" fill="#1A1A1A">Frame 11 / 60</text>
+  <text x="50" y="180" font-family="Arial" font-size="40" fill="#666">RoyalPetts Demo Sequence</text>
+</svg>
