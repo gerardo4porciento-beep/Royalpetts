@@ -128,6 +128,15 @@ const HeroSection = () => {
     const buttonsRef = useRef(null);
     const bgRef = useRef(null);
 
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     useEffect(() => {
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
@@ -199,18 +208,20 @@ const HeroSection = () => {
                 style={{ backgroundImage: "url('/fondo_home3.svg')" }}
             ></div>
 
-            {/* 3D Scene Layer (Absolute Background/Interactive) */}
-            <div className="absolute inset-0 z-5 h-full w-full">
-                <Canvas shadows gl={{ antialias: true, alpha: true }} dpr={[1, 2]}>
-                    <Suspense fallback={null}>
-                        <ErrorBoundary FallbackComponent={() => null}>
-                            <SceneContent />
-                        </ErrorBoundary>
-                    </Suspense>
-                </Canvas>
-                {/* Vignette Overlay for focus */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_120%)] pointer-events-none mix-blend-multiply opacity-50"></div>
-            </div>
+            {/* 3D Scene Layer (Absolute Background/Interactive) - Desktop Only */}
+            {!isMobile && (
+                <div className="absolute inset-0 z-5 h-full w-full">
+                    <Canvas shadows gl={{ antialias: true, alpha: true }} dpr={[1, 2]}>
+                        <Suspense fallback={null}>
+                            <ErrorBoundary FallbackComponent={() => null}>
+                                <SceneContent />
+                            </ErrorBoundary>
+                        </Suspense>
+                    </Canvas>
+                    {/* Vignette Overlay for focus */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_120%)] pointer-events-none mix-blend-multiply opacity-50"></div>
+                </div>
+            )}
 
             {/* UI Content Layer (Grid Layout) */}
             <div className="relative z-10 w-full h-full max-w-[1600px] mx-auto grid grid-cols-12 px-6 lg:px-12 pointer-events-none">

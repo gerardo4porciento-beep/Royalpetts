@@ -2,11 +2,13 @@ import React from 'react';
 import SmoothScroll from './SmoothScroll';
 import HeroSection from './HeroSection';
 
-import AccessoriesGrid from './AccessoriesGrid';
-import Footer from './Footer';
+// import AccessoriesGrid from './AccessoriesGrid'; // REMOVED
+// import Footer from './Footer'; // REMOVED
 import Navbar from './Navbar';
 import GallerySection from './GallerySection';
 import ScrollGuidePath from './ScrollGuidePath';
+import FamilySection from './FamilySection';
+import ContactSection from './ContactSection';
 
 import { motion, useScroll, useSpring } from 'framer-motion';
 
@@ -39,10 +41,12 @@ const LandingPage = () => {
                     <HeroSection />
                     <GallerySection />
 
-                    <AccessoriesGrid />
+                    {/* New Sections */}
+                    <FamilySection />
+                    <ContactSection />
                 </main>
 
-                <Footer />
+                {/* Footer Removed as requested */}
             </div>
         </SmoothScroll>
     );
