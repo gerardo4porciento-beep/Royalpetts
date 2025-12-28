@@ -239,13 +239,13 @@ const HeroSection = () => {
                 </div>
 
                 {/* Right Column: Space for 3D Visuals & Puppy Image */}
-                <div className="hidden lg:block lg:col-span-5 pointer-events-none relative">
+                <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-[50vh] lg:h-auto flex items-end justify-center lg:block">
                     {/* Floating Puppy Image (Idea 2: Parallax, Idea 4: Rim Light) */}
                     <img
                         ref={puppyRef}
                         src="/frenchie_hero.gif?v=6"
                         alt="Cute Puppy"
-                        className="absolute bottom-0 left-[50px] w-[1365px] h-auto object-contain z-20 pointer-events-auto"
+                        className="relative lg:absolute bottom-0 lg:left-[50px] w-full max-w-[380px] lg:max-w-none lg:w-[1365px] h-auto object-contain z-20 pointer-events-auto"
                     />
                 </div>
             </div>
