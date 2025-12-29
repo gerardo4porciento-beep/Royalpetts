@@ -85,7 +85,7 @@ const LandingPage = () => {
                 <img
                     src="/frenchie_hero.gif"
                     alt="Frenchie background"
-                    className="fixed bottom-0 left-0 w-[240px] z-[1] pointer-events-none md:hidden"
+                    className="fixed bottom-0 left-0 w-[240px] z-[2] pointer-events-none md:hidden"
                     style={{
                         transform: 'rotate(5deg) scale(1.1)',
                         filter: 'drop-shadow(0 0 15px rgba(7, 172, 221, 0.4))'
