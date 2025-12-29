@@ -208,7 +208,7 @@ const HeroSection = () => {
                 <div className="col-span-12 lg:col-span-7 flex flex-col justify-center items-start text-left h-full pt-20">
 
                     {/* H1 - Massive Title */}
-                    <div className="relative overflow-visible p-2 mt-[380px]">
+                    <div className="relative overflow-visible p-2 mt-[120px] sm:mt-[200px] lg:mt-[380px]">
                         <h1
                             ref={titleRef}
                             className="font-skater text-[3.6rem] sm:text-[5.4rem] lg:text-[6.75rem] leading-[0.9] text-white opacity-0 transform origin-left"
@@ -218,7 +218,7 @@ const HeroSection = () => {
                             {'ENDLESS LOVE'.split('').map((letter, index) => (
                                 <motion.span
                                     key={index}
-                                    className="text-[4.95rem] sm:text-[7.2rem] lg:text-[8.55rem] inline-block"
+                                    className="text-[2.5rem] sm:text-[5rem] lg:text-[8.55rem] inline-block"
                                     initial={{ opacity: 0, y: 50 }}
                                     animate={{
                                         opacity: 1,
