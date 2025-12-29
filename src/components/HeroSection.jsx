@@ -205,7 +205,7 @@ const HeroSection = () => {
             <div className="relative z-10 w-full h-full max-w-[1600px] mx-auto grid grid-cols-12 px-6 lg:px-12 pointer-events-none">
 
                 {/* Left Column: Typography & CTAs - Spans 7 cols on Desktop */}
-                <div className="col-span-12 lg:col-span-7 flex flex-col justify-center items-start text-left h-full pt-20">
+                <div className="col-span-12 lg:col-span-7 flex flex-col justify-center items-start text-left h-full pt-20 order-last lg:order-first">
 
                     {/* H1 - Massive Title */}
                     <div className="relative overflow-visible p-2 mt-[120px] sm:mt-[200px] lg:mt-[380px]">
@@ -269,7 +269,7 @@ const HeroSection = () => {
                 </div>
 
                 {/* Right Column: Space for 3D Visuals & Puppy Image */}
-                <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-full flex items-end lg:items-center justify-center lg:justify-end">
+                <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-full flex items-end lg:items-center justify-center lg:justify-end order-first lg:order-last">
                     {/* Video popping out of hole - responsive */}
                     <video
                         src="/video home.mp4"
