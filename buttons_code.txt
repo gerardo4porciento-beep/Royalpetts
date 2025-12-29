@@ -1,0 +1,107 @@
+﻿
+> temp_hero.js:118:    const buttonsRef = useRef(null);
+  temp_hero.js:119:    const bgRef = useRef(null);
+  temp_hero.js:120:
+  temp_hero.js:121:    const [isMobile, setIsMobile] = useState(false);
+  temp_hero.js:122:
+  temp_hero.js:123:    useEffect(() => {
+  temp_hero.js:124:        const checkMobile = () => 
+setIsMobile(window.innerWidth < 1024);
+  temp_hero.js:125:        checkMobile();
+  temp_hero.js:126:        window.addEventListener('resize', checkMobile);
+  temp_hero.js:127:        return () => window.removeEventListener('resize', 
+checkMobile);
+  temp_hero.js:128:    }, []);
+  temp_hero.js:129:
+  temp_hero.js:130:    useEffect(() => {
+  temp_hero.js:131:        const ctx = gsap.context(() => {
+  temp_hero.js:132:            const tl = gsap.timeline({ defaults: { ease: 
+"power4.out" } });
+  temp_hero.js:133:
+  temp_hero.js:134:            // Initial Text Reveal Animation
+  temp_hero.js:135:            if (titleRef.current) {
+  temp_hero.js:136:                tl.fromTo(titleRef.current,
+  temp_hero.js:137:                    { x: -100, opacity: 0, scale: 1.2 },
+  temp_hero.js:138:                    { x: 0, opacity: 1, scale: 1, duration: 
+1.5, delay: 0.5 }
+  temp_hero.js:139:                );
+  temp_hero.js:140:            }
+  temp_hero.js:141:
+  temp_hero.js:142:
+  temp_hero.js:143:
+  temp_hero.js:144:
+  temp_hero.js:145:
+  temp_hero.js:146:            if (subtitleRef.current) {
+  temp_hero.js:147:                tl.fromTo(subtitleRef.current,
+  temp_hero.js:148:                    { x: -50, opacity: 0 },
+  temp_hero.js:149:                    { x: 0, opacity: 1, duration: 1 },
+  temp_hero.js:150:                    "-=1"
+  temp_hero.js:151:                );
+  temp_hero.js:152:            }
+> temp_hero.js:153:            if (buttonsRef.current && 
+buttonsRef.current.children.length > 0) {
+> temp_hero.js:154:                tl.fromTo(buttonsRef.current.children,
+  temp_hero.js:155:                    { y: 50, opacity: 0 },
+  temp_hero.js:156:                    { y: 0, opacity: 1, stagger: 0.2, 
+duration: 0.8 },
+  temp_hero.js:157:                    "-=0.8"
+  temp_hero.js:158:                );
+  temp_hero.js:159:            }
+  temp_hero.js:160:        }, containerRef);
+  temp_hero.js:161:
+  temp_hero.js:162:        // Parallax on Text & Background (Mouse Move)
+  temp_hero.js:163:        const handleMouseMove = (e) => {
+  temp_hero.js:164:            // Only check for title, allowing others to be 
+absent
+  temp_hero.js:165:            if (titleRef.current) {
+  temp_hero.js:166:                const x = (e.clientX / window.innerWidth - 
+0.5) * 20;
+  temp_hero.js:167:                const y = (e.clientY / window.innerHeight - 
+0.5) * 20;
+  temp_hero.js:168:
+  temp_hero.js:169:                gsap.to(titleRef.current, { x: x, y: y, 
+duration: 1, ease: "power2.out" });
+  temp_hero.js:170:
+  temp_hero.js:171:                // Optional subtitle parallax
+  temp_hero.js:172:                if (subtitleRef.current) {
+  temp_hero.js:173:                    gsap.to(subtitleRef.current, { x: x * 
+0.5, y: y * 0.5, duration: 1, ease: "power2.out" });
+  temp_hero.js:174:                }
+  temp_hero.js:175:            }
+  temp_hero.js:176:        };
+  temp_hero.js:177:
+  temp_hero.js:178:        window.addEventListener('mousemove', handleMouseMove);
+  temp_hero.js:179:        return () => {
+  temp_hero.js:180:            window.removeEventListener('mousemove', 
+handleMouseMove);
+  temp_hero.js:181:            ctx.revert();
+  temp_hero.js:182:        };
+  temp_hero.js:183:
+  temp_hero.js:184:    }, []);
+  temp_hero.js:185:
+  temp_hero.js:186:    return (
+  temp_hero.js:187:        <section ref={containerRef} className="relative 
+h-screen w-full overflow-hidden">
+  temp_hero.js:188:
+  temp_hero.js:189:            {/* 3D Scene Layer (Absolute 
+Background/Interactive) - Desktop Only */}
+  temp_hero.js:190:            {!isMobile && (
+  temp_hero.js:191:                <div className="absolute inset-0 z-5 h-full 
+w-full">
+  temp_hero.js:192:                    <Canvas shadows gl={{ antialias: true, 
+alpha: true }} dpr={[1, 2]}>
+  temp_hero.js:193:                        <Suspense fallback={null}>
+  temp_hero.js:194:                            <ErrorBoundary 
+FallbackComponent={() => null}>
+  temp_hero.js:195:                                <SceneContent />
+  temp_hero.js:196:                            </ErrorBoundary>
+  temp_hero.js:197:                        </Suspense>
+  temp_hero.js:198:                    </Canvas>
+  temp_hero.js:199:
+  temp_hero.js:200:                    {/* Vignette Overlay removed */}
+  temp_hero.js:201:                </div>
+  temp_hero.js:202:            )}
+  temp_hero.js:203:
+  temp_hero.js:204:            {/* UI Content Layer (Grid Layout) */}
+
+
