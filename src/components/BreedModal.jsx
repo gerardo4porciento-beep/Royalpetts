@@ -97,21 +97,21 @@ const BreedModal = ({ pet, onClose }) => {
 
                             {/* Details Grid */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-                                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                                    <h4 className="font-bold text-gray-400 text-sm uppercase mb-1">Tamaño</h4>
-                                    <p className="font-semibold text-royal-black">{info.size}</p>
+                                <div className="bg-royal-black p-4 rounded-xl border border-royal-blue/30">
+                                    <h4 className="font-bold text-royal-blue text-sm uppercase mb-1">Tamaño</h4>
+                                    <p className="font-semibold text-white">{info.size}</p>
                                 </div>
-                                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                                    <h4 className="font-bold text-gray-400 text-sm uppercase mb-1">Origen</h4>
-                                    <p className="font-semibold text-royal-black">{info.origin}</p>
+                                <div className="bg-royal-black p-4 rounded-xl border border-royal-green/30">
+                                    <h4 className="font-bold text-royal-green text-sm uppercase mb-1">Origen</h4>
+                                    <p className="font-semibold text-white">{info.origin}</p>
                                 </div>
-                                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                                    <h4 className="font-bold text-gray-400 text-sm uppercase mb-1">Vida media</h4>
-                                    <p className="font-semibold text-royal-black">{info.lifeExpectancy}</p>
+                                <div className="bg-royal-black p-4 rounded-xl border border-royal-pink/30">
+                                    <h4 className="font-bold text-royal-pink text-sm uppercase mb-1">Vida media</h4>
+                                    <p className="font-semibold text-white">{info.lifeExpectancy}</p>
                                 </div>
-                                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                                    <h4 className="font-bold text-gray-400 text-sm uppercase mb-1">Temperamento</h4>
-                                    <p className="font-semibold text-royal-black">{info.temperament}</p>
+                                <div className="bg-royal-black p-4 rounded-xl border border-royal-orange/30">
+                                    <h4 className="font-bold text-royal-orange text-sm uppercase mb-1">Temperamento</h4>
+                                    <p className="font-semibold text-white">{info.temperament}</p>
                                 </div>
                             </div>
 

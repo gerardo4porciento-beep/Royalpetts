@@ -2,52 +2,167 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const FamilySection = () => {
-    return (
-        <section className="relative min-h-screen bg-black flex flex-col items-center justify-center py-20 px-6 overflow-hidden">
+    const cards = [
+        {
+            title: 'PROCESO DE RESERVA',
+            icon: '📋',
+            description: 'Conoce nuestro proceso paso a paso para reservar tu cachorro ideal',
+            color: '#34f4ce',
+            shadowColor: '#ff7db2',
+            size: 'large'
+        },
+        {
+            title: 'CACHORROS',
+            icon: '🐶',
+            description: 'Explora nuestra selección de cachorros de raza disponibles',
+            color: '#ff7db2',
+            shadowColor: '#00b9ec',
+            size: 'small'
+        },
+        {
+            title: 'ACCESORIOS',
+            icon: '🎀',
+            description: 'Todo lo que tu mascota necesita para vivir como realeza',
+            color: '#fe9e5b',
+            shadowColor: '#ff7db2',
+            size: 'wide'
+        }
+    ];
 
-            {/* Background Atmosphere */}
-            <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
-                <div className="absolute top-[20%] left-[10%] w-[500px] h-[500px] bg-royal-blue rounded-full blur-[120px]"></div>
-                <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-royal-pink rounded-full blur-[120px]"></div>
+    const CardContent = ({ card, isWide = false }) => (
+        <>
+            {/* Glow Effect on Hover */}
+            <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                    background: `radial-gradient(circle at 50% 50%, ${card.color}30, transparent 70%)`
+                }}
+            />
+
+            {/* Icon Container */}
+            <div className="relative z-10">
+                <motion.div
+                    className={`${isWide ? 'w-16 h-16 text-3xl' : 'w-20 h-20 text-4xl'} rounded-2xl flex items-center justify-center mb-4`}
+                    style={{
+                        background: `linear-gradient(135deg, ${card.color}, ${card.shadowColor})`,
+                        boxShadow: `0 10px 30px ${card.color}50`
+                    }}
+                    whileHover={{ rotate: [0, -10, 10, 0] }}
+                    transition={{ duration: 0.5 }}
+                >
+                    {card.icon}
+                </motion.div>
             </div>
 
-            {/* Content Container */}
-            <div className="relative z-10 max-w-7xl w-full text-center">
-
-                {/* Title */}
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    viewport={{ once: true }}
-                    className="mb-16"
+            {/* Content */}
+            <div className="relative z-10 mt-auto">
+                <h3
+                    className={`font-skater ${isWide ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'} text-white mb-3 leading-tight`}
+                    style={{
+                        textShadow: `2px 2px 0px ${card.shadowColor}`
+                    }}
                 >
-                    <h2
-                        className="font-skater text-[5rem] md:text-[8rem] text-white leading-none mb-4"
-                        style={{ textShadow: "4px 4px 0px #32f4bb" }}
-                    >
-                        FAMILIA
-                    </h2>
-                    <p className="text-xl md:text-2xl text-gray-300 font-light tracking-wider max-w-2xl mx-auto">
-                        MÁS QUE MASCOTAS, MIEMBROS DE LA REALEZA.
-                    </p>
-                </motion.div>
+                    {card.title}
+                </h3>
+                <p className={`text-gray-300 ${isWide ? 'text-sm' : 'text-sm md:text-base'} leading-relaxed`}>
+                    {card.description}
+                </p>
 
-                {/* Placeholder Grid for Family Photos */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {[1, 2, 3].map((item) => (
-                        <motion.div
-                            key={item}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5, delay: item * 0.2 }}
-                            viewport={{ once: true }}
-                            className="aspect-[4/5] bg-gray-900 rounded-2xl border border-white/10 flex items-center justify-center relative overflow-hidden group hover:border-royal-orange/50 transition-colors"
+                {/* Arrow Button */}
+                <motion.div
+                    className={`mt-4 ${isWide ? 'w-12 h-12 text-xl' : 'w-14 h-14 text-2xl'} rounded-full flex items-center justify-center text-black font-bold`}
+                    style={{
+                        background: card.color,
+                        boxShadow: `3px 3px 0px ${card.shadowColor}`
+                    }}
+                    whileHover={{ x: 5 }}
+                >
+                    →
+                </motion.div>
+            </div>
+
+            {/* Decorative Corner */}
+            <div
+                className="absolute top-0 right-0 w-32 h-32 opacity-20"
+                style={{
+                    background: `radial-gradient(circle at 100% 0%, ${card.color}, transparent 70%)`
+                }}
+            />
+        </>
+    );
+
+    return (
+        <section id="family" className="relative min-h-screen flex flex-col items-center justify-center py-20 px-6 overflow-hidden">
+
+            {/* Content Container */}
+            <div className="relative z-10 max-w-7xl w-full">
+
+                {/* Bento Grid Layout */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 p-8">
+
+                    {/* Left Column - Large Card */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -200, rotateY: -45, scale: 0.8 }}
+                        whileInView={{ opacity: 1, x: 0, rotateY: 0, scale: 1 }}
+                        transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        whileHover={{ scale: 1.05, y: -10, rotateY: 5 }}
+                        className="relative cursor-pointer group md:row-span-2"
+                        style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
+                    >
+                        <div
+                            className="relative h-full min-h-[500px] rounded-3xl overflow-hidden p-8 flex flex-col justify-between border-[8px] border-[#34f4ce]"
+                            style={{
+                                background: '#ffffff',
+                                boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
+                            }}
                         >
-                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80"></div>
-                            <span className="text-gray-600 font-skater text-4xl group-hover:text-royal-orange transition-colors duration-300">FOTO {item}</span>
-                        </motion.div>
-                    ))}
+                            <CardContent card={cards[0]} />
+                        </div>
+                    </motion.div>
+
+                    {/* Right Column - Top Card */}
+                    <motion.div
+                        initial={{ opacity: 0, y: -150, rotateX: 45, scale: 0.8 }}
+                        whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+                        transition={{ duration: 0.8, delay: 0.2, type: "spring", bounce: 0.3 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        whileHover={{ scale: 1.05, y: -10, rotateX: -5 }}
+                        className="relative cursor-pointer group"
+                        style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
+                    >
+                        <div
+                            className="relative h-full min-h-[240px] rounded-3xl overflow-hidden p-6 flex flex-col justify-between border-[8px] border-[#34f4ce]"
+                            style={{
+                                background: '#34f4ce',
+                                boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
+                            }}
+                        >
+                            <CardContent card={cards[1]} isWide />
+                        </div>
+                    </motion.div>
+
+                    {/* Right Column - Bottom Card */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 200, rotateY: 45, scale: 0.8 }}
+                        whileInView={{ opacity: 1, x: 0, rotateY: 0, scale: 1 }}
+                        transition={{ duration: 0.8, delay: 0.4, type: "spring", bounce: 0.3 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        whileHover={{ scale: 1.05, y: -10, rotateY: -5 }}
+                        className="relative cursor-pointer group"
+                        style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
+                    >
+                        <div
+                            className="relative h-full min-h-[240px] rounded-3xl overflow-hidden p-6 flex flex-col justify-between border-[8px] border-[#34f4ce]"
+                            style={{
+                                background: '#fe9e5b',
+                                boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
+                            }}
+                        >
+                            <CardContent card={cards[2]} isWide />
+                        </div>
+                    </motion.div>
+
                 </div>
 
             </div>

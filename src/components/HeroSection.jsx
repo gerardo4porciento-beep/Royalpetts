@@ -98,20 +98,10 @@ const SceneContent = () => {
                 castShadow
                 distance={20}
             />
-            <SpotLight
-                position={[0, -5, 2]}
-                angle={1}
-                penumbra={1}
-                intensity={2}
-                color="#00b9ec"
-                distance={10}
-            />
 
-            {/* Dynamic Elements (Idea 3: Atmosphere) */}
-            <Stars radius={50} depth={50} count={3000} factor={4} saturation={1} fade speed={2} />
-            <Sparkles count={300} scale={12} size={6} speed={0.4} opacity={0.6} color="#ffea20" />
-            <Sparkles count={100} scale={15} size={10} speed={0.2} opacity={0.3} color="#ffffff" />
+            {/* Dynamic Elements (Atmosphere) - Removed stars, sparkles and spotlight */}
 
+            {/* Dynamic Elements (Atmosphere) - Removed stars */}
             <Environment preset="night" blur={0.5} />
         </>
     );
@@ -171,8 +161,8 @@ const HeroSection = () => {
 
         // Parallax on Text & Background (Mouse Move)
         const handleMouseMove = (e) => {
-            // Only check for title and bg, allowing subtitle to be absent
-            if (titleRef.current && bgRef.current) {
+            // Only check for title, allowing others to be absent
+            if (titleRef.current) {
                 const x = (e.clientX / window.innerWidth - 0.5) * 20;
                 const y = (e.clientY / window.innerHeight - 0.5) * 20;
 
@@ -182,11 +172,6 @@ const HeroSection = () => {
                 if (subtitleRef.current) {
                     gsap.to(subtitleRef.current, { x: x * 0.5, y: y * 0.5, duration: 1, ease: "power2.out" });
                 }
-
-                // Puppy and Shadow no longer track mouse (Fixed position)
-
-                // Background moves slightly in opposite direction for depth
-                gsap.to(bgRef.current, { x: -x * 0.5, y: -y * 0.5, duration: 1.2, ease: "power2.out" });
             }
         };
 
@@ -199,14 +184,7 @@ const HeroSection = () => {
     }, []);
 
     return (
-        <section ref={containerRef} className="relative h-screen w-full overflow-hidden bg-[#050510]">
-
-            {/* Animated Background Image Layer */}
-            <div
-                ref={bgRef}
-                className="absolute -inset-[2.5%] w-[105%] h-[105%] z-0 bg-cover bg-center pointer-events-none saturate-150 contrast-125"
-                style={{ backgroundImage: "url('/fondo_home3.svg')" }}
-            ></div>
+        <section ref={containerRef} className="relative h-screen w-full overflow-hidden">
 
             {/* 3D Scene Layer (Absolute Background/Interactive) - Desktop Only */}
             {!isMobile && (
@@ -218,8 +196,8 @@ const HeroSection = () => {
                             </ErrorBoundary>
                         </Suspense>
                     </Canvas>
-                    {/* Vignette Overlay for focus */}
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#000000_120%)] pointer-events-none mix-blend-multiply opacity-50"></div>
+
+                    {/* Vignette Overlay removed */}
                 </div>
             )}
 
@@ -230,13 +208,54 @@ const HeroSection = () => {
                 <div className="col-span-12 lg:col-span-7 flex flex-col justify-center items-start text-left h-full pt-20">
 
                     {/* H1 - Massive Title */}
-                    <div className="relative overflow-visible p-2 -mt-[70px]">
+                    <div className="relative overflow-visible p-2 mt-[380px]">
                         <h1
                             ref={titleRef}
-                            className="font-skater text-[4rem] sm:text-[6rem] lg:text-[7.5rem] leading-[0.9] text-white opacity-0 transform origin-left"
+                            className="font-skater text-[3.6rem] sm:text-[5.4rem] lg:text-[6.75rem] leading-[0.9] text-white opacity-0 transform origin-left"
                             style={{ textShadow: "4px 4px 0px #ff7db2, 8px 8px 0px #00b9ec" }}
                         >
-                            <span className="text-[5.5rem] sm:text-[8rem] lg:text-[9.5rem]">ENDLESS LOVE</span>
+                            {/* Animated Letters */}
+                            {'ENDLESS LOVE'.split('').map((letter, index) => (
+                                <motion.span
+                                    key={index}
+                                    className="text-[4.95rem] sm:text-[7.2rem] lg:text-[8.55rem] inline-block"
+                                    initial={{ opacity: 0, y: 50 }}
+                                    animate={{
+                                        opacity: 1,
+                                        y: 0,
+                                        rotate: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Math.random() > 0.5 ? 5 : -5, 0],
+                                        scale: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.1, 1],
+                                    }}
+                                    transition={{
+                                        opacity: { duration: 0.5, delay: index * 0.05 },
+                                        y: { duration: 0.5, delay: index * 0.05, type: "spring" },
+                                        rotate: {
+                                            duration: 0.5,
+                                            delay: 2 + Math.random() * 3,
+                                            repeat: Infinity,
+                                            repeatDelay: 3 + Math.random() * 5,
+                                        },
+                                        scale: {
+                                            duration: 0.3,
+                                            delay: 2 + Math.random() * 3,
+                                            repeat: Infinity,
+                                            repeatDelay: 3 + Math.random() * 5,
+                                        }
+                                    }}
+                                    whileHover={{
+                                        scale: 1.2,
+                                        rotate: Math.random() > 0.5 ? 10 : -10,
+                                        color: '#34f4ce',
+                                        transition: { duration: 0.2 }
+                                    }}
+                                    style={{
+                                        display: letter === ' ' ? 'inline' : 'inline-block',
+                                        width: letter === ' ' ? '0.3em' : 'auto'
+                                    }}
+                                >
+                                    {letter === ' ' ? '\u00A0' : letter}
+                                </motion.span>
+                            ))}
                         </h1>
 
                         {/* Grunge Texture Overlay on Text (CSS Mask equivalent) */}
@@ -250,28 +269,26 @@ const HeroSection = () => {
                 </div>
 
                 {/* Right Column: Space for 3D Visuals & Puppy Image */}
-                <div className="col-span-12 lg:col-span-5 pointer-events-none relative">
-                    {/* Floating Puppy Image (Idea 2: Parallax, Idea 4: Rim Light) */}
-                    {/* Mobile Version */}
-                    <img
-                        src="/frenchie_hero.gif?v=6"
-                        alt="Cute Puppy"
-                        className="lg:hidden relative bottom-0 w-full max-w-[380px] h-auto object-contain z-20 pointer-events-auto mx-auto"
-                    />
-                    {/* Desktop Version - Original positioning */}
-                    <img
-                        ref={puppyRef}
-                        src="/frenchie_hero.gif?v=6"
-                        alt="Cute Puppy"
-                        className="hidden lg:block absolute bottom-0 left-[50px] w-[1365px] h-auto object-contain z-20 pointer-events-auto"
+                <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-full">
+                    {/* Video popping out of hole - positioned above bench area */}
+                    <video
+                        src="/video home.mp4"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="absolute w-[610px] z-20 animate-fade-in-up object-cover"
+                        style={{
+                            bottom: '35%',
+                            right: 'calc(10% - 80px)',
+                            transform: 'rotate(-5deg)',
+                            maskImage: 'radial-gradient(closest-side at 40% 50%, black 85%, transparent 100%)',
+                            WebkitMaskImage: 'radial-gradient(closest-side at 40% 50%, black 85%, transparent 100%)'
+                        }}
                     />
                 </div>
             </div>
 
-
-
-            {/* Restored Strong Bottom Gradient for extra intensity */}
-            <div className="absolute bottom-0 left-0 w-full h-[30px] bg-gradient-to-t from-[#ff7db2] to-transparent z-[50] pointer-events-none opacity-100 mix-blend-normal"></div>
 
 
 

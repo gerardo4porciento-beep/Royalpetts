@@ -68,5 +68,40 @@
         "origin": "Reino Unido",
         "lifeExpectancy": "12-15 años",
         "temperament": "Alegre, Curioso, Amigable"
+    },
+    "Husky": {
+        "description": "El Husky Siberiano es un perro de trabajo atlético y resistente, famoso por su pelaje espeso y ojos azules penetrantes. Son perros amigables, juguetones y muy enérgicos que necesitan ejercicio regular.",
+        "size": "Mediano-Grande (50-60 cm)",
+        "origin": "Siberia, Rusia",
+        "lifeExpectancy": "12-14 años",
+        "temperament": "Amigable, Juguetón, Independiente"
+    },
+    "Goldendoodle": {
+        "description": "El Goldendoodle es un cruce entre Golden Retriever y Poodle. Combina la inteligencia del Poodle con la amabilidad del Golden, resultando en un perro hipoalergénico, cariñoso y excelente para familias.",
+        "size": "Variable (35-65 cm)",
+        "origin": "Estados Unidos/Australia",
+        "lifeExpectancy": "10-15 años",
+        "temperament": "Inteligente, Cariñoso, Social"
+    },
+    "Maltipoo": {
+        "description": "El Maltipoo es un adorable cruce entre Maltés y Poodle. Son perros pequeños, cariñosos y juguetones, perfectos para apartamentos. Su pelaje bajo en alergenos los hace ideales para personas sensibles.",
+        "size": "Pequeño (20-35 cm)",
+        "origin": "Estados Unidos",
+        "lifeExpectancy": "12-15 años",
+        "temperament": "Cariñoso, Juguetón, Gentil"
+    },
+    "Chihuahua": {
+        "description": "El Chihuahua es la raza más pequeña del mundo pero con la personalidad más grande. Son valientes, alertas y muy leales a sus dueños. A pesar de su tamaño, son excelentes perros guardianes y compañeros devotos.",
+        "size": "Toy (15-23 cm)",
+        "origin": "México",
+        "lifeExpectancy": "14-18 años",
+        "temperament": "Valiente, Leal, Vivaz"
+    },
+    "Doberman": {
+        "description": "El Doberman es un perro elegante, atlético y extremadamente leal. Son conocidos por su inteligencia y capacidad de entrenamiento. Aunque tienen una apariencia imponente, son cariñosos con su familia.",
+        "size": "Grande (63-72 cm)",
+        "origin": "Alemania",
+        "lifeExpectancy": "10-13 años",
+        "temperament": "Leal, Inteligente, Protector"
     }
 }

@@ -1,140 +1,163 @@
 import React, { useState } from 'react';
-import petsData from '../data/gallery_pets.json'; // Importing generated data
-import BreedModal from './BreedModal';
-
-// Split data into two rows for the marquee
-const half = Math.ceil(petsData.length / 2);
-const row1Pets = petsData.slice(0, half);
-const row2Pets = petsData.slice(half);
-
-// Component for Marquee Items
-const MarqueeItem = ({ pet, onClick }) => (
-    <div
-        className="relative flex-shrink-0 w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] mx-0 rounded-none bg-black overflow-hidden group transition-all duration-500 hover:scale-105 hover:z-20 border-y-[16px] sm:border-y-[24px] border-black border-r-[2px] border-gray-900"
-        style={{
-            boxShadow: `0 0 0 rgba(0,0,0,0)` // Default header
-        }}
-        // Using inline style for dynamic hover shadow is tricky in React without state, 
-        // so we'll use a group-hover tactic or just rely on CSS variables if we could.
-        // Instead, let's use a nested div for the glow or standard tailwind utilities if colors were standard.
-        // Since colors are dynamic, we will use a workaround.
-        onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = `0 15px 40px ${pet.color}66`; // 66 = 40% opacity
-        }}
-        onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = 'none';
-        }}
-        onClick={() => onClick && onClick(pet)}
-    >
-        {/* Sprocket Holes Simulation (Top) */}
-        <div className="absolute top-[-14px] sm:top-[-20px] left-0 w-full h-[12px] flex justify-between px-1 pointer-events-none z-30">
-            {[...Array(8)].map((_, i) => <div key={i} className="w-[8px] h-[6px] sm:w-[12px] sm:h-[8px] bg-white/30 rounded-sm"></div>)}
-        </div>
-
-        {/* Image */}
-        <img
-            src={pet.image}
-            alt={pet.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 group-hover:blur-[0px]"
-        />
-
-        {/* Sprocket Holes Simulation (Bottom) */}
-        <div className="absolute bottom-[-14px] sm:bottom-[-20px] left-0 w-full h-[12px] flex justify-between px-1 pointer-events-none z-30">
-            {[...Array(8)].map((_, i) => <div key={i} className="w-[8px] h-[6px] sm:w-[12px] sm:h-[8px] bg-white/30 rounded-sm"></div>)}
-        </div>
-
-        {/* Gradient Overlay for Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-        {/* Ribbon/Text Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-100 scale-90">
-            {/* Glassmorphism Badge */}
-            <div
-                className="px-4 py-2 sm:px-6 sm:py-3 bg-opacity-90 backdrop-blur-md rounded-lg shadow-2xl transform flex justify-center items-center border border-white/20"
-                style={{ backgroundColor: pet.color }}
-            >
-                <h3
-                    className="text-[1.5rem] sm:text-[2rem] font-skater text-royal-blue leading-none tracking-wide drop-shadow-lg"
-                    style={{ textShadow: "2px 2px 0px #ffffff" }}
-                >
-                    {pet.title}
-                </h3>
-            </div>
-        </div>
-    </div>
-);
+import GridMotion from './GridMotion';
+import breedInfo from '../data/breed_info.json';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const GallerySection = () => {
-    const [selectedPet, setSelectedPet] = useState(null);
+    const [selectedBreed, setSelectedBreed] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    // Pet images with breed mapping
+    const items = [
+        { image: '/ROYALPETTS LIVE CONECT/Bulldog Frances/bulldogfrances1.jpg', breed: 'Bulldog Frances' },
+        { image: '/ROYALPETTS LIVE CONECT/Pomerania/pomerania1.jpg', breed: 'Pomerania' },
+        { image: '/ROYALPETTS LIVE CONECT/Golden Retriever/goldenretriever1.jpg', breed: 'Golden Retriever' },
+        { image: '/ROYALPETTS LIVE CONECT/Chihuahua/chihuahua1.jpg', breed: 'Chihuahua' },
+        { image: '/ROYALPETTS LIVE CONECT/Husky/husky1.jpg', breed: 'Husky' },
+        { image: '/ROYALPETTS LIVE CONECT/Goldendoodle/goldendoodle1.jpg', breed: 'Goldendoodle' },
+        { image: '/ROYALPETTS LIVE CONECT/Maltipoo/maltipoo1.jpg', breed: 'Maltipoo' },
+        { image: '/ROYALPETTS LIVE CONECT/Bulldog Frances/bulldogfrances2.jpg', breed: 'Bulldog Frances' },
+        { image: '/ROYALPETTS LIVE CONECT/Pomerania/pomerania2.jpg', breed: 'Pomerania' },
+        { image: '/ROYALPETTS LIVE CONECT/Golden Retriever/goldenretriever2.jpg', breed: 'Golden Retriever' },
+        { image: '/ROYALPETTS LIVE CONECT/Chihuahua/chihuahua2.jpg', breed: 'Chihuahua' },
+        { image: '/ROYALPETTS LIVE CONECT/Husky/husky2.jpg', breed: 'Husky' },
+        { image: '/ROYALPETTS LIVE CONECT/Goldendoodle/goldendoodle2.jpg', breed: 'Goldendoodle' },
+        { image: '/ROYALPETTS LIVE CONECT/Beagle/beagle1.jpg', breed: 'Beagle' },
+        { image: '/ROYALPETTS LIVE CONECT/Bulldog Frances/bulldogfrances3.jpg', breed: 'Bulldog Frances' },
+        { image: '/ROYALPETTS LIVE CONECT/Pomerania/pomerania3.jpg', breed: 'Pomerania' },
+        { image: '/ROYALPETTS LIVE CONECT/Caniche Toy Rojo/canichetoyrojo1.jpg', breed: 'Caniche' },
+        { image: '/ROYALPETTS LIVE CONECT/Chihuahua/chihuahua3.jpg', breed: 'Chihuahua' },
+        { image: '/ROYALPETTS LIVE CONECT/Husky/husky3.jpg', breed: 'Husky' },
+        { image: '/ROYALPETTS LIVE CONECT/Goldendoodle/goldendoodle3.jpg', breed: 'Goldendoodle' },
+        { image: '/ROYALPETTS LIVE CONECT/Beagle/beagle2.jpg', breed: 'Beagle' },
+        { image: '/ROYALPETTS LIVE CONECT/Bulldog Frances/bulldogfrances4.jpg', breed: 'Bulldog Frances' },
+        { image: '/ROYALPETTS LIVE CONECT/Pomerania/pomerania4.jpg', breed: 'Pomerania' },
+        { image: '/ROYALPETTS LIVE CONECT/Caniche Toy Rojo/canichetoyrojo2.jpg', breed: 'Caniche' },
+        { image: '/ROYALPETTS LIVE CONECT/Chihuahua/chihuahua4.jpg', breed: 'Chihuahua' },
+        { image: '/ROYALPETTS LIVE CONECT/Doberman/doberman1.jpg', breed: 'Doberman' },
+        { image: '/ROYALPETTS LIVE CONECT/Bulldog Frances/bulldogfrances5.jpg', breed: 'Bulldog Frances' },
+        { image: '/ROYALPETTS LIVE CONECT/Pomerania/pomerania5.jpg', breed: 'Pomerania' },
+    ];
+
+    const handleImageClick = (item) => {
+        const info = breedInfo[item.breed];
+        if (info) {
+            setSelectedBreed({ name: item.breed, ...info });
+            setSelectedImage(item.image);
+        }
+    };
+
+    const closeCard = () => {
+        setSelectedBreed(null);
+        setSelectedImage(null);
+    };
+
+    const whatsappMessage = selectedBreed
+        ? `Hola, estoy interesado en un cachorro de ${selectedBreed.name}`
+        : '';
+    const whatsappUrl = `https://wa.me/584129461175?text=${encodeURIComponent(whatsappMessage)}`;
 
     return (
-        <section id="gallery" className="relative min-h-screen bg-cover bg-center flex flex-col justify-center overflow-hidden py-24" style={{ backgroundImage: "url('/fondo_galeria.png')" }}>
+        <section id="gallery" className="relative min-h-screen py-20">
+            {/* Wide Container */}
+            <motion.div
+                initial={{ opacity: 0, y: 150, scale: 0.85, rotateX: 15 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+                transition={{ duration: 1, type: "spring", bounce: 0.2 }}
+                viewport={{ once: true, amount: 0.2 }}
+                className="w-[85vw] mx-auto h-[80vh] rounded-3xl overflow-hidden border-[8px] border-[#34f4ce]"
+                style={{
+                    transformStyle: 'preserve-3d',
+                    perspective: '1500px',
+                    boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
+                }}
+            >
+                <GridMotion items={items} onItemClick={handleImageClick} />
+            </motion.div>
 
-            {/* Header */}
-            <div className="absolute top-10 left-6 md:left-12 z-20 pointer-events-none">
-                <h2
-                    className="font-skater text-[4rem] sm:text-[6rem] lg:text-[7rem] text-white leading-[0.9] transform origin-left"
-                    style={{ textShadow: "4px 4px 0px #ff7db2, 8px 8px 0px #00b9ec" }}
-                >
-                    GALERÍA
-                </h2>
-                <div className="absolute inset-0 pointer-events-none select-none mix-blend-overlay opacity-30"></div>
-            </div>
+            {/* Breed Info Card Modal */}
+            <AnimatePresence>
+                {selectedBreed && (
+                    <>
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={closeCard}
+                            className="fixed inset-0 bg-black/50 z-[9990] flex items-center justify-center"
+                        >
+                            {/* Card - Responsive Layout: Vertical on mobile, Horizontal on desktop */}
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="w-[90vw] max-w-[500px] max-h-[85vh] overflow-y-auto bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
+                                style={{
+                                    boxShadow: "6px 6px 0px #ff7db2, 12px 12px 0px #00b9ec",
+                                    fontFamily: "'Inter', 'Segoe UI', sans-serif"
+                                }}
+                            >
+                                {/* Image - Full width on mobile, fixed width on desktop */}
+                                <div className="w-full h-[150px] md:w-[220px] md:h-auto flex-shrink-0 overflow-hidden">
+                                    <img
+                                        src={selectedImage}
+                                        alt={selectedBreed.name}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
 
-            {/* Marquee Container */}
-            <div className="flex flex-col gap-0 mt-20 md:mt-[50px] relative z-10">
+                                {/* Right - Content (Smaller) */}
+                                <div className="flex-1 p-3 relative flex flex-col justify-between">
+                                    {/* Close Button */}
+                                    <button
+                                        onClick={closeCard}
+                                        className="absolute top-2 right-2 w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-200 transition-colors text-xs"
+                                    >
+                                        ✕
+                                    </button>
 
-                {/* --- Row 1: Moving LEFT --- */}
-                <div
-                    className="relative w-full overflow-hidden transform -rotate-1 hover:rotate-0 transition-transform duration-700 ease-out"
-                    style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}
-                >
-                    <div className="flex w-max animate-marquee gap-8 py-2"> {/* Reduced padding */}
-                        {/* Render Row 1 */}
-                        {row1Pets.map((pet, i) => (
-                            <MarqueeItem key={"r1-" + i} pet={pet} onClick={setSelectedPet} />
-                        ))}
-                        {/* Duplicate for Loop */}
-                        {row1Pets.map((pet, i) => (
-                            <MarqueeItem key={"r1-dup-" + i} pet={pet} onClick={setSelectedPet} />
-                        ))}
-                        {/* Duplicate Again for Safety */}
-                        {row1Pets.length < 10 && row1Pets.map((pet, i) => (
-                            <MarqueeItem key={"r1-tri-" + i} pet={pet} onClick={setSelectedPet} />
-                        ))}
-                    </div>
-                </div>
+                                    <div className="flex-1">
+                                        <h3 className="font-skater text-xl text-[#34f4ce] mb-2 pr-6"
+                                            style={{ textShadow: "1px 1px 0px #ff7db2" }}
+                                        >
+                                            {selectedBreed.name}
+                                        </h3>
 
-                {/* --- Row 2: Moving RIGHT --- */}
-                <div
-                    className="relative w-full overflow-hidden transform rotate-1 hover:rotate-0 transition-transform duration-700 ease-out"
-                    style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}
-                >
-                    <div className="flex w-max animate-marquee-reverse gap-8 py-2"> {/* Reduced padding */}
-                        {/* Render Row 2 */}
-                        {row2Pets.map((pet, i) => (
-                            <MarqueeItem key={"r2-" + i} pet={pet} onClick={setSelectedPet} />
-                        ))}
-                        {/* Duplicate for Loop */}
-                        {row2Pets.map((pet, i) => (
-                            <MarqueeItem key={"r2-dup-" + i} pet={pet} onClick={setSelectedPet} />
-                        ))}
-                        {/* Duplicate Again for Safety */}
-                        {row2Pets.length < 10 && row2Pets.map((pet, i) => (
-                            <MarqueeItem key={"r2-tri-" + i} pet={pet} onClick={setSelectedPet} />
-                        ))}
-                    </div>
-                </div>
+                                        <p className="text-gray-700 text-[11px] font-bold mb-3 leading-relaxed">
+                                            {selectedBreed.description}
+                                        </p>
 
-            </div>
+                                        {/* Quick Info */}
+                                        <div className="flex flex-wrap gap-2">
+                                            <span className="bg-gray-100 rounded px-2 py-1 text-[10px] font-bold">
+                                                <span className="text-[#00b9ec]">Tamaño:</span> {selectedBreed.size}
+                                            </span>
+                                            <span className="bg-gray-100 rounded px-2 py-1 text-[10px] font-bold">
+                                                <span className="text-[#ff7db2]">Vida:</span> {selectedBreed.lifeExpectancy}
+                                            </span>
+                                        </div>
+                                    </div>
 
-            {/* Background Decor */}
-            <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-royal-blue/20 rounded-full blur-[100px] pointer-events-none mix-blend-multiply"></div>
-            <div className="absolute top-20 right-20 w-72 h-72 bg-royal-orange/20 rounded-full blur-[80px] pointer-events-none mix-blend-multiply"></div>
-
-            {/* Details Modal */}
-            <BreedModal pet={selectedPet} onClose={() => setSelectedPet(null)} />
-
+                                    {/* WhatsApp Button */}
+                                    <a
+                                        href={whatsappUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block w-full py-1.5 bg-[#34f4ce] text-black font-semibold text-[10px] text-center rounded-full hover:scale-105 transition-transform"
+                                        style={{
+                                            boxShadow: "2px 2px 0px #ff7db2"
+                                        }}
+                                    >
+                                        💬 CONSULTAR
+                                    </a>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
         </section>
     );
 };

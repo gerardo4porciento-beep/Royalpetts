@@ -36,6 +36,18 @@ html.lenis {
 }
 
 /* Custom styles */
+/* Hide scrollbar globally */
+* {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   background-color: #ffffff;
   font-family: 'FinalFont', sans-serif !important;
