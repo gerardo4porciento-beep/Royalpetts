@@ -70,10 +70,12 @@ const LandingPage = () => {
                 {/* Desktop background (visible on md and larger) */}
                 <div
                     ref={bgRef}
-                    className="fixed left-0 w-full z-0 pointer-events-none bg-[url('/fondo_landing.webp')] bg-cover bg-top bg-no-repeat hidden md:block"
+                    className="absolute inset-0 w-full z-0 pointer-events-none hidden md:block"
                     style={{
-                        top: '40px',
-                        height: 'calc(100vh - 40px)',
+                        backgroundImage: "url('/fondo todo el landing.png')",
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'top',
+                        backgroundRepeat: 'no-repeat',
                         backgroundColor: '#07acdd',
                         transform: 'scale(1.05)',
                     }}
