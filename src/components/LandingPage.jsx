@@ -55,14 +55,15 @@ const LandingPage = () => {
             >
 
                 {/* Mobile background (visible on screens < md) */}
-                <div
-                    ref={bgRef}
-                    className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none bg-[url('/FONDO_MOBILE4.png')] bg-cover bg-top bg-no-repeat md:hidden"
+                <img
+                    src="/FONDO_MOBILE4.png"
+                    alt="Mobile background"
+                    className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none object-cover md:hidden"
                     style={{
                         backgroundColor: '#07acdd',
                         transform: 'scale(1.05)',
                     }}
-                ></div>
+                />
 
                 {/* Desktop background (visible on md and larger) */}
                 <div
