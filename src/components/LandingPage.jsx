@@ -54,13 +54,23 @@ const LandingPage = () => {
                 className="relative bg-[#07acdd] text-white selection:bg-royal-pink selection:text-white overflow-x-hidden"
             >
 
-                {/* Unified Background for Mobile and Desktop */}
+                {/* Mobile background (visible on screens < md) */}
                 <div
                     ref={bgRef}
-                    className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none bg-[url('/fondo_landing.webp')] bg-cover bg-top bg-no-repeat"
+                    className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none bg-[url('/FONDO_MOBILE4.png')] bg-cover bg-top bg-no-repeat md:hidden"
                     style={{
-                        backgroundColor: '#07acdd', // Matches top sky blue
-                        transform: 'scale(1.05)', // Initial scale to allow movement
+                        backgroundColor: '#07acdd',
+                        transform: 'scale(1.05)',
+                    }}
+                ></div>
+
+                {/* Desktop background (visible on md and larger) */}
+                <div
+                    ref={bgRef}
+                    className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none bg-[url('/fondo_landing.webp')] bg-cover bg-top bg-no-repeat hidden md:block"
+                    style={{
+                        backgroundColor: '#07acdd',
+                        transform: 'scale(1.05)',
                     }}
                 ></div>
 
