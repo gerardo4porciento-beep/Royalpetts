@@ -208,113 +208,99 @@ const HeroSection = () => {
                 <div className="col-span-12 lg:col-span-7 flex flex-col justify-center items-center lg:items-start text-center lg:text-left h-full pt-16 lg:pt-20 order-first">
 
                     {/* H1 - Massive Title */}
-                    <div ref={titleRef} className="relative overflow-visible p-2 mt-[125px] lg:mt-[405px] flex flex-col items-center lg:items-start gap-0 opacity-0">
+                    <div className="relative overflow-visible p-2 mt-[125px] lg:mt-[405px]">
                         <h1
-                            className="font-skater text-[4.5rem] sm:text-[6rem] lg:text-[7.5rem] leading-[0.8] text-white transform origin-left"
+                            ref={titleRef}
+                            className="font-skater text-[3.6rem] sm:text-[5.4rem] lg:text-[6.75rem] leading-[0.9] text-white opacity-0 transform origin-left"
                             style={{ textShadow: "4px 4px 0px #ff7db2, 8px 8px 0px #00b9ec" }}
                         >
-                            {'AMOR'.split('').map((letter, index) => (
-                                <motion.span
-                                    key={`amor-${index}`}
-                                    className="text-[3.5rem] sm:text-[6rem] lg:text-[9rem] inline-block"
-                                    initial={{ opacity: 0, y: 50 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{
-                                        opacity: { duration: 0.5, delay: index * 0.05 },
-                                        y: { duration: 0.5, delay: index * 0.05, type: "spring" }
-                                    }}
-                                    whileHover={{
-                                        scale: 1.2,
-                                        rotate: Math.random() > 0.5 ? 10 : -10,
-                                        color: '#34f4ce',
-                                        transition: { duration: 0.2 }
-                                    }}
-                                >
-                                    {letter}
-                                </motion.span>
+                            {/* Animated Letters */}
+                            {['AMOR', 'INCONDICIONAL'].map((word, wordIdx) => (
+                                <div key={wordIdx} className="block first:mb-[-0.2em] lg:first:mb-[-0.4em]">
+                                    {word.split('').map((letter, index) => {
+                                        const totalIndex = wordIdx === 0 ? index : 5 + index;
+                                        return (
+                                            <motion.span
+                                                key={`${wordIdx}-${index}`}
+                                                className="text-[2.2rem] sm:text-[5rem] lg:text-[8.55rem] inline-block"
+                                                initial={{ opacity: 0, y: 50 }}
+                                                animate={{
+                                                    opacity: 1,
+                                                    y: 0,
+                                                    rotate: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Math.random() > 0.5 ? 5 : -5, 0],
+                                                    scale: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.1, 1],
+                                                }}
+                                                transition={{
+                                                    opacity: { duration: 0.5, delay: totalIndex * 0.05 },
+                                                    y: { duration: 0.5, delay: totalIndex * 0.05, type: "spring" },
+                                                    rotate: {
+                                                        duration: 0.5,
+                                                        delay: 2 + Math.random() * 3,
+                                                        repeat: Infinity,
+                                                        repeatDelay: 3 + Math.random() * 5,
+                                                    },
+                                                    scale: {
+                                                        duration: 0.3,
+                                                        delay: 2 + Math.random() * 3,
+                                                        repeat: Infinity,
+                                                        repeatDelay: 3 + Math.random() * 5,
+                                                    }
+                                                }}
+                                                whileHover={{
+                                                    scale: 1.2,
+                                                    rotate: Math.random() > 0.5 ? 10 : -10,
+                                                    color: '#34f4ce',
+                                                    transition: { duration: 0.2 }
+                                                }}
+                                                style={{ display: 'inline-block' }}
+                                            >
+                                                {letter}
+                                            </motion.span>
+                                        );
+                                    })}
+                                </div>
                             ))}
                         </h1>
-                        <h1
-                            className="font-skater text-[3rem] sm:text-[4.5rem] lg:text-[6rem] leading-[0.8] text-white transform origin-left mt-[-10px] sm:mt-[-20px]"
-                            style={{
-                                textShadow: "4px 4px 0px #ff7db2, 8px 8px 0px #00b9ec",
-                                opacity: 1 // subtitleRef handles some reveal, but let's keep it consistent
-                            }}
-                        >
-                            {'INCONDICIONAL'.split('').map((letter, index) => (
-                                <motion.span
-                                    key={`inc-${index}`}
-                                    className="text-[2.2rem] sm:text-[4rem] lg:text-[6.5rem] inline-block"
-                                    initial={{ opacity: 0, y: 50 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{
-                                        opacity: { duration: 0.5, delay: 0.3 + index * 0.05 },
-                                        y: { duration: 0.5, delay: 0.3 + index * 0.05, type: "spring" }
-                                    }}
-                                    whileHover={{
-                                        scale: 1.2,
-                                        rotate: Math.random() > 0.5 ? 10 : -10,
-                                        color: '#34f4ce',
-                                        transition: { duration: 0.2 }
-                                    }}
-                                >
-                                    {letter}
-                                </motion.span>
-                            ))}
-                        </h1>
-                    </div>      {/* end title div */}
+
+                        {/* Grunge Texture Overlay on Text (CSS Mask equivalent) */}
+                        <div className="absolute inset-0 pointer-events-none select-none mix-blend-overlay opacity-30">
+                        </div>
+                    </div>
 
                     {/* CTAs */}
-                    <div ref={buttonsRef} className="flex flex-wrap gap-4 mt-12 lg:mt-16 justify-center lg:justify-start pointer-events-auto">
-                        <button
-                            className="bg-[#ff7db2] text-white font-bold py-4 px-10 rounded-full hover:scale-105 transition-transform"
-                            style={{ boxShadow: "4px 4px 0px #00b9ec" }}
-                        >
-                            VER CACHORROS
-                        </button>
-                        <button
-                            className="bg-white text-black font-bold py-4 px-10 rounded-full hover:scale-105 transition-transform border-2 border-transparent"
-                            style={{ boxShadow: "4px 4px 0px #ff7db2" }}
-                        >
-                            INFO RESERVAS
-                        </button>
-                    </div>
-                </div>      {/* end col-span-12 typography column */}
 
-                {/* Grunge Texture Overlay on Text (CSS Mask equivalent) */}
-                <div className="absolute inset-0 pointer-events-none select-none mix-blend-overlay opacity-30">
+
+                </div>
+
+                {/* Right Column: Space for 3D Visuals & Puppy Image */}
+                <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-full flex items-start lg:items-center justify-center lg:justify-end order-last">
+                    {/* Video popping out of hole - responsive */}
+                    <video
+                        src="/video home.mp4"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        preload="metadata"
+                        className="w-[213px] sm:w-[500px] lg:w-[763px] fixed lg:absolute z-0 lg:z-20 animate-fade-in-up object-cover"
+                        style={{
+                            top: 'calc(25% - 80px)', // moved down another 10px
+                            left: '50%',
+                            transform: 'translateX(calc(-50% + 160px)) rotate(-5deg)', // moved right another 40px
+                            bottom: window.innerWidth >= 1024 ? '35%' : 'auto',
+                            right: window.innerWidth >= 1024 ? 'calc(10% - 80px)' : 'auto',
+                            maskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
+                            WebkitMaskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
+                            filter: 'drop-shadow(0 0 15px #00D2FF)'
+                        }}
+                    />
                 </div>
             </div>
 
-            {/* Right Column: Space for 3D Visuals & Puppy Image */}
-            <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-full flex items-start lg:items-center justify-center lg:justify-end order-last">
-                {/* Video popping out of hole - responsive */}
-                <video
-                    src="/video home.mp4"
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    preload="metadata"
-                    className="w-[213px] sm:w-[500px] lg:w-[763px] fixed lg:absolute z-0 lg:z-20 animate-fade-in-up object-cover"
-                    style={{
-                        top: 'calc(25% - 80px)', // moved down another 10px
-                        left: '50%',
-                        transform: 'translateX(calc(-50% + 160px)) rotate(-5deg)', // moved right another 40px
-                        bottom: window.innerWidth >= 1024 ? '35%' : 'auto',
-                        right: window.innerWidth >= 1024 ? 'calc(10% - 80px)' : 'auto',
-                        maskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
-                        WebkitMaskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
-                        filter: 'drop-shadow(0 0 15px #00D2FF)'
-                    }}
-                />
-            </div>
-        </div>
 
 
 
-
-        </section >
+        </section>
     );
 };
 
