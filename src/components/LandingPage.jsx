@@ -83,10 +83,10 @@ const LandingPage = () => {
                 <img
                     src="/frenchie_hero.gif"
                     alt="Frenchie background"
-                    className="fixed bottom-0 left-0 w-[150px] z-[1] pointer-events-none md:hidden opacity-80"
+                    className="fixed bottom-0 left-0 w-[240px] z-[1] pointer-events-none md:hidden"
                     style={{
                         transform: 'rotate(5deg) scale(1.1)',
-                        filter: 'drop-shadow(0 0 10px rgba(7, 172, 221, 0.5))'
+                        filter: 'drop-shadow(0 0 15px rgba(7, 172, 221, 0.4))'
                     }}
                 />
 
@@ -107,7 +107,7 @@ const LandingPage = () => {
                 {/* WhatsApp Floating Button */}
                 {/* <WhatsAppButton /> */}
 
-                <main>
+                <main className="relative z-10">
                     <HeroSection />
                     <GallerySection />
                     <LogoLoop />

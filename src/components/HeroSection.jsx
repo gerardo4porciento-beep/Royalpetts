@@ -280,9 +280,9 @@ const HeroSection = () => {
                         preload="metadata"
                         className="w-[213px] sm:w-[500px] lg:w-[763px] fixed lg:absolute z-0 lg:z-20 animate-fade-in-up object-cover"
                         style={{
-                            top: 'calc(25% - 90px)', // moved down 10px
+                            top: 'calc(25% - 80px)', // moved down another 10px
                             left: '50%',
-                            transform: 'translateX(calc(-50% + 120px)) rotate(-5deg)', // moved right 40px
+                            transform: 'translateX(calc(-50% + 160px)) rotate(-5deg)', // moved right another 40px
                             bottom: window.innerWidth >= 1024 ? '35%' : 'auto',
                             right: window.innerWidth >= 1024 ? 'calc(10% - 80px)' : 'auto',
                             maskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
