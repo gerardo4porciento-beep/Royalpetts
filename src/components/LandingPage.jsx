@@ -57,11 +57,11 @@ const LandingPage = () => {
                 {/* Global Background (Parallax Active) */}
                 <div
                     ref={bgRef}
-                    className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none transition-transform duration-100 ease-out will-change-transform bg-[url('/FONDO_MOBILE3.svg')] md:bg-[url('/fondo_landing.webp')] bg-cover md:bg-[length:100%_auto] bg-top bg-no-repeat"
+                    className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none transition-transform duration-100 ease-out will-change-transform bg-[url('/mobile_bg.svg')] md:bg-[url('/fondo_landing.webp')] bg-cover md:bg-[length:100%_auto] bg-top bg-no-repeat"
                     style={{
                         backgroundColor: '#07acdd', // Matches top sky blue
-                        transform: 'scale(1.05)', // Initial scale to allow movement
-                        // Filter only on desktop to avoid altering the mobile SVG color match
+                        // Only apply transform scale on desktop to avoid iOS fixed position issues
+                        transform: typeof window !== 'undefined' && window.innerWidth >= 768 ? 'scale(1.05)' : 'none',
                     }}
                 ></div>
 
