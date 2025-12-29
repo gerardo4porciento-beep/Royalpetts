@@ -79,6 +79,17 @@ const LandingPage = () => {
                     }}
                 ></div>
 
+                {/* Frenchie GIF anchor - Mobile Only */}
+                <img
+                    src="/frenchie_hero.gif"
+                    alt="Frenchie background"
+                    className="fixed bottom-0 left-0 w-[150px] z-[1] pointer-events-none md:hidden opacity-80"
+                    style={{
+                        transform: 'rotate(5deg) scale(1.1)',
+                        filter: 'drop-shadow(0 0 10px rgba(7, 172, 221, 0.5))'
+                    }}
+                />
+
                 {/* Magical Particle Atmosphere */}
                 <ParticleBackground />
                 {/* Global Progress Bar */}
