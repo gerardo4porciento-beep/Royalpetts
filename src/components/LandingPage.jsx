@@ -54,20 +54,10 @@ const LandingPage = () => {
                 className="relative bg-[#07acdd] text-white selection:bg-royal-pink selection:text-white overflow-x-hidden"
             >
 
-                {/* Mobile Background: Direct Image for stability */}
-                <img
-                    src="/mobile_bg.svg"
-                    alt="Background"
-                    className="fixed top-0 left-0 w-full h-[100dvh] z-0 object-cover block md:hidden pointer-events-none"
-                    style={{
-                        backgroundColor: '#07acdd',
-                    }}
-                />
-
-                {/* Desktop Background: Parallax Div */}
+                {/* Unified Background for Mobile and Desktop */}
                 <div
                     ref={bgRef}
-                    className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none transition-transform duration-100 ease-out will-change-transform hidden md:block md:bg-[url('/fondo_landing.webp')] md:bg-[length:100%_auto] bg-top bg-no-repeat"
+                    className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none bg-[url('/fondo_landing.webp')] bg-cover bg-top bg-no-repeat"
                     style={{
                         backgroundColor: '#07acdd', // Matches top sky blue
                         transform: 'scale(1.05)', // Initial scale to allow movement
