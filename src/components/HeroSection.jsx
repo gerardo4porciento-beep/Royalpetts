@@ -277,8 +277,10 @@ const HeroSection = () => {
                         loop
                         muted
                         playsInline
-                        className="w-[170px] sm:w-[400px] lg:w-[610px] fixed lg:absolute z-0 lg:z-20 animate-fade-in-up object-cover top-[calc(25%-80px)] left-1/2 translate-x-[calc(-50%+80px)] lg:top-auto lg:left-auto lg:translate-x-0"
+                        className="w-[170px] sm:w-[400px] lg:w-[610px] fixed lg:absolute z-0 lg:z-20 animate-fade-in-up object-cover"
                         style={{
+                            top: 'calc(25% - 50px)', // move down 50px
+                            left: 'calc(50% + 25px)', // move right 25px
                             bottom: window.innerWidth >= 1024 ? '35%' : 'auto',
                             right: window.innerWidth >= 1024 ? 'calc(10% - 80px)' : 'auto',
                             transform: 'rotate(-5deg)',
