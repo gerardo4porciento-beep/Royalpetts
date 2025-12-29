@@ -208,14 +208,14 @@ const HeroSection = () => {
                 <div className="col-span-12 lg:col-span-7 flex flex-col justify-center items-center lg:items-start text-center lg:text-left h-full pt-16 lg:pt-20 order-first">
 
                     {/* H1 - Massive Title */}
-                    <div className="relative overflow-visible p-2 mt-[100px] lg:mt-[380px]">
+                    <div className="relative overflow-visible p-2 mt-[125px] lg:mt-[405px]">
                         <h1
                             ref={titleRef}
                             className="font-skater text-[3.6rem] sm:text-[5.4rem] lg:text-[6.75rem] leading-[0.9] text-white opacity-0 transform origin-left"
                             style={{ textShadow: "4px 4px 0px #ff7db2, 8px 8px 0px #00b9ec" }}
                         >
                             {/* Animated Letters */}
-                            {'ENDLESS LOVE'.split('').map((letter, index) => (
+                            {'AMOR INCONDICIONAL'.split('').map((letter, index) => (
                                 <motion.span
                                     key={index}
                                     className="text-[2.5rem] sm:text-[5rem] lg:text-[8.55rem] inline-block"
