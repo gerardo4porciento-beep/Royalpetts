@@ -65,11 +65,13 @@ const GallerySection = () => {
                 whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
                 transition={{ duration: 1, type: "spring", bounce: 0.2 }}
                 viewport={{ once: true, amount: 0.2 }}
-                className="w-[85vw] mx-auto h-[80vh] rounded-3xl overflow-hidden border-[8px] border-[#34f4ce]"
+                className="w-[92vw] sm:w-[85vw] mx-auto h-[60vh] sm:h-[80vh] rounded-3xl overflow-hidden border-[4px] sm:border-[8px] border-[#34f4ce]"
                 style={{
                     transformStyle: 'preserve-3d',
                     perspective: '1500px',
-                    boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
+                    boxShadow: window.innerWidth < 640
+                        ? "4px 4px 0px #ff7db2, 8px 8px 0px #00b9ec"
+                        : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
                 }}
             >
                 <GridMotion items={items} onItemClick={handleImageClick} />
@@ -93,14 +95,14 @@ const GallerySection = () => {
                                 animate={{ opacity: 1, scale: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
                                 onClick={(e) => e.stopPropagation()}
-                                className="w-[90vw] max-w-[500px] max-h-[85vh] overflow-y-auto bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
+                                className="w-[85vw] max-w-[500px] md:max-w-[700px] max-h-[85vh] overflow-y-auto bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row"
                                 style={{
-                                    boxShadow: "6px 6px 0px #ff7db2, 12px 12px 0px #00b9ec",
+                                    boxShadow: window.innerWidth < 640 ? "4px 4px 0px #ff7db2" : "6px 6px 0px #ff7db2, 12px 12px 0px #00b9ec",
                                     fontFamily: "'Inter', 'Segoe UI', sans-serif"
                                 }}
                             >
                                 {/* Image - Full width on mobile, fixed width on desktop */}
-                                <div className="w-full h-[150px] md:w-[220px] md:h-auto flex-shrink-0 overflow-hidden">
+                                <div className="w-full h-[180px] md:w-[280px] md:h-auto flex-shrink-0 overflow-hidden">
                                     <img
                                         src={selectedImage}
                                         alt={selectedBreed.name}

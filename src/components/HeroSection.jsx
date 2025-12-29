@@ -277,13 +277,14 @@ const HeroSection = () => {
                         loop
                         muted
                         playsInline
-                        className="w-[170px] sm:w-[400px] lg:w-[610px] fixed lg:absolute z-0 lg:z-20 animate-fade-in-up object-cover"
+                        preload="metadata"
+                        className="w-[213px] sm:w-[500px] lg:w-[763px] fixed lg:absolute z-0 lg:z-20 animate-fade-in-up object-cover"
                         style={{
-                            top: 'calc(25% - 50px)', // move down 50px
-                            left: 'calc(50% + 25px)', // move right 25px
+                            top: 'calc(25% - 100px)', // moved down additional 50px
+                            left: '50%',
+                            transform: 'translateX(calc(-50% + 80px)) rotate(-5deg)', // moved right additional 25px and keep rotation
                             bottom: window.innerWidth >= 1024 ? '35%' : 'auto',
                             right: window.innerWidth >= 1024 ? 'calc(10% - 80px)' : 'auto',
-                            transform: 'rotate(-5deg)',
                             maskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
                             WebkitMaskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
                             filter: 'drop-shadow(0 0 15px #00D2FF)'

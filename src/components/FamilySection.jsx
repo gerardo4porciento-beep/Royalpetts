@@ -57,7 +57,7 @@ const FamilySection = () => {
             {/* Content */}
             <div className="relative z-10 mt-auto">
                 <h3
-                    className={`font-skater ${isWide ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'} text-white mb-3 leading-tight`}
+                    className={`font-skater ${isWide ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'} ${card.titleColor ? `text-[${card.titleColor}]` : 'text-white'} mb-3 leading-tight`}
                     style={{
                         textShadow: `2px 2px 0px ${card.shadowColor}`
                     }}
@@ -98,7 +98,7 @@ const FamilySection = () => {
             <div className="relative z-10 max-w-7xl w-full">
 
                 {/* Bento Grid Layout */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 p-4 md:p-8">
 
                     {/* Left Column - Large Card */}
                     <motion.div
@@ -111,13 +111,15 @@ const FamilySection = () => {
                         style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
                     >
                         <div
-                            className="relative h-full min-h-[500px] rounded-3xl overflow-hidden p-8 flex flex-col justify-between border-[8px] border-[#34f4ce]"
+                            className="relative h-full min-h-[400px] md:min-h-[500px] rounded-3xl overflow-hidden p-6 md:p-8 flex flex-col justify-between border-[4px] md:border-[8px] border-[#34f4ce]"
                             style={{
                                 background: '#ffffff',
-                                boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
+                                boxShadow: window.innerWidth < 640
+                                    ? "6px 6px 0px #ff7db2"
+                                    : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
                             }}
                         >
-                            <CardContent card={cards[0]} />
+                            <CardContent card={{ ...cards[0], titleColor: '#333' }} />
                         </div>
                     </motion.div>
 
@@ -132,10 +134,12 @@ const FamilySection = () => {
                         style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
                     >
                         <div
-                            className="relative h-full min-h-[240px] rounded-3xl overflow-hidden p-6 flex flex-col justify-between border-[8px] border-[#34f4ce]"
+                            className="relative h-full min-h-[200px] md:min-h-[240px] rounded-3xl overflow-hidden p-6 flex flex-col justify-between border-[4px] md:border-[8px] border-[#34f4ce]"
                             style={{
                                 background: '#34f4ce',
-                                boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
+                                boxShadow: window.innerWidth < 640
+                                    ? "6px 6px 0px #ff7db2"
+                                    : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
                             }}
                         >
                             <CardContent card={cards[1]} isWide />
@@ -153,10 +157,12 @@ const FamilySection = () => {
                         style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
                     >
                         <div
-                            className="relative h-full min-h-[240px] rounded-3xl overflow-hidden p-6 flex flex-col justify-between border-[8px] border-[#34f4ce]"
+                            className="relative h-full min-h-[200px] md:min-h-[240px] rounded-3xl overflow-hidden p-6 flex flex-col justify-between border-[4px] md:border-[8px] border-[#34f4ce]"
                             style={{
                                 background: '#fe9e5b',
-                                boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
+                                boxShadow: window.innerWidth < 640
+                                    ? "6px 6px 0px #ff7db2"
+                                    : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
                             }}
                         >
                             <CardContent card={cards[2]} isWide />

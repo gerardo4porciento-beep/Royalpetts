@@ -26,10 +26,12 @@ const InstagramSection = () => {
                 whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
                 transition={{ duration: 1, type: "spring", bounce: 0.2 }}
                 viewport={{ once: true, amount: 0.2 }}
-                className="w-[65vw] max-w-4xl mx-auto rounded-3xl overflow-hidden border-[8px] border-[#34f4ce] p-6 md:p-8"
+                className="w-[92vw] sm:w-[65vw] max-w-4xl mx-auto rounded-3xl overflow-hidden border-[4px] sm:border-[8px] border-[#34f4ce] p-6 md:p-8"
                 style={{
                     background: '#ffffff',
-                    boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff",
+                    boxShadow: window.innerWidth < 640
+                        ? "4px 4px 0px #ff7db2, 8px 8px 0px #00b9ec"
+                        : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff",
                     transformStyle: 'preserve-3d',
                     perspective: '1500px'
                 }}

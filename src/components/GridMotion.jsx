@@ -59,7 +59,7 @@ const GridMotion = ({ items = [], onItemClick = null }) => {
                 <div
                     className="relative flex flex-col gap-4"
                     style={{
-                        transform: 'rotate(-12deg) scale(1.3)',
+                        transform: `rotate(-12deg) scale(${window.innerWidth < 640 ? 1.1 : 1.3})`,
                         transformOrigin: 'center center'
                     }}
                 >
@@ -83,11 +83,7 @@ const GridMotion = ({ items = [], onItemClick = null }) => {
                                 return (
                                     <div
                                         key={itemIndex}
-                                        className={`relative flex-shrink-0 ${isClickable ? 'cursor-pointer hover:scale-105 transition-transform duration-300' : ''}`}
-                                        style={{
-                                            width: '220px',
-                                            height: '160px'
-                                        }}
+                                        className={`relative flex-shrink-0 w-[140px] h-[100px] sm:w-[220px] sm:h-[160px] ${isClickable ? 'cursor-pointer hover:scale-105 transition-transform duration-300' : ''}`}
                                         onClick={() => handleClick(content)}
                                     >
                                         <div

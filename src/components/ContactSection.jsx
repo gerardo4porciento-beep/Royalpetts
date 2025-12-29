@@ -12,10 +12,12 @@ const ContactSection = () => {
                 whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
                 transition={{ duration: 1, type: "spring", bounce: 0.25 }}
                 viewport={{ once: true, amount: 0.2 }}
-                className="w-[85vw] mx-auto rounded-3xl overflow-hidden border-[8px] border-[#34f4ce] p-8 md:p-16"
+                className="w-[92vw] sm:w-[85vw] mx-auto rounded-3xl overflow-hidden border-[4px] sm:border-[8px] border-[#34f4ce] p-6 md:p-16"
                 style={{
                     background: '#34f4ce',
-                    boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff",
+                    boxShadow: window.innerWidth < 640
+                        ? "4px 4px 0px #ff7db2, 8px 8px 0px #00b9ec"
+                        : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff",
                     transformStyle: 'preserve-3d',
                     perspective: '1500px'
                 }}
@@ -89,7 +91,7 @@ const ContactSection = () => {
                             viewport={{ once: true }}
                             className="bg-white p-8 rounded-3xl text-center"
                             style={{
-                                boxShadow: "6px 6px 0px #ff7db2, 12px 12px 0px #00b9ec"
+                                boxShadow: window.innerWidth < 640 ? "4px 4px 0px #ff7db2" : "6px 6px 0px #ff7db2, 12px 12px 0px #00b9ec"
                             }}
                         >
                             <h3 className="font-skater text-3xl md:text-4xl text-[#ff7db2] mb-4" style={{ textShadow: "2px 2px 0px #00b9ec" }}>VISÍTANOS</h3>
