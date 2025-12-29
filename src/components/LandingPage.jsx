@@ -4,7 +4,7 @@ import HeroSection from './HeroSection';
 import ParticleBackground from './ParticleBackground';
 
 // import AccessoriesGrid from './AccessoriesGrid'; // REMOVED
-// import Footer from './Footer'; // REMOVED
+import Footer from './Footer'; // Restored
 import Navbar from './Navbar';
 import GallerySection from './GallerySection';
 import ScrollGuidePath from './ScrollGuidePath';
@@ -57,15 +57,11 @@ const LandingPage = () => {
                 {/* Global Background (Parallax Active) */}
                 <div
                     ref={bgRef}
-                    className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none transition-transform duration-100 ease-out will-change-transform"
+                    className="fixed top-0 left-0 w-full h-screen z-0 pointer-events-none transition-transform duration-100 ease-out will-change-transform bg-[url('/FONDO_MOBILE3.svg')] md:bg-[url('/fondo_landing.webp')] bg-cover md:bg-[length:100%_auto] bg-top bg-no-repeat"
                     style={{
                         backgroundColor: '#07acdd', // Matches top sky blue
-                        backgroundImage: "url('/fondo_landing.webp')",
-                        backgroundSize: '100% auto',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'top center',
                         transform: 'scale(1.05)', // Initial scale to allow movement
-                        filter: 'saturate(1.3) brightness(1.1)' // More vibrant colors
+                        // Filter only on desktop to avoid altering the mobile SVG color match
                     }}
                 ></div>
 
@@ -93,11 +89,11 @@ const LandingPage = () => {
 
                     {/* New Sections */}
                     <FamilySection />
-                    {/* <InstagramSection /> - Oculto temporalmente */}
+                    <InstagramSection />
                     <ContactSection />
                 </main>
 
-                {/* Footer Removed as requested */}
+                <Footer />
             </div>
         </SmoothScroll>
     );

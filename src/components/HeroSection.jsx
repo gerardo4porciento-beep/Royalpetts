@@ -205,10 +205,10 @@ const HeroSection = () => {
             <div className="relative z-10 w-full h-full max-w-[1600px] mx-auto grid grid-cols-12 px-6 lg:px-12 pointer-events-none">
 
                 {/* Left Column: Typography & CTAs - Spans 7 cols on Desktop */}
-                <div className="col-span-12 lg:col-span-7 flex flex-col justify-center items-start text-left h-full pt-20 order-last lg:order-first">
+                <div className="col-span-12 lg:col-span-7 flex flex-col justify-center items-center lg:items-start text-center lg:text-left h-full pt-16 lg:pt-20 order-first">
 
                     {/* H1 - Massive Title */}
-                    <div className="relative overflow-visible p-2 mt-[120px] sm:mt-[200px] lg:mt-[380px]">
+                    <div className="relative overflow-visible p-2 mt-[100px] lg:mt-[380px]">
                         <h1
                             ref={titleRef}
                             className="font-skater text-[3.6rem] sm:text-[5.4rem] lg:text-[6.75rem] leading-[0.9] text-white opacity-0 transform origin-left"
@@ -269,7 +269,7 @@ const HeroSection = () => {
                 </div>
 
                 {/* Right Column: Space for 3D Visuals & Puppy Image */}
-                <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-full flex items-end lg:items-center justify-center lg:justify-end order-first lg:order-last">
+                <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-full flex items-start lg:items-center justify-center lg:justify-end order-last">
                     {/* Video popping out of hole - responsive */}
                     <video
                         src="/video home.mp4"
@@ -277,13 +277,14 @@ const HeroSection = () => {
                         loop
                         muted
                         playsInline
-                        className="w-[280px] sm:w-[400px] lg:w-[610px] z-20 animate-fade-in-up object-cover mb-20 lg:mb-0 lg:absolute"
+                        className="w-[248px] sm:w-[400px] lg:w-[610px] fixed lg:absolute z-0 lg:z-20 animate-fade-in-up object-cover top-[calc(25%-130px)] left-1/2 translate-x-[calc(-50%+65px)] lg:top-auto lg:left-auto lg:translate-x-0"
                         style={{
                             bottom: window.innerWidth >= 1024 ? '35%' : 'auto',
                             right: window.innerWidth >= 1024 ? 'calc(10% - 80px)' : 'auto',
                             transform: 'rotate(-5deg)',
-                            maskImage: 'radial-gradient(closest-side at 40% 50%, black 85%, transparent 100%)',
-                            WebkitMaskImage: 'radial-gradient(closest-side at 40% 50%, black 85%, transparent 100%)'
+                            maskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
+                            WebkitMaskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
+                            filter: 'drop-shadow(0 0 15px #00D2FF)'
                         }}
                     />
                 </div>
