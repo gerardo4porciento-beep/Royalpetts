@@ -269,18 +269,18 @@ const HeroSection = () => {
                 </div>
 
                 {/* Right Column: Space for 3D Visuals & Puppy Image */}
-                <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-full">
-                    {/* Video popping out of hole - positioned above bench area */}
+                <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-full flex items-end lg:items-center justify-center lg:justify-end">
+                    {/* Video popping out of hole - responsive */}
                     <video
                         src="/video home.mp4"
                         autoPlay
                         loop
                         muted
                         playsInline
-                        className="absolute w-[610px] z-20 animate-fade-in-up object-cover"
+                        className="w-[280px] sm:w-[400px] lg:w-[610px] z-20 animate-fade-in-up object-cover mb-20 lg:mb-0 lg:absolute"
                         style={{
-                            bottom: '35%',
-                            right: 'calc(10% - 80px)',
+                            bottom: window.innerWidth >= 1024 ? '35%' : 'auto',
+                            right: window.innerWidth >= 1024 ? 'calc(10% - 80px)' : 'auto',
                             transform: 'rotate(-5deg)',
                             maskImage: 'radial-gradient(closest-side at 40% 50%, black 85%, transparent 100%)',
                             WebkitMaskImage: 'radial-gradient(closest-side at 40% 50%, black 85%, transparent 100%)'

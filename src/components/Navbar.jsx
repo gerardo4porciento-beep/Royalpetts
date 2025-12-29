@@ -33,11 +33,11 @@ const Navbar = () => {
                 </div>
 
                 {/* Right: Action Buttons */}
-                <div className="flex items-center gap-3">
-                    {/* Contáctanos Button */}
+                <div className="flex items-center gap-2 md:gap-3">
+                    {/* Contáctanos Button - Hidden on very small screens */}
                     <a
                         href="#contact"
-                        className="px-6 py-3 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 text-sm md:text-base"
+                        className="hidden sm:block px-3 py-2 md:px-6 md:py-3 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 text-xs md:text-base"
                         style={{
                             boxShadow: "2px 2px 0px #ff7db2, 4px 4px 0px #00b9ec"
                         }}
@@ -48,13 +48,13 @@ const Navbar = () => {
                     {/* Menu Button */}
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="px-6 py-3 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 flex items-center gap-2 text-sm md:text-base"
+                        className="px-3 py-2 md:px-6 md:py-3 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 flex items-center gap-1 md:gap-2 text-xs md:text-base"
                         style={{
                             boxShadow: "2px 2px 0px #ff7db2, 4px 4px 0px #00b9ec"
                         }}
                     >
                         {isMenuOpen ? 'CLOSE' : 'MENU'}
-                        <span className="text-lg">{isMenuOpen ? '✕' : '⋮⋮'}</span>
+                        <span className="text-sm md:text-lg">{isMenuOpen ? '✕' : '⋮⋮'}</span>
                     </button>
                 </div>
             </nav>
