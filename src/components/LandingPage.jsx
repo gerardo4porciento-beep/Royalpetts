@@ -12,7 +12,7 @@ import FamilySection from './FamilySection';
 import ContactSection from './ContactSection';
 import LogoLoop from './LogoLoop';
 import InstagramSection from './InstagramSection';
-import WhatsAppButton from './WhatsAppButton';
+// WhatsApp widget implemented via script in index.html
 
 import { motion, useScroll, useSpring } from 'framer-motion';
 
@@ -107,7 +107,7 @@ const LandingPage = () => {
                 <Navbar />
 
                 {/* WhatsApp Floating Button */}
-                <WhatsAppButton />
+                {/* WhatsApp Widget is loaded via index.html script */}
 
                 <main className="relative z-10">
                     <HeroSection />
