@@ -13,6 +13,7 @@ import {
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion } from 'framer-motion';
+import FallingText from './FallingText';
 
 // Register Plugin safely
 if (typeof window !== 'undefined') {
@@ -286,6 +287,20 @@ const HeroSection = () => {
                         {/* Grunge Texture Overlay on Text (CSS Mask equivalent) */}
                         <div className="absolute inset-0 pointer-events-none select-none mix-blend-overlay opacity-30">
                         </div>
+                    </div>
+
+                    {/* Interactive Physics Text */}
+                    <div className="relative w-full max-w-[500px] h-[200px] pointer-events-auto mt-[-20px] lg:mt-[-40px]">
+                        <FallingText
+                            text="Amor puro y fidelidad sin límites en cada uno de nuestros cachorros. Encuentra a tu compañero ideal hoy mismo."
+                            highlightWords={["Amor", "cachorros", "compañero", "ideal"]}
+                            trigger="auto"
+                            backgroundColor="transparent"
+                            wireframes={false}
+                            gravity={0.4}
+                            fontSize={isMobile ? "1.2rem" : "1.8rem"}
+                            mouseConstraintStiffness={0.6}
+                        />
                     </div>
 
                     {/* CTAs */}
