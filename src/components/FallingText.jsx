@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import Matter from 'matter-js';
 
 const FallingText = ({
@@ -53,7 +53,7 @@ const FallingText = ({
             observer.observe(containerRef.current);
             return () => observer.disconnect();
         }
-    }, [trigger, effectStarted]);
+    }, [trigger]);
 
     useEffect(() => {
         if (!effectStarted) return;
@@ -153,9 +153,7 @@ const FallingText = ({
             Render.stop(render);
             Runner.stop(runner);
             if (render.canvas && canvasContainerRef.current) {
-                if (canvasContainerRef.current.contains(render.canvas)) {
-                    canvasContainerRef.current.removeChild(render.canvas);
-                }
+                canvasContainerRef.current.removeChild(render.canvas);
             }
             World.clear(engine.world, false);
             Engine.clear(engine);
@@ -184,7 +182,7 @@ const FallingText = ({
                 }}
             />
 
-            <div className="absolute top-0 left-0 z-0 w-full h-full" ref={canvasContainerRef} />
+            <div className="absolute top-0 left-0 z-0" ref={canvasContainerRef} />
         </div>
     );
 };

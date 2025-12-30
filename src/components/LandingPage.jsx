@@ -120,21 +120,17 @@ const LandingPage = () => {
 
                     <ContactSection />
 
-                    {/* Fun Interactive Section at the bottom */}
-                    <div className="py-20 px-6 mt-10">
-                        <div className="max-w-[1000px] mx-auto border-[6px] border-[#34f4ce] rounded-[40px] bg-white/5 backdrop-blur-sm overflow-hidden"
-                            style={{ boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec" }}>
-                            <FallingText
-                                text="React Bits is a library of animated and interactive React components designed to streamline UI development and simplify your workflow."
-                                highlightWords={["React", "Bits", "animated", "components", "simplify"]}
-                                trigger="scroll"
-                                backgroundColor="transparent"
-                                wireframes={false}
-                                gravity={0.56}
-                                fontSize="2rem"
-                                mouseConstraintStiffness={0.9}
-                            />
-                        </div>
+                    <div className="w-full h-[400px] mt-20 relative z-20 pointer-events-auto">
+                        <FallingText
+                            text="React Bits is a library of animated and interactive React components designed to streamline UI development and simplify your workflow."
+                            highlightWords={["React", "Bits", "animated", "components", "simplify"]}
+                            trigger="scroll"
+                            backgroundColor="transparent"
+                            wireframes={false}
+                            gravity={0.56}
+                            fontSize="2rem"
+                            mouseConstraintStiffness={0.9}
+                        />
                     </div>
                 </main>
 
