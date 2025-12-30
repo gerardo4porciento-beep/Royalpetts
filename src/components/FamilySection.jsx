@@ -63,7 +63,7 @@ const FamilySection = () => {
             {/* Content */}
             <div className="relative z-10 mt-auto">
                 <h3
-                    className={`font-skater ${isWide ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'} ${card.titleColor ? `text-[${card.titleColor}]` : 'text-white'} mb-3 leading-tight`}
+                    className={`font-skater ${isWide ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl'} ${card.titleColor ? `text-[${card.titleColor}]` : 'text-gray-900'} mb-3 leading-tight`}
                     style={{
                         textShadow: `2px 2px 0px ${card.shadowColor}`
                     }}
@@ -133,15 +133,14 @@ const FamilySection = () => {
                         style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
                     >
                         <div
-                            className="relative h-full min-h-[400px] md:min-h-[500px] rounded-3xl overflow-hidden p-6 md:p-8 flex flex-col justify-between border-[4px] md:border-[8px] border-[#34f4ce]"
+                            className="relative h-full min-h-[400px] md:min-h-[500px] rounded-3xl overflow-hidden p-6 md:p-8 flex flex-col justify-between border-[3px] md:border-[4px] border-[#34f4ce] bg-white"
                             style={{
-                                background: '#ffffff',
                                 boxShadow: window.innerWidth < 640
                                     ? "6px 6px 0px #ff7db2"
-                                    : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
+                                    : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec"
                             }}
                         >
-                            <CardContent card={{ ...cards[0], titleColor: '#333' }} />
+                            <CardContent card={{ ...cards[0], titleColor: '#1a1a1a' }} />
                         </div>
                     </motion.div>
 
@@ -156,15 +155,14 @@ const FamilySection = () => {
                         style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
                     >
                         <div
-                            className="relative h-full min-h-[200px] md:min-h-[240px] rounded-3xl overflow-hidden p-6 flex flex-col justify-between border-[4px] md:border-[8px] border-[#34f4ce]"
+                            className="relative h-full min-h-[200px] md:min-h-[240px] rounded-3xl overflow-hidden p-6 flex flex-col justify-between border-[3px] md:border-[4px] border-[#34f4ce] bg-white"
                             style={{
-                                background: '#34f4ce',
                                 boxShadow: window.innerWidth < 640
                                     ? "6px 6px 0px #ff7db2"
-                                    : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
+                                    : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec"
                             }}
                         >
-                            <CardContent card={cards[1]} isWide />
+                            <CardContent card={{ ...cards[1], titleColor: '#1a1a1a' }} isWide />
                         </div>
                     </motion.div>
 
@@ -179,15 +177,14 @@ const FamilySection = () => {
                         style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
                     >
                         <div
-                            className="relative h-full min-h-[200px] md:min-h-[240px] rounded-3xl overflow-hidden p-6 flex flex-col justify-between border-[4px] md:border-[8px] border-[#34f4ce]"
+                            className="relative h-full min-h-[200px] md:min-h-[240px] rounded-3xl overflow-hidden p-6 flex flex-col justify-between border-[3px] md:border-[4px] border-[#34f4ce] bg-white"
                             style={{
-                                background: '#fe9e5b',
                                 boxShadow: window.innerWidth < 640
                                     ? "6px 6px 0px #ff7db2"
-                                    : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec, 24px 24px 0px #ffffff, -8px -8px 0px #ff7db2, -16px -16px 0px #00b9ec, -24px -24px 0px #ffffff"
+                                    : "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec"
                             }}
                         >
-                            <CardContent card={cards[2]} isWide />
+                            <CardContent card={{ ...cards[2], titleColor: '#1a1a1a' }} isWide />
                         </div>
                     </motion.div>
 
