@@ -11,7 +11,7 @@ import ScrollGuidePath from './ScrollGuidePath';
 import FamilySection from './FamilySection';
 import ContactSection from './ContactSection';
 import LogoLoop from './LogoLoop';
-import InstagramSection from './InstagramSection';
+
 // WhatsApp widget implemented via script in index.html
 
 import { motion, useScroll, useSpring } from 'framer-motion';
@@ -116,7 +116,7 @@ const LandingPage = () => {
 
                     {/* New Sections */}
                     <FamilySection />
-                    <InstagramSection />
+
                     <ContactSection />
                 </main>
 
