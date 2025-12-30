@@ -289,16 +289,16 @@ const HeroSection = () => {
                         </div>
                     </div>
 
-                    {/* Interactive Physics Text */}
-                    <div className="relative w-full max-w-[500px] h-[200px] pointer-events-auto mt-[-20px] lg:mt-[-40px]">
+                    {/* Interactive Physics Text - Repositioned to the right and higher */}
+                    <div className="absolute top-[80px] lg:top-[120px] right-[5%] lg:right-[15%] w-[85vw] sm:w-[500px] h-[250px] pointer-events-auto z-20">
                         <FallingText
-                            text="Amor puro y fidelidad sin límites en cada uno de nuestros cachorros. Encuentra a tu compañero ideal hoy mismo."
-                            highlightWords={["Amor", "cachorros", "compañero", "ideal"]}
+                            text="amor lealtad cachorros colitas [LOGO:PINK] [LOGO:BLUE] [LOGO:GREEN] [LOGO:YELLOW] 🦴 🎾 ⚽ 🐾"
+                            highlightWords={["amor", "lealtad", "cachorros", "colitas"]}
                             trigger="auto"
                             backgroundColor="transparent"
                             wireframes={false}
                             gravity={0.4}
-                            fontSize={isMobile ? "1.2rem" : "1.8rem"}
+                            fontSize={isMobile ? "1.5rem" : "2.2rem"}
                             mouseConstraintStiffness={0.6}
                         />
                     </div>

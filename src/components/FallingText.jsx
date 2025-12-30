@@ -23,7 +23,23 @@ const FallingText = ({
 
         const newHTML = words
             .map(word => {
-                const isHighlighted = highlightWords.some(hw => word.startsWith(hw));
+                if (word.startsWith('[LOGO:')) {
+                    const color = word.replace('[LOGO:', '').replace(']', '').toLowerCase();
+                    const filterColor = {
+                        pink: 'invert(52%) sepia(82%) saturate(464%) hue-rotate(296deg) brightness(101%) contrast(101%)',
+                        blue: 'invert(58%) sepia(90%) saturate(1814%) hue-rotate(162deg) brightness(97%) contrast(104%)',
+                        green: 'invert(84%) sepia(35%) saturate(845%) hue-rotate(113deg) brightness(101%) contrast(104%)',
+                        yellow: 'invert(86%) sepia(85%) saturate(541%) hue-rotate(339deg) brightness(102%) contrast(101%)'
+                    }[color] || 'none';
+
+                    return `<img src="/SEPARACION 6/LOGO 3.png" class="inline-block w-8 h-8 mx-2 select-none" style="filter: ${filterColor};" />`;
+                }
+
+                if (['🦴', '🎾', '⚽', '🐾'].includes(word)) {
+                    return `<span class="inline-block text-2xl mx-1 select-none">${word}</span>`;
+                }
+
+                const isHighlighted = highlightWords.some(hw => word.toLowerCase() === hw.toLowerCase());
                 return `<span
           class="inline-block mx-[2px] select-none ${isHighlighted ? 'text-[#ff7db2] font-bold' : ''}"
         >
@@ -92,7 +108,7 @@ const FallingText = ({
         const ceiling = Bodies.rectangle(width / 2, -25, width, 50, boundaryOptions);
 
         if (!textRef.current) return;
-        const wordSpans = textRef.current.querySelectorAll('span');
+        const wordSpans = textRef.current.querySelectorAll('span, img');
         const wordBodies = [...wordSpans].map(elem => {
             const rect = elem.getBoundingClientRect();
 
