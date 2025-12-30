@@ -214,30 +214,37 @@ const HeroSection = () => {
                             className="font-skater leading-[0.9] text-white opacity-0 transform origin-left"
                             style={{ textShadow: "4px 4px 0px #ff7db2, 8px 8px 0px #00b9ec" }}
                         >
-                            {/* Desktop Version: ENDLESS LOVE in one line */}
-                            <div className="hidden lg:block whitespace-nowrap">
-                                {'ENDLESS LOVE'.split('').map((letter, index) => (
-                                    <motion.span
-                                        key={`desktop-${index}`}
-                                        className="text-[8.55rem] inline-block"
-                                        initial={{ opacity: 0, y: 50 }}
-                                        animate={{
-                                            opacity: 1,
-                                            y: 0,
-                                            rotate: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Math.random() > 0.5 ? 5 : -5, 0],
-                                            scale: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.1, 1],
-                                        }}
-                                        transition={{
-                                            opacity: { duration: 0.5, delay: index * 0.05 },
-                                            y: { duration: 0.5, delay: index * 0.05, type: "spring" },
-                                            rotate: { duration: 0.5, delay: 2 + Math.random() * 3, repeat: Infinity, repeatDelay: 3 + Math.random() * 5 },
-                                            scale: { duration: 0.3, delay: 2 + Math.random() * 3, repeat: Infinity, repeatDelay: 3 + Math.random() * 5 }
-                                        }}
-                                        whileHover={{ scale: 1.2, rotate: Math.random() > 0.5 ? 10 : -10, color: '#34f4ce', transition: { duration: 0.2 } }}
-                                        style={{ display: letter === ' ' ? 'inline' : 'inline-block', width: letter === ' ' ? '0.3em' : 'auto' }}
-                                    >
-                                        {letter === ' ' ? '\u00A0' : letter}
-                                    </motion.span>
+                            {/* Desktop Version: AMOR INCONDICIONAL in two lines */}
+                            <div className="hidden lg:block">
+                                {['AMOR', 'INCONDICIONAL'].map((word, wordIdx) => (
+                                    <div key={`desktop-word-${wordIdx}`} className={`block ${wordIdx === 0 ? 'mb-[-0.2em]' : ''}`}>
+                                        {word.split('').map((letter, index) => {
+                                            const totalIndex = wordIdx === 0 ? index : 5 + index;
+                                            return (
+                                                <motion.span
+                                                    key={`desktop-${wordIdx}-${index}`}
+                                                    className={`${wordIdx === 0 ? 'text-[9.5rem]' : 'text-[7.5rem]'} inline-block`}
+                                                    initial={{ opacity: 0, y: 50 }}
+                                                    animate={{
+                                                        opacity: 1,
+                                                        y: 0,
+                                                        rotate: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, Math.random() > 0.5 ? 5 : -5, 0],
+                                                        scale: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.1, 1],
+                                                    }}
+                                                    transition={{
+                                                        opacity: { duration: 0.5, delay: totalIndex * 0.05 },
+                                                        y: { duration: 0.5, delay: totalIndex * 0.05, type: "spring" },
+                                                        rotate: { duration: 0.5, delay: 2 + Math.random() * 3, repeat: Infinity, repeatDelay: 3 + Math.random() * 5 },
+                                                        scale: { duration: 0.3, delay: 2 + Math.random() * 3, repeat: Infinity, repeatDelay: 3 + Math.random() * 5 }
+                                                    }}
+                                                    whileHover={{ scale: 1.2, rotate: Math.random() > 0.5 ? 10 : -10, color: '#34f4ce', transition: { duration: 0.2 } }}
+                                                    style={{ display: 'inline-block' }}
+                                                >
+                                                    {letter}
+                                                </motion.span>
+                                            );
+                                        })}
+                                    </div>
                                 ))}
                             </div>
 
