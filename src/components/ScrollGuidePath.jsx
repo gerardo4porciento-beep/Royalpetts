@@ -78,7 +78,7 @@ const ScrollGuidePath = () => {
             trigger: "#scrolly-main-wrapper",
             start: "top top",
             end: "bottom bottom",
-            scrub: 1,
+            scrub: 0.5,
             animation: gsap.timeline()
                 .to(maskPath, {
                     strokeDashoffset: 0,
