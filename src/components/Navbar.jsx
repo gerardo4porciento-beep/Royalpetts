@@ -85,8 +85,8 @@ const Navbar = () => {
                                     className="block px-6 py-4 text-3xl font-skater text-white transition-all duration-300 border-b border-white/20 last:border-0"
                                     style={{ textShadow: "1.5px 1.5px 0px #ff7db2, 3px 3px 0px #00b9ec" }}
                                     whileHover={{
-                                        backgroundColor: "#ffffff",
-                                        color: "#000000",
+                                        backgroundColor: "#ff7db2",
+                                        color: "#ffffff",
                                         textShadow: "none",
                                         x: 5,
                                         transition: { duration: 0.2 }
