@@ -296,13 +296,13 @@ const HeroSection = () => {
                         muted
                         playsInline
                         preload="metadata"
-                        className="w-[213px] sm:w-[500px] lg:w-[763px] fixed lg:absolute z-[1] lg:z-20 animate-fade-in-up object-cover"
+                        className="w-[213px] sm:w-[500px] lg:w-[763px] fixed lg:absolute z-[1] lg:z-[1] animate-fade-in-up object-cover"
                         style={{
                             top: 'calc(25% - 80px)', // moved down another 10px
                             left: '50%',
                             transform: 'translateX(calc(-50% + 160px)) rotate(-5deg)', // moved right another 40px
                             bottom: window.innerWidth >= 1024 ? '35%' : 'auto',
-                            right: window.innerWidth >= 1024 ? 'calc(10% - 80px)' : 'auto',
+                            right: window.innerWidth >= 1024 ? 'calc(10% - 60px)' : 'auto',
                             maskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
                             WebkitMaskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
                             filter: 'drop-shadow(0 0 15px #00D2FF)'
