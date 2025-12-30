@@ -37,7 +37,7 @@ const Navbar = () => {
                     {/* Contáctanos Button - Hidden on very small screens */}
                     <a
                         href="#contact"
-                        className="hidden sm:block px-2 py-1.5 md:px-4 md:py-2 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 text-[10px] md:text-sm"
+                        className="hidden sm:block px-2 py-1.5 md:px-4 md:py-2 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 text-[10px] md:text-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
                         style={{
                             boxShadow: "2px 2px 0px #ff7db2, 3px 3px 0px #00b9ec"
                         }}
@@ -48,7 +48,7 @@ const Navbar = () => {
                     {/* Menu Button */}
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="px-2 py-1.5 md:px-4 md:py-2 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 flex items-center gap-1 md:gap-2 text-[10px] md:text-sm"
+                        className="px-2 py-1.5 md:px-4 md:py-2 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 flex items-center gap-1 md:gap-2 text-[10px] md:text-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
                         style={{
                             boxShadow: "2px 2px 0px #ff7db2, 3px 3px 0px #00b9ec"
                         }}
@@ -80,7 +80,7 @@ const Navbar = () => {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: index * 0.1 }}
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="block py-4 text-2xl font-bold text-white hover:opacity-70 transition-colors duration-300 border-b border-white/20 last:border-0"
+                                    className="block py-4 text-2xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] hover:opacity-70 transition-colors duration-300 border-b border-white/20 last:border-0"
                                 >
                                     {item.label}
                                 </motion.a>
@@ -89,7 +89,7 @@ const Navbar = () => {
 
                         {/* Newsletter Section */}
                         <div className="bg-black/10 p-6">
-                            <h3 className="text-xl font-bold text-white mb-3">
+                            <h3 className="text-xl font-bold text-white mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                                 Suscríbete a nuestro newsletter
                             </h3>
                             <div className="relative">
