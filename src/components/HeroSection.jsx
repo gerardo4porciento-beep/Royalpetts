@@ -208,7 +208,7 @@ const HeroSection = () => {
                 <div className="col-span-12 lg:col-span-7 flex flex-col justify-center items-center lg:items-start text-center lg:text-left h-full pt-16 lg:pt-20 order-first">
 
                     {/* H1 - Massive Title */}
-                    <div className="relative overflow-visible p-2 mt-[170px] lg:mt-[380px] ml-[15px] lg:ml-0">
+                    <div className="relative overflow-visible p-2 mt-[190px] lg:mt-[380px] ml-[15px] lg:ml-0">
                         <h1
                             ref={titleRef}
                             className="font-skater leading-[0.9] text-white opacity-0 transform origin-left"
@@ -250,7 +250,7 @@ const HeroSection = () => {
                                             return (
                                                 <motion.span
                                                     key={`mobile-${wordIdx}-${index}`}
-                                                    className="text-[2.65rem] sm:text-[5rem] inline-block"
+                                                    className={`${wordIdx === 0 ? 'text-[2.95rem]' : 'text-[2.65rem]'} sm:text-[5rem] inline-block`}
                                                     initial={{ opacity: 0, y: 50 }}
                                                     animate={{
                                                         opacity: 1,
