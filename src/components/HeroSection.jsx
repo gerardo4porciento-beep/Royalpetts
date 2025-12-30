@@ -13,7 +13,6 @@ import {
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { motion } from 'framer-motion';
-import FallingText from './FallingText';
 
 // Register Plugin safely
 if (typeof window !== 'undefined') {
@@ -287,20 +286,6 @@ const HeroSection = () => {
                         {/* Grunge Texture Overlay on Text (CSS Mask equivalent) */}
                         <div className="absolute inset-0 pointer-events-none select-none mix-blend-overlay opacity-30">
                         </div>
-                    </div>
-
-                    {/* Interactive Physics Text - Repositioned to the right and higher */}
-                    <div className="absolute top-[80px] lg:top-[120px] right-[5%] lg:right-[15%] w-[85vw] sm:w-[500px] h-[250px] pointer-events-auto z-20">
-                        <FallingText
-                            text="amor lealtad cachorros colitas [LOGO:PINK] [LOGO:BLUE] [LOGO:GREEN] [LOGO:YELLOW] 🦴 🎾 ⚽ 🐾"
-                            highlightWords={["amor", "lealtad", "cachorros", "colitas"]}
-                            trigger="auto"
-                            backgroundColor="transparent"
-                            wireframes={false}
-                            gravity={0.4}
-                            fontSize={isMobile ? "1.5rem" : "2.2rem"}
-                            mouseConstraintStiffness={0.6}
-                        />
                     </div>
 
                     {/* CTAs */}
