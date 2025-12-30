@@ -11,6 +11,7 @@ import ScrollGuidePath from './ScrollGuidePath';
 import FamilySection from './FamilySection';
 import ContactSection from './ContactSection';
 import LogoLoop from './LogoLoop';
+import FallingText from './FallingText';
 
 // WhatsApp widget implemented via script in index.html
 
@@ -118,6 +119,26 @@ const LandingPage = () => {
                     <FamilySection />
 
                     <ContactSection />
+
+                    {/* Fun Interactive Section at the bottom */}
+                    <div className="py-20 px-6 mt-10">
+                        <div className="max-w-[1000px] mx-auto border-[6px] border-[#34f4ce] rounded-[40px] bg-white/5 backdrop-blur-sm overflow-hidden"
+                            style={{ boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec" }}>
+                            <FallingText
+                                text="amor lealtad cachorros colitas [LOGO:PINK] [LOGO:BLUE] [LOGO:GREEN] [LOGO:YELLOW] 🦴 🎾 ⚽ 🐾 🐶 🐩"
+                                highlightWords={["amor", "lealtad", "cachorros", "colitas"]}
+                                trigger="scroll"
+                                backgroundColor="transparent"
+                                wireframes={false}
+                                gravity={0.6}
+                                fontSize="2.8rem"
+                                mouseConstraintStiffness={0.8}
+                            />
+                        </div>
+                        <p className="text-center mt-6 font-skater text-xl text-white opacity-60">
+                            ¡Juega con nuestras huellitas! Arrastra los elementos con el ratón.
+                        </p>
+                    </div>
                 </main>
 
                 <Footer />
