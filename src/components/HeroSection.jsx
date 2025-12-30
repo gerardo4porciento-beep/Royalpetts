@@ -300,9 +300,8 @@ const HeroSection = () => {
                         style={{
                             top: 'calc(25% - 80px)', // moved down another 10px
                             left: '50%',
-                            transform: 'translateX(calc(-50% + 160px)) rotate(-5deg)', // moved right another 40px
+                            transform: `translateX(calc(-50% + ${window.innerWidth >= 1024 ? '110px' : '160px'})) rotate(-5deg)`,
                             bottom: window.innerWidth >= 1024 ? '35%' : 'auto',
-                            right: window.innerWidth >= 1024 ? 'calc(10% - 10px)' : 'auto',
                             maskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
                             WebkitMaskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
                             filter: 'drop-shadow(0 0 15px #00D2FF)'
