@@ -18,7 +18,7 @@ const LogoLoop = () => {
                         <img
                             src="/SEPARACION 6/LOGO 3.png"
                             alt="Royal Petts Logo"
-                            className="w-24 h-24 md:w-32 md:h-32 lg:w-44 lg:h-44 object-contain flex-shrink-0 brightness-0 invert drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] rotate-[45deg]"
+                            className="w-24 h-24 md:w-32 md:h-32 lg:w-44 lg:h-44 object-contain flex-shrink-0 brightness-0 invert drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] rotate-[25deg]"
                         />
                     </div>
                 ))}
