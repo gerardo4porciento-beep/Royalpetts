@@ -67,7 +67,7 @@ const Navbar = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed top-24 right-6 md:right-12 z-[9998] bg-white rounded-3xl shadow-2xl overflow-hidden"
+                        className="fixed top-24 right-6 md:right-12 z-[9998] bg-[#34f4ce] rounded-3xl shadow-2xl overflow-hidden"
                         style={{ width: '320px' }}
                     >
                         {/* Menu Items */}
@@ -80,7 +80,7 @@ const Navbar = () => {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: index * 0.1 }}
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="block py-4 text-2xl font-bold text-black hover:text-royal-blue transition-colors duration-300 border-b border-gray-100 last:border-0"
+                                    className="block py-4 text-2xl font-bold text-white hover:opacity-70 transition-colors duration-300 border-b border-white/20 last:border-0"
                                 >
                                     {item.label}
                                 </motion.a>
@@ -88,8 +88,8 @@ const Navbar = () => {
                         </div>
 
                         {/* Newsletter Section */}
-                        <div className="bg-gradient-to-br from-royal-blue/10 to-royal-pink/10 p-6">
-                            <h3 className="text-xl font-bold text-black mb-3">
+                        <div className="bg-black/10 p-6">
+                            <h3 className="text-xl font-bold text-white mb-3">
                                 Suscríbete a nuestro newsletter
                             </h3>
                             <div className="relative">
