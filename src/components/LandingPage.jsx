@@ -119,23 +119,6 @@ const LandingPage = () => {
                     <FamilySection />
 
                     <ContactSection />
-
-                    {/* Health Guarantee Section */}
-                    <div className="py-20 px-6 mt-10">
-                        <div className="max-w-[1000px] mx-auto border-[6px] border-[#34f4ce] rounded-[40px] bg-white/5 backdrop-blur-sm overflow-hidden"
-                            style={{ boxShadow: "8px 8px 0px #ff7db2, 16px 16px 0px #00b9ec" }}>
-                            <FallingText
-                                text="Garantía de Salud Royal Petts: Todos nuestros cachorros se entregan con vacunación al día, desparasitación integral, 100% libres de parásitos externos y examen de hematología completa realizado para asegurar su bienestar total."
-                                highlightWords={["vacunación", "desparasitación", "parásitos", "hematología", "bienestar"]}
-                                trigger="scroll"
-                                backgroundColor="transparent"
-                                wireframes={false}
-                                gravity={0.6}
-                                fontSize="2.5rem"
-                                mouseConstraintStiffness={0.8}
-                            />
-                        </div>
-                    </div>
                 </main>
 
                 <Footer />

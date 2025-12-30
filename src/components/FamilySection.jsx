@@ -14,9 +14,9 @@ const FamilySection = () => {
         {
             title: 'CACHORROS',
             icon: '🐶',
-            description: 'Explora nuestra selección de cachorros de raza disponibles',
-            color: '#ff7db2',
-            shadowColor: '#00b9ec',
+            description: 'Garantía de bienestar: Cachorros con esquema de vacunación al día, desparasitación integral y examen profesional de hematología completa.',
+            color: '#34f4ce',
+            shadowColor: '#ff7db2',
             size: 'small'
         },
         {
