@@ -73,7 +73,7 @@ const Navbar = () => {
                         style={{ width: '320px' }}
                     >
                         {/* Menu Items */}
-                        <div className="p-6">
+                        <div className="py-2">
                             {menuItems.map((item, index) => (
                                 <motion.a
                                     key={item.label}
@@ -82,12 +82,13 @@ const Navbar = () => {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: index * 0.1 }}
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="block py-4 text-3xl font-skater text-white transition-colors duration-300 border-b border-white/20 last:border-0"
-                                    style={{ textShadow: "2px 2px 0px #ff7db2, 4px 4px 0px #00b9ec" }}
+                                    className="block px-6 py-4 text-3xl font-skater text-white transition-all duration-300 border-b border-white/20 last:border-0"
+                                    style={{ textShadow: "1.5px 1.5px 0px #ff7db2, 3px 3px 0px #00b9ec" }}
                                     whileHover={{
-                                        scale: 1.1,
-                                        x: 20,
-                                        color: "#ff7db2",
+                                        backgroundColor: "#ffffff",
+                                        color: "#000000",
+                                        textShadow: "none",
+                                        x: 5,
                                         transition: { duration: 0.2 }
                                     }}
                                 >
