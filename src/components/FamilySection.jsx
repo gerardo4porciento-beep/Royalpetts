@@ -14,7 +14,13 @@ const FamilySection = () => {
         {
             title: 'CACHORROS',
             icon: '🐶',
-            description: 'Garantía de bienestar: Cachorros con esquema de vacunación al día, desparasitación integral y examen profesional de hematología completa.',
+            description: 'Garantía de bienestar total:',
+            details: [
+                'Vacunación al día 💉',
+                'Desparasitación integral 💊',
+                'Libres de pulgas/garrapatas 🛡️',
+                'Hematología completa 🩸'
+            ],
             color: '#34f4ce',
             shadowColor: '#ff7db2',
             size: 'small'
@@ -64,9 +70,25 @@ const FamilySection = () => {
                 >
                     {card.title}
                 </h3>
-                <p className={`text-gray-300 ${isWide ? 'text-sm' : 'text-sm md:text-base'} leading-relaxed`}>
-                    {card.description}
-                </p>
+                {card.details ? (
+                    <div className="mt-2 text-left">
+                        <p className={`font-bold mb-2 ${isWide ? 'text-sm' : 'text-base md:text-lg'} text-gray-800`}>
+                            {card.description}
+                        </p>
+                        <ul className="space-y-1">
+                            {card.details.map((item, idx) => (
+                                <li key={idx} className={`flex items-start ${isWide ? 'text-xs' : 'text-sm md:text-base'} font-medium text-gray-700`}>
+                                    <span className="mr-2 text-[#ff7db2]">•</span>
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ) : (
+                    <p className={`text-gray-600 font-medium ${isWide ? 'text-sm' : 'text-sm md:text-base'} leading-relaxed`}>
+                        {card.description}
+                    </p>
+                )}
 
                 {/* Arrow Button */}
                 <motion.div
