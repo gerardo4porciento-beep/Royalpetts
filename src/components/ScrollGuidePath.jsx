@@ -58,9 +58,14 @@ const ScrollGuidePath = () => {
             }
         };
 
+        // Wait a bit for layout to settle
+        const timer = setTimeout(updatePath, 500);
         updatePath();
         window.addEventListener('resize', updatePath);
-        return () => window.removeEventListener('resize', updatePath);
+        return () => {
+            window.removeEventListener('resize', updatePath);
+            clearTimeout(timer);
+        };
     }, []);
 
     useEffect(() => {
@@ -74,8 +79,8 @@ const ScrollGuidePath = () => {
         gsap.set(pawRef.current, { opacity: 1 });
 
         // Continuous Scroll - No Pinning (to avoid "white space" issue)
-        ScrollTrigger.create({
-            trigger: "#scrolly-main-wrapper",
+        const st = ScrollTrigger.create({
+            trigger: "body",
             start: "top top",
             end: "bottom bottom",
             scrub: 0.1,
@@ -97,10 +102,17 @@ const ScrollGuidePath = () => {
                 }, 0)
         });
 
+        // Force a refresh after settings everything up
+        ScrollTrigger.refresh();
+
+        return () => {
+            if (st) st.kill();
+        };
+
     }, [pathD]);
 
     return (
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-[5] overflow-hidden mix-blend-multiply">
+        <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-20 overflow-hidden mix-blend-multiply">
             <svg
                 className="w-full h-full"
                 style={{ height: '100%' }}
