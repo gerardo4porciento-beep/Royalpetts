@@ -286,9 +286,9 @@ export default function BubbleMenu({
                         className={[
                             'pill-list',
                             'list-none m-0 px-6',
-                            'w-full max-w-[1600px] mx-auto',
-                            'flex flex-wrap',
-                            'gap-x-0 gap-y-1',
+                            'w-full max-w-[600px] mx-auto',
+                            'flex flex-wrap justify-center',
+                            'gap-x-2 gap-y-2',
                             'pointer-events-auto',
                             'relative'
                         ].join(' ')}
@@ -302,8 +302,8 @@ export default function BubbleMenu({
                                 className={[
                                     'pill-col',
                                     'flex justify-center items-stretch',
-                                    '[flex:0_0_calc(100%/2)] lg:[flex:0_0_calc(100%/4)]',
-                                    'box-border p-2'
+                                    '[flex:0_0_calc(100%/2.5)] lg:[flex:0_0_calc(100%/5)]',
+                                    'box-border p-1'
                                 ].join(' ')}
                             >
                                 <a
@@ -333,8 +333,8 @@ export default function BubbleMenu({
                                         '--hover-color': item.hoverStyles?.textColor || menuContentColor,
                                         background: 'var(--pill-bg)',
                                         color: 'var(--pill-color)',
-                                        padding: '1.5rem 0',
-                                        fontSize: 'clamp(1.5rem, 4vw, 4.5rem)',
+                                        padding: '1rem 0',
+                                        fontSize: 'clamp(1rem, 2.5vw, 2.2rem)',
                                         fontWeight: 400,
                                         willChange: 'transform',
                                     }}
