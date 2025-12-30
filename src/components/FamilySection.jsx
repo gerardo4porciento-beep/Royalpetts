@@ -71,14 +71,14 @@ const FamilySection = () => {
                     {card.title}
                 </h3>
                 {card.details ? (
-                    <div className="mt-4 text-left">
-                        <p className={`font-black mb-3 ${isWide ? 'text-base' : 'text-lg md:text-xl'} text-black tracking-tight leading-none`} style={{ color: '#000000' }}>
+                    <div className="mt-6 text-left flex-grow flex flex-col justify-center">
+                        <p className={`font-black mb-4 ${isWide ? 'text-lg md:text-xl' : 'text-xl md:text-2xl'} text-black tracking-tight leading-tight`} style={{ color: '#000000' }}>
                             {card.description}
                         </p>
-                        <ul className="space-y-2">
+                        <ul className="space-y-3">
                             {card.details.map((item, idx) => (
-                                <li key={idx} className={`flex items-center ${isWide ? 'text-sm' : 'text-base md:text-lg'} font-bold text-black`}>
-                                    <span className="mr-2 text-white drop-shadow-md text-xl">✓</span>
+                                <li key={idx} className={`flex items-center ${isWide ? 'text-base md:text-lg' : 'text-lg md:text-xl'} font-bold text-black`}>
+                                    <span className="mr-3 text-white drop-shadow-md text-2xl">✓</span>
                                     <span style={{ color: '#000000' }}>{item}</span>
                                 </li>
                             ))}
