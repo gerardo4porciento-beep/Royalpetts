@@ -53,6 +53,22 @@ body {
   font-family: 'FinalFont', sans-serif !important;
 }
 
+/* Custom Cursor for Interactive Elements */
+a,
+button,
+.cursor-pointer,
+input[type="submit"],
+input[type="button"] {
+  cursor: url('/paw_cursor.svg') 16 16, pointer !important;
+}
+
+a:hover,
+button:hover,
+.cursor-pointer:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+  cursor: url('/paw_cursor.svg') 16 16, pointer !important;
+}
 
 /* Infinite Scroll Animation */
 @keyframes scroll-left {

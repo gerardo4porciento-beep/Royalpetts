@@ -11,7 +11,6 @@ import ScrollGuidePath from './ScrollGuidePath';
 import FamilySection from './FamilySection';
 import ContactSection from './ContactSection';
 import LogoLoop from './LogoLoop';
-import PawCursor from './PawCursor';
 
 // WhatsApp widget implemented via script in index.html
 
@@ -120,8 +119,6 @@ const LandingPage = () => {
 
                     <ContactSection />
                 </main>
-
-                <PawCursor />
 
                 <Footer />
             </div>
