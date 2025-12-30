@@ -19,7 +19,7 @@ const Navbar = () => {
                 <div className="flex flex-col items-start leading-none select-none cursor-pointer">
                     {/* Top Line: ROYAL + Logo Icon */}
                     <div className="flex items-center gap-2 ml-1">
-                        <span className="font-skater text-xl md:text-3xl text-white tracking-wide">ROYAL</span>
+                        <span className="font-skater text-xl md:text-3xl text-white tracking-wide" style={{ textShadow: "1.5px 1.5px 0px #ff7db2, 3px 3px 0px #00b9ec" }}>ROYAL</span>
                         <img
                             src="/SEPARACION 6/LOGO 3.png"
                             alt="Royal Petts Logo"
@@ -27,7 +27,7 @@ const Navbar = () => {
                         />
                     </div>
                     {/* Bottom Line: PETTSTORE */}
-                    <span className="font-skater text-xl md:text-3xl text-white tracking-wide -mt-3 md:-mt-4">
+                    <span className="font-skater text-xl md:text-3xl text-white tracking-wide -mt-3 md:-mt-4" style={{ textShadow: "1.5px 1.5px 0px #ff7db2, 3px 3px 0px #00b9ec" }}>
                         PETTSTORE
                     </span>
                 </div>
@@ -37,9 +37,10 @@ const Navbar = () => {
                     {/* Contáctanos Button - Hidden on very small screens */}
                     <a
                         href="#contact"
-                        className="hidden sm:block px-2 py-1.5 md:px-4 md:py-2 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 text-[10px] md:text-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
+                        className="hidden sm:block px-2 py-1.5 md:px-4 md:py-2 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 text-[10px] md:text-sm"
                         style={{
-                            boxShadow: "2px 2px 0px #ff7db2, 3px 3px 0px #00b9ec"
+                            boxShadow: "2px 2px 0px #ff7db2, 3px 3px 0px #00b9ec",
+                            textShadow: "1.5px 1.5px 0px #ff7db2, 3px 3px 0px #00b9ec"
                         }}
                     >
                         CONTÁCTANOS
@@ -48,9 +49,10 @@ const Navbar = () => {
                     {/* Menu Button */}
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="px-2 py-1.5 md:px-4 md:py-2 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 flex items-center gap-1 md:gap-2 text-[10px] md:text-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]"
+                        className="px-2 py-1.5 md:px-4 md:py-2 bg-[#34f4ce] text-white font-bold rounded-full hover:scale-105 transition-all duration-300 flex items-center gap-1 md:gap-2 text-[10px] md:text-sm"
                         style={{
-                            boxShadow: "2px 2px 0px #ff7db2, 3px 3px 0px #00b9ec"
+                            boxShadow: "2px 2px 0px #ff7db2, 3px 3px 0px #00b9ec",
+                            textShadow: "1.5px 1.5px 0px #ff7db2, 3px 3px 0px #00b9ec"
                         }}
                     >
                         {isMenuOpen ? 'CLOSE' : 'MENU'}
@@ -80,7 +82,14 @@ const Navbar = () => {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: index * 0.1 }}
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="block py-4 text-2xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] hover:opacity-70 transition-colors duration-300 border-b border-white/20 last:border-0"
+                                    className="block py-4 text-3xl font-skater text-white transition-colors duration-300 border-b border-white/20 last:border-0"
+                                    style={{ textShadow: "2px 2px 0px #ff7db2, 4px 4px 0px #00b9ec" }}
+                                    whileHover={{
+                                        scale: 1.1,
+                                        x: 20,
+                                        color: "#ff7db2",
+                                        transition: { duration: 0.2 }
+                                    }}
                                 >
                                     {item.label}
                                 </motion.a>
@@ -89,7 +98,7 @@ const Navbar = () => {
 
                         {/* Newsletter Section */}
                         <div className="bg-black/10 p-6">
-                            <h3 className="text-xl font-bold text-white mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                            <h3 className="text-xl font-skater text-white mb-3" style={{ textShadow: "1.5px 1.5px 0px #ff7db2, 3px 3px 0px #00b9ec" }}>
                                 Suscríbete a nuestro newsletter
                             </h3>
                             <div className="relative">
