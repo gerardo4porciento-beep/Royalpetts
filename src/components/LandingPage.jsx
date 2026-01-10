@@ -4,10 +4,10 @@ import HeroSection from './HeroSection';
 import ParticleBackground from './ParticleBackground';
 
 // import AccessoriesGrid from './AccessoriesGrid'; // REMOVED
-import Footer from './Footer'; // Restored
+// import Footer from './Footer'; // REMOVED as per user request
 import Navbar from './Navbar';
 import GallerySection from './GallerySection';
-import ScrollGuidePath from './ScrollGuidePath';
+// import ScrollGuidePath from './ScrollGuidePath'; // REMOVED as per user request
 import FamilySection from './FamilySection';
 import ContactSection from './ContactSection';
 import LogoLoop from './LogoLoop';
@@ -86,7 +86,7 @@ const LandingPage = () => {
                 <img
                     src="/frenchie_hero.gif"
                     alt="Frenchie background"
-                    className="fixed bottom-0 left-0 w-[240px] z-[2] pointer-events-none md:hidden"
+                    className="fixed bottom-0 left-0 w-[240px] z-[0] pointer-events-none md:hidden"
                     style={{
                         transform: 'rotate(5deg) scale(1.1)',
                         filter: 'drop-shadow(0 0 15px rgba(7, 172, 221, 0.4))'
@@ -102,7 +102,8 @@ const LandingPage = () => {
                 />
 
                 {/* Path Tracing Scroll Effect */}
-                <ScrollGuidePath />
+                {/* Path Tracing Scroll Effect - REMOVED */}
+                {/* <ScrollGuidePath /> */}
 
                 {/* Navigation (Simplified for Immersion) */}
                 <Navbar />
@@ -121,7 +122,7 @@ const LandingPage = () => {
                     <ContactSection />
                 </main>
 
-                <Footer />
+                {/* <Footer /> - REMOVED */}
             </div>
         </SmoothScroll>
     );

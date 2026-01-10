@@ -19,8 +19,9 @@ function initFirebase() {
     if (typeof firebase !== 'undefined') {
         app = firebase.initializeApp(firebaseConfig);
         window.db = firebase.firestore();
+        window.auth = firebase.auth();
         analytics = firebase.analytics();
-        return { app, db: window.db, analytics };
+        return { app, db: window.db, auth: window.auth, analytics };
     } else {
         console.error('Firebase SDK no está cargado');
         return null;

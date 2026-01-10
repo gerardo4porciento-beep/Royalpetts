@@ -9,11 +9,12 @@ let currentPage = 1;
 const itemsPerPage = 8; // Showing 8 items per page for better visibility
 let selectedIds = new Set();
 
-// Inicialización
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM cargado, inicializando...');
 
-    // Configurar event listeners primero
+    // Initial load
+    showDashboard(); // Ensure dashboard is visible
+    waitForDbAndLoad();
     setupEventListeners();
 
     // Esperar a que Firebase esté cargado
@@ -35,29 +36,48 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isAuthenticated) {
         console.log('Usuario autenticado, mostrando dashboard');
         showDashboard();
-        // Esperar a que db esté listo antes de cargar datos
-        const checkDb = setInterval(() => {
-            if (window.db) {
-                clearInterval(checkDb);
-                loadDashboard();
-            }
-        }, 100);
 
-        // Timeout después de 5 segundos
-        setTimeout(() => {
-            clearInterval(checkDb);
-            if (!window.db) {
-                console.warn('Firebase no disponible, mostrando dashboard sin datos');
-                updateStats();
-                updateCharts();
-                updateTable();
-            }
-        }, 5000);
+        // Ensure we are signed in to Firebase anonymously
+        if (window.auth) {
+            window.auth.signInAnonymously()
+                .then(() => {
+                    console.log('Restaurada sesión anónima en Firebase');
+                    // Wait for db
+                    waitForDbAndLoad();
+                })
+                .catch((error) => {
+                    console.error('Error restaurando sesión anónima:', error);
+                    waitForDbAndLoad(); // Try anyway
+                });
+        } else {
+            waitForDbAndLoad();
+        }
     } else {
         console.log('Usuario no autenticado, mostrando login');
         showLogin();
     }
 });
+
+function waitForDbAndLoad() {
+    // Esperar a que db esté listo antes de cargar datos
+    const checkDb = setInterval(() => {
+        if (window.db) {
+            clearInterval(checkDb);
+            loadDashboard();
+        }
+    }, 100);
+
+    // Timeout después de 5 segundos
+    setTimeout(() => {
+        clearInterval(checkDb);
+        if (!window.db) {
+            console.warn('Firebase no disponible, mostrando dashboard sin datos');
+            updateStats();
+            updateCharts();
+            updateTable();
+        }
+    }, 5000);
+}
 
 // Inicializar Firebase
 function initializeFirebase() {
@@ -176,40 +196,16 @@ function handleLogin(e) {
         console.log('Credenciales correctas, iniciando sesión...');
         localStorage.setItem('isAuthenticated', 'true');
         isAuthenticated = true;
-        showDashboard();
 
-        // Intentar cargar dashboard, esperar a que db esté listo si es necesario
+        // Skip auth for now per debug results
+        showDashboard();
+        // Wait for db
         if (window.db) {
-            console.log('Firebase listo, cargando dashboard...');
             loadDashboard();
         } else {
-            console.log('Esperando Firebase...');
-            // Esperar a que Firebase se inicialice
-            const checkDbInterval = setInterval(() => {
-                if (window.db) {
-                    clearInterval(checkDbInterval);
-                    console.log('Firebase listo, cargando dashboard...');
-                    loadDashboard();
-                }
-            }, 100);
-
-            // Timeout después de 5 segundos
-            setTimeout(() => {
-                clearInterval(checkDbInterval);
-                if (!window.db) {
-                    console.warn('Firebase no está disponible, pero el login fue exitoso');
-                    // Mostrar dashboard vacío
-                    // Mostrar dashboard vacío
-                    updateStats();
-                    updateCharts();
-                    updateStats();
-                    updateCharts();
-                    updateStats();
-                    updateCharts();
-                    updateTable();
-                }
-            }, 5000);
+            waitForDbAndLoad();
         }
+
     } else {
         console.log('Credenciales incorrectas');
         alert('Usuario o contraseña incorrectos');
@@ -266,9 +262,11 @@ function loadDashboard() {
     }
 
     // Listener en tiempo real para ventas
+    console.log('Iniciando listener de ventas...');
     ventasUnsubscribe = window.db.collection('ventas')
         .orderBy('fecha', 'desc')
         .onSnapshot((snapshot) => {
+            console.log(`Ventas recibidas: ${snapshot.size} docs`);
             ventas = [];
             snapshot.forEach((doc) => {
                 ventas.push({ id: doc.id, ...doc.data() });
@@ -277,13 +275,20 @@ function loadDashboard() {
             updateCharts();
             updateTable();
         }, (error) => {
-            console.error('Error cargando ventas:', error);
+            console.error('CRITICAL: Error cargando ventas:', error);
+            if (error.code === 'failed-precondition') {
+                // Index missing
+                console.error('INDEX MISSING! Check your Firebase Console link in the console log.');
+                alert('Error de Indice en Firebase. Revisa la consola para el link de creación.');
+            }
         });
 
     // Listener en tiempo real para gastos
+    console.log('Iniciando listener de gastos...');
     gastosUnsubscribe = window.db.collection('gastos')
         .orderBy('fecha', 'desc')
         .onSnapshot((snapshot) => {
+            console.log(`Gastos recibidos: ${snapshot.size} docs`);
             gastos = [];
             snapshot.forEach((doc) => {
                 gastos.push({ id: doc.id, ...doc.data() });
@@ -292,13 +297,15 @@ function loadDashboard() {
             updateCharts();
             updateTable();
         }, (error) => {
-            console.error('Error cargando gastos:', error);
+            console.error('CRITICAL: Error cargando gastos:', error);
         });
 
     // Listener en tiempo real para costos
+    console.log('Iniciando listener de costos...');
     costosUnsubscribe = window.db.collection('costos')
         .orderBy('fecha', 'desc')
         .onSnapshot((snapshot) => {
+            console.log(`Costos recibidos: ${snapshot.size} docs`);
             costos = [];
             snapshot.forEach((doc) => {
                 costos.push({ id: doc.id, ...doc.data() });
@@ -307,7 +314,7 @@ function loadDashboard() {
             updateCharts();
             updateTable();
         }, (error) => {
-            console.error('Error cargando costos:', error);
+            console.error('CRITICAL: Error cargando costos:', error);
         });
 }
 
@@ -477,41 +484,75 @@ async function handleGastoSubmit(e) {
 
 // Dashboard
 function updateStats() {
-    // Filter Sales by Status
-    const ventasCobradas = ventas.filter(v => v.estadoCobro !== 'por_cobrar');
-    const ventasPorCobrar = ventas.filter(v => v.estadoCobro === 'por_cobrar');
+    // Filter data by Month first
+    const monthSelect = document.getElementById('monthFilter');
+    const selectedMonth = monthSelect ? monthSelect.value : 'all';
 
-    const totalVendidos = ventas.reduce((sum, v) => sum + v.cantidad, 0);
+    const isItemInMonth = (item) => {
+        if (selectedMonth === 'all') return true;
+
+        let dateToCheck = null;
+
+        // Priority: createdAt (Timestamp) > fecha (String YYYY-MM-DD)
+        if (item.createdAt && typeof item.createdAt.toDate === 'function') {
+            dateToCheck = item.createdAt.toDate();
+        } else if (item.createdAt && item.createdAt.seconds) {
+            dateToCheck = new Date(item.createdAt.seconds * 1000);
+        } else if (item.fecha) {
+            // Fallback for legacy items or manual entries without timestamp
+            // Note: treating 'fecha' string as UTC or Local depends on browser, 
+            // but usually valid for YYYY-MM comparison
+            // Append T12:00:00 to avoid timezone shifts on simple dates
+            dateToCheck = new Date(item.fecha + 'T12:00:00');
+        }
+
+        if (!dateToCheck || isNaN(dateToCheck.getTime())) return false; // Invalid date
+
+        const year = dateToCheck.getFullYear();
+        const month = String(dateToCheck.getMonth() + 1).padStart(2, '0');
+        const itemMonth = `${year}-${month}`;
+
+        return itemMonth === selectedMonth;
+    };
+
+    const filteredVentas = ventas.filter(v => isItemInMonth(v));
+    const filteredGastos = gastos.filter(g => isItemInMonth(g)); // Gastos usually have fecha, maybe createdAt
+    const filteredCostos = costos.filter(c => isItemInMonth(c));
+
+    // Filter Sales by Status
+    const ventasCobradas = filteredVentas.filter(v => v.estadoCobro !== 'por_cobrar');
+    const ventasPorCobrar = filteredVentas.filter(v => v.estadoCobro === 'por_cobrar');
+
+    const totalVendidos = filteredVentas.reduce((sum, v) => sum + v.cantidad, 0);
 
     // Total Sales (Revenue) - NOW INCLUDES EVERYTHING (Accrual Basis)
-    const totalVentas = ventas.reduce((sum, v) => sum + v.total, 0);
+    const totalVentas = filteredVentas.reduce((sum, v) => sum + v.total, 0);
 
     // Pending Collections
     const totalCobrosPendientes = ventasPorCobrar.reduce((sum, v) => sum + v.total, 0);
 
     // Map sales by ID for fast lookup
-    const ventasMap = new Map(ventas.map(v => [v.id, v]));
+    const ventasMap = new Map(filteredVentas.map(v => [v.id, v]));
 
     // Separar gastos reales de costos legacy (guardados como gastos)
-    const trueGastos = gastos.filter(g => g.categoria !== 'Costo de Venta' && g.categoria !== 'Comisión Socio');
+    const trueGastos = filteredGastos.filter(g => g.categoria !== 'Costo de Venta' && g.categoria !== 'Comisión Socio');
 
     // Helper to check if a cost should be included
     const shouldIncludeCost = (ventaId) => {
         if (!ventaId) return true; // Legacy/Manual cost with no link -> Include
+        // If it's linked to a sale, check if that sale exists in the filtered set
         const venta = ventasMap.get(ventaId);
-        // Exclude only if sale is explicitly deleted (not found in map)
-        // Now including costs for 'por_cobrar' sales too
         return !!venta;
     };
 
     // Legacy Costs
-    const legacyCostos = gastos.filter(g =>
+    const legacyCostos = filteredGastos.filter(g =>
         (g.categoria === 'Costo de Venta' || g.categoria === 'Comisión Socio') &&
         shouldIncludeCost(g.ventaId)
     );
 
     // True Costos
-    const activeCostos = costos.filter(c => shouldIncludeCost(c.ventaId));
+    const activeCostos = filteredCostos.filter(c => shouldIncludeCost(c.ventaId));
 
     const totalGastos = trueGastos.reduce((sum, g) => sum + g.total, 0);
     const totalCostos = activeCostos.reduce((sum, c) => sum + c.monto, 0) +
@@ -519,17 +560,6 @@ function updateStats() {
 
     // Ganancia Neta (Accrual Basis)
     const gananciaNeta = totalVentas - totalCostos;
-
-    // Disponible (Cash Basis Proxy - roughly)
-    // Actually, "Disponible" usually means Cash on Hand.
-    // Cash on Hand = (Total Ventas - Pending Collections) - Total Gastos - Total Costos (paid)
-    // But for simplicity based on user request "Disponible = Ganancia - Gastos", we stick to the formula but warns it might include pending money.
-    // If they want REAL availability, it should be: (TotalVentas - Pending) - Costos(Paid?) - Gastos.
-    // Let's keep the formula simple as requested: GananciaNeta - Gastos, but GananciaNeta is now Accrual.
-    // Wait, if "Disponible" assumes money in pocket, we should probably substract Pending from it?
-    // Let's stick to the requested simple math "Disponible = Ganancia - Gastos" but using the new TotalVentas.
-    // If the user complains about "Disponible" being too high (including money they don't have), we can adjust.
-    // For now, fixing "Total Ventas" is the priority.
     const totalDisponible = gananciaNeta - totalGastos;
 
     document.getElementById('totalVendidos').textContent = totalVendidos;
@@ -547,6 +577,15 @@ function updateStats() {
     if (document.getElementById('totalDisponible')) {
         document.getElementById('totalDisponible').textContent = `$${totalDisponible.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
     }
+
+    // IMPORTANT: Call updateTable to reflect changes in the table too!
+    // But updateTable needs to know about the filter.
+    // We should move logic to updateTable or have updateTable read the DOM filter.
+    // 'updateTable' already reads DOM '#monthFilter'.
+    // BUT updateTable 'isDateInMonth' logic needs to be updated to match this 'isItemInMonth' logic.
+    // For now, let's keep them separate but synced logic or share it. 
+    // To avoid duplication and errors, let's trust 'updateTable' reads the same inputs.
+    // However, I need to update 'updateTable's implementation of filtering too, in the next step or consolidated here.
 }
 
 function updateCharts() {
@@ -554,6 +593,83 @@ function updateCharts() {
     updateVentasEstadoChart(); // New chart
     updateVentasRazaChart();
 }
+
+// MONTH FILTER INITIALIZATION
+function initMonthFilter() {
+    const monthSelect = document.getElementById('monthFilter');
+    if (!monthSelect) return;
+
+    // Apply Styles
+    monthSelect.removeAttribute('style'); // Remove inline styles
+    monthSelect.className = 'month-select-styled';
+
+    monthSelect.innerHTML = '<option value="all">📅 Todas las fechas</option>';
+
+    // Generate last 12 months
+    const date = new Date();
+    date.setDate(1);
+
+    for (let i = 0; i < 12; i++) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const value = `${year}-${month}`;
+
+        const monthName = date.toLocaleString('es-VE', { month: 'long', year: 'numeric' });
+        const label = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = label;
+        monthSelect.appendChild(option);
+
+        date.setMonth(date.getMonth() - 1);
+    }
+
+    // Default to current
+    const currentY = new Date().getFullYear();
+    const currentM = String(new Date().getMonth() + 1).padStart(2, '0');
+    monthSelect.value = `${currentY}-${currentM}`;
+
+    // Add Styles dynamically
+    if (!document.getElementById('monthFilterStyles')) {
+        const style = document.createElement('style');
+        style.id = 'monthFilterStyles';
+        style.textContent = `
+            .month-select-styled {
+                background-color: #1a1a1a;
+                color: #e0e0e0;
+                border: 1px solid #333;
+                border-radius: 8px;
+                padding: 8px 12px;
+                font-size: 14px;
+                outline: none;
+                cursor: pointer;
+                transition: border-color 0.2s;
+                margin-right: 10px;
+                min-width: 150px;
+            }
+            .month-select-styled:hover {
+                border-color: #555;
+            }
+            .month-select-styled:focus {
+                border-color: #00b9ec;
+            }
+            option {
+                background-color: #1a1a1a;
+                color: #e0e0e0;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    monthSelect.addEventListener('change', () => {
+        updateTable();
+        updateStats();
+    });
+}
+// Init filter when DOM loads
+document.addEventListener('DOMContentLoaded', initMonthFilter);
+
 
 function updateVentasEstadoChart() {
     const ctx = document.getElementById('ventasEstadoChart');
@@ -711,228 +827,249 @@ function updateVentasRazaChart() {
 
 // Consolidated Table Update
 function updateTable() {
-    const tbody = document.getElementById('tableBody');
-    const searchInput = document.getElementById('searchInput');
-    const searchText = searchInput ? searchInput.value.toLowerCase() : '';
-
-    // Determine current filter from active tab
-    let activeTab = document.querySelector('.filter-tab.active');
-    if (!activeTab) {
-        // Default to 'venta' if no active tab found
-        activeTab = document.querySelector('.filter-tab[data-filter="venta"]');
-        if (activeTab) activeTab.classList.add('active');
-    }
-    currentFilter = activeTab ? activeTab.getAttribute('data-filter') : 'venta';
-
-    // Split Gastos into True Gastos and Legacy Costs
-    const trueGastos = [];
-    const legacyCostos = [];
-
-    gastos.forEach(g => {
-        if (g.categoria === 'Costo de Venta' || g.categoria === 'Comisión Socio') {
-            legacyCostos.push(g);
-        } else {
-            trueGastos.push(g);
+    try {
+        console.log('Iniciando updateTable (Standard Mode Safe)...');
+        const tbody = document.getElementById('tableBody');
+        if (!tbody) {
+            console.error('TBODY NOT FOUND');
+            return;
         }
-    });
 
-    // Merge all data
-    let allData = [
-        ...ventas.map(v => ({ ...v, dataType: 'venta', collection: 'ventas' })),
-        ...trueGastos.map(g => ({ ...g, dataType: 'gasto', collection: 'gastos' })),
-        ...costos.map(c => ({ ...c, dataType: 'costo', collection: 'costos' })),
-        ...legacyCostos.map(c => ({ ...c, dataType: 'costo', collection: 'gastos', isLegacy: true }))
-    ];
+        const searchInput = document.getElementById('searchInput');
+        const searchText = searchInput ? searchInput.value.toLowerCase() : '';
 
-    // Filter by type
-    if (currentFilter !== 'all') {
-        allData = allData.filter(item => item.dataType === currentFilter);
-    }
+        // Determine current filter
+        let activeTab = document.querySelector('.filter-tab.active');
+        // MONTH FILTER LOGIC
+        const monthSelect = document.getElementById('monthFilter');
+        const selectedMonth = monthSelect ? monthSelect.value : 'all'; // Format: "YYYY-MM" or "all"
 
-    // Filter by search text
-    if (searchText) {
-        allData = allData.filter(item => {
-            const text = (
-                (item.descripcion || '') +
-                (item.raza || '') +
-                (item.categoria || '') +
-                (item.dataType || '')
-            ).toLowerCase();
-            return text.includes(searchText);
+        // Helper to check date against month filter (Matches logic in updateStats)
+        const isItemInMonth = (item) => {
+            if (selectedMonth === 'all') return true;
+
+            let dateToCheck = null;
+
+            // Priority: createdAt (Timestamp) > fecha (String YYYY-MM-DD)
+            if (item.createdAt && typeof item.createdAt.toDate === 'function') {
+                dateToCheck = item.createdAt.toDate();
+            } else if (item.createdAt && item.createdAt.seconds) {
+                dateToCheck = new Date(item.createdAt.seconds * 1000);
+            } else if (item.fecha) {
+                dateToCheck = new Date(item.fecha + 'T12:00:00');
+            }
+
+            if (!dateToCheck || isNaN(dateToCheck.getTime())) return false;
+
+            const year = dateToCheck.getFullYear();
+            const month = String(dateToCheck.getMonth() + 1).padStart(2, '0');
+            const itemMonth = `${year}-${month}`;
+
+            return itemMonth === selectedMonth;
+        };
+
+        if (!activeTab) {
+            activeTab = document.querySelector('.filter-tab[data-filter="venta"]');
+            if (activeTab) activeTab.classList.add('active');
+        }
+        const currentFilter = activeTab ? activeTab.getAttribute('data-filter') : 'venta';
+
+        // Split Gastos
+        const trueGastos = [];
+        const legacyCostos = [];
+        gastos.forEach(g => {
+            if (g.categoria === 'Costo de Venta' || g.categoria === 'Comisión Socio') {
+                legacyCostos.push(g);
+            } else {
+                trueGastos.push(g);
+            }
         });
-    }
 
-    // Sort by date desc
-    allData.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        // Merge Data
+        let allData = [
+            ...ventas.map(v => ({ ...v, dataType: 'venta', collection: 'ventas' })),
+            ...trueGastos.map(g => ({ ...g, dataType: 'gasto', collection: 'gastos' })),
+            ...costos.map(c => ({ ...c, dataType: 'costo', collection: 'costos' })),
+            ...legacyCostos.map(c => ({ ...c, dataType: 'costo', collection: 'gastos', isLegacy: true }))
+        ];
 
-    // Pagination Logic
-    const totalPages = Math.ceil(allData.length / itemsPerPage) || 1;
-
-    // Validate current page
-    if (currentPage < 1) currentPage = 1;
-    if (currentPage > totalPages) currentPage = totalPages;
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedData = allData.slice(startIndex, startIndex + itemsPerPage);
-
-    // Render
-    tbody.innerHTML = paginatedData.map(item => {
-        const dateStr = formatDate(item.fecha);
-        const tipoBadge = getBadge(item.dataType);
-
-        let detalleHtml = '';
-        let montoHtml = '';
-        let mobileDetailHtml = '';
-
-        // Use total, monto, or fallback
-        const amount = item.monto || item.total || 0;
-
-        if (item.dataType === 'venta') {
-            detalleHtml = `
-                <div><strong>${item.raza}</strong></div>
-                <div class="text-sm text-muted">${item.sexo || ''}, ${item.estado || ''}</div>
-                <div class="text-sm">Cant: ${item.cantidad}</div>
-                ${item.estadoCobro === 'por_cobrar'
-                    ? `<span class="badge badge-warning">Por Cobrar (${formatDate(item.fechaCobro)})</span>`
-                    : '<span class="badge badge-success">Cobrado</span>'}
-            `;
-            montoHtml = `$${amount.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
-            mobileDetailHtml = `
-                <p><strong>Raza:</strong> ${item.raza}</p>
-                <p><strong>Cant:</strong> ${item.cantidad}</p>
-                <p><strong>Precio:</strong> $${item.precio}</p>
-                <p><strong>Total:</strong> $${amount}</p>
-                <p><strong>Estado Pago:</strong> ${item.estadoCobro === 'por_cobrar' ? '<span style="color:orange">Por Cobrar</span>' : '<span style="color:green">Cobrado</span>'}</p>
-                <p><strong>Desc:</strong> ${item.descripcion || '-'}</p>
-            `;
-        } else if (item.dataType === 'gasto') {
-            detalleHtml = `
-                <div><strong>${item.categoria}</strong></div>
-            `;
-            montoHtml = `$${amount.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
-            mobileDetailHtml = `
-                <p><strong>Categoría:</strong> ${item.categoria}</p>
-                <p><strong>Monto:</strong> $${amount}</p>
-                <p><strong>Desc:</strong> ${item.descripcion}</p>
-            `;
-        } else if (item.dataType === 'costo') {
-            detalleHtml = `
-                <div><em>${item.categoria || 'Costo Operativo'}</em></div>
-            `;
-            montoHtml = `$${amount.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
-            mobileDetailHtml = `
-                <p><strong>Concepto:</strong> ${item.categoria || 'Costo'}</p>
-                <p><strong>Monto:</strong> $${amount}</p>
-                <p><strong>Desc:</strong> ${item.descripcion}</p>
-            `;
+        // Filter by Month
+        if (selectedMonth !== 'all') {
+            allData = allData.filter(item => isItemInMonth(item));
         }
 
-        return `
-            <tr id="row-${item.id}" class="${selectedIds.has(item.id) ? 'selected' : ''}">
-                <td style="text-align: center;">
-                    ${item.dataType === 'venta'
-                ? `<input type="checkbox" class="row-checkbox" value="${item.id}" onchange="handleRowSelection('${item.id}')" ${selectedIds.has(item.id) ? 'checked' : ''}>`
-                : ''}
-                </td>
-                <td>
-                    ${dateStr}
-                    <div class="mobile-only-row">
-                        ${tipoBadge}
-                    </div>
-                </td>
-                <td class="mobile-hidden">${tipoBadge}</td>
-                <td class="mobile-hidden">${item.descripcion || '-'}</td>
-                <td>${detalleHtml}</td>
-                <td class="mobile-hidden">${montoHtml}</td>
-                <td class="mobile-hidden">
-                    <button class="btn-delete" onclick="deleteItem('${item.id}', '${item.collection}')">×</button>
-                    ${!item.isLegacy && item.dataType !== 'costo' ? `<button class="btn-edit" onclick="editItem('${item.id}', '${item.dataType}')">✎</button>` : ''}
-                </td>
-                <td class="mobile-only-cell"> 
-                     <button id="btn-toggle-${item.id}" class="btn-toggle-mobile" onclick="toggleMobileRow('${item.id}')">▼</button>
-                </td>
-            </tr>
-            <tr id="detail-${item.id}" class="mobile-detail-row hidden">
-                <td colspan="6">
-                    ${mobileDetailHtml}
-                    <div style="margin-top: 10px; text-align: right;">
-                        <button class="btn-delete" onclick="deleteItem('${item.id}', '${item.collection}')">Eliminar</button>
-                        ${!item.isLegacy && item.dataType !== 'costo' ? `<button class="btn-edit" onclick="editItem('${item.id}', '${item.dataType}')">Editar</button>` : ''}
-                    </div>
-                </td>
-            </tr>
-        `;
-    }).join('');
+        // Filter by Type
+        if (currentFilter !== 'all') {
+            allData = allData.filter(item => item.dataType === currentFilter);
+        }
 
-    // Update Pagination Controls
-    renderPagination(totalPages);
+        // Filter by Search
+        if (searchText) {
+            allData = allData.filter(item => {
+                const text = (
+                    (item.descripcion || '') +
+                    (item.raza || '') +
+                    (item.categoria || '') +
+                    (item.dataType || '')
+                ).toLowerCase();
+                return text.includes(searchText);
+            });
+        }
+
+        // Sort by Date
+        allData.sort((a, b) => {
+            const dateA = new Date(a.fecha || 0);
+            const dateB = new Date(b.fecha || 0);
+            return dateB - dateA;
+        });
+
+        // Pagination
+        const totalPages = Math.ceil(allData.length / itemsPerPage) || 1;
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const paginatedData = allData.slice(startIndex, startIndex + itemsPerPage);
+
+        // Render Rows
+        const rowsHtml = paginatedData.map(item => {
+            try {
+                const dateStr = formatDate(item.fecha);
+                const tipoBadge = getBadge(item.dataType);
+                const amount = item.monto || item.total || 0;
+                const montoStr = `$${amount.toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+
+                let detalleHtml = '';
+                let mobileDetailHtml = '';
+
+                if (item.dataType === 'venta') {
+                    detalleHtml = `
+                        <div><strong>${item.raza || 'Sin raza'}</strong></div>
+                        <div class="text-sm text-muted">${item.sexo || ''}</div>
+                        <div class="text-sm">Cant: ${item.cantidad || 1}</div>
+                        ${item.estadoCobro === 'por_cobrar'
+                            ? `<span class="badge badge-warning">Por Cobrar (${formatDate(item.fechaCobro)})</span>`
+                            : '<span class="badge badge-success">Cobrado</span>'}
+                    `;
+                    mobileDetailHtml = `
+                        <p><strong>Raza:</strong> ${item.raza}</p>
+                        <p><strong>Total:</strong> ${montoStr}</p>
+                        <p><strong>Estado:</strong> ${item.estadoCobro === 'por_cobrar' ? 'Por Cobrar' : 'Cobrado'}</p>
+                    `;
+                } else {
+                    // Gastos / Costos
+                    detalleHtml = `<div><strong>${item.categoria || 'Gasto'}</strong></div>`;
+                    mobileDetailHtml = `
+                        <p><strong>Categoría:</strong> ${item.categoria}</p>
+                        <p><strong>Monto:</strong> ${montoStr}</p>
+                    `;
+                }
+
+                return `
+                <tr id="row-${item.id}" class="${selectedIds.has(item.id) ? 'selected' : ''}">
+                    <td style="text-align: center;">
+                        ${item.dataType === 'venta'
+                        ? `<input type="checkbox" class="row-checkbox" value="${item.id}" onchange="handleRowSelection('${item.id}')" ${selectedIds.has(item.id) ? 'checked' : ''}>`
+                        : ''}
+                    </td>
+                    <td>
+                        ${dateStr}
+                        <div class="mobile-only-row">${tipoBadge}</div>
+                    </td>
+                    <td class="mobile-hidden">${tipoBadge}</td>
+                    <td class="mobile-hidden">${item.descripcion || '-'}</td>
+                    <td>${detalleHtml}</td>
+                    <td class="mobile-hidden">${montoStr}</td>
+                    <td class="mobile-hidden">
+                        <button class="btn-delete" onclick="deleteItem('${item.id}', '${item.collection}')">×</button>
+                        ${!item.isLegacy && item.dataType !== 'costo' ? `<button class="btn-edit" onclick="editItem('${item.id}', '${item.dataType}')">✎</button>` : ''}
+                    </td>
+                    <td class="mobile-only-cell">
+                        <button id="btn-toggle-${item.id}" class="btn-toggle-mobile" onclick="toggleMobileRow('${item.id}')">▼</button>
+                    </td>
+                </tr>
+                <tr id="detail-${item.id}" class="mobile-detail-row hidden">
+                    <td colspan="6">
+                        ${mobileDetailHtml}
+                        <div style="margin-top: 10px; text-align: right;">
+                            <button class="btn-delete" onclick="deleteItem('${item.id}', '${item.collection}')">Eliminar</button>
+                        </div>
+                    </td>
+                </tr>`;
+            } catch (e) {
+                console.error('Render error:', e);
+                return `<tr><td colspan="7" style="color:red">Error fila: ${e.message}</td></tr>`;
+            }
+        }).join('');
+
+        if (paginatedData.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align:center; padding: 20px;">
+                        <h3>No hay datos para mostrar</h3>
+                        <div style="font-size:12px; color:#888; text-align:left; margin-top:10px; padding:10px; background:#f0f0f0; border-radius:5px;">
+                            <strong>Debug Info:</strong><br>
+                            Filtro Actual: ${currentFilter}<br>
+                            Total Items: ${allData.length}<br>
+                            Ventas raw: ${ventas.length}<br>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        } else {
+            tbody.innerHTML = rowsHtml;
+        }
+
+        renderPagination(totalPages);
+
+    } catch (criticalError) {
+        console.error('CRITICAL ERROR IN UPDATE TABLE:', criticalError);
+        const tbody = document.getElementById('tableBody');
+        if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="color:red; font-size:16px; padding:20px;">CRITICAL JS ERROR: ${criticalError.message}</td></tr>`;
+    }
 }
 
 function renderPagination(totalPages) {
     const container = document.getElementById('paginationControls');
     if (!container) return;
-
-    // Don't show controls if only 1 page
     if (totalPages <= 1) {
         container.innerHTML = '';
         container.style.display = 'none';
         return;
     }
-
     container.style.display = 'flex';
-
     container.innerHTML = `
-        <button class="pagination-btn" 
-            onclick="changePage(${currentPage - 1})" 
-            ${currentPage === 1 ? 'disabled' : ''}>
-            Anterior
-        </button>
-        <span class="pagination-info">
-            Página ${currentPage} de ${totalPages}
-        </span>
-        <button class="pagination-btn" 
-            onclick="changePage(${currentPage + 1})" 
-            ${currentPage === totalPages ? 'disabled' : ''}>
-            Siguiente
-        </button>
+        <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>Ant</button>
+        <span class="pagination-info">${currentPage} / ${totalPages}</span>
+        <button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Sig</button>
     `;
 }
 
 function changePage(newPage) {
     currentPage = newPage;
     updateTable();
-    // Scroll to the top of the table section
-    const tableSection = document.querySelector('.table-section');
-    if (tableSection) {
-        tableSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
 }
-
-// Make changePage globally available
 window.changePage = changePage;
 
-
 function getBadge(type) {
-    if (type === 'venta') return '<span class="badge-venta">Venta</span>';
-    if (type === 'gasto') return '<span class="badge-gasto">Gasto</span>';
-    if (type === 'costo') return '<span class="badge-costo">Costo</span>';
-    return '';
+    if (type === 'venta') return '<span class="badge pl-2 pr-2" style="background:#32f4bb;color:#000;">Venta</span>';
+    if (type === 'gasto') return '<span class="badge pl-2 pr-2" style="background:#ff7db2;color:#fff;">Gasto</span>';
+    if (type === 'costo') return '<span class="badge pl-2 pr-2" style="background:#ffea20;color:#000;">Costo</span>';
+    return type;
 }
 
 function toggleMobileRow(id) {
     const row = document.getElementById(`detail-${id}`);
-    const btn = document.getElementById(`btn-toggle-${id}`);
-    if (row && btn) {
-        row.classList.toggle('hidden');
-        btn.innerHTML = row.classList.contains('hidden') ? '▼' : '▲';
-    }
+    if (row) row.classList.toggle('hidden');
 }
 
 function formatDate(dateString) {
     if (!dateString) return '-';
-    // dateString comes as "YYYY-MM-DD" from input type="date"
-    // We split it directly to avoid timezone issues with Date() object
-    const [year, month, day] = dateString.split('-');
+    // Handle specific 2024-01 style or full timestamp
+    if (typeof dateString !== 'string') return 'Fecha Inválida';
+    const part = dateString.split('T')[0]; // simple safety
+    const [year, month, day] = part.split('-');
+    if (!day || !month || !year) return dateString; // fallback
     return `${day}/${month}/${year}`;
 }
 
@@ -1243,6 +1380,25 @@ function handleGenerateReport() {
     window.open('/admin/report.html', '_blank');
 }
 
-// Expose functions
+// Make functions available globally for HTML onclick events
+window.deleteItem = deleteItem;
+window.editItem = editItem;
+window.formatDate = formatDate;
+window.getBadge = getBadge;
+window.toggleMobileRow = toggleMobileRow;
+window.changePage = changePage;
+
+// Expose handleRowSelection and toggleSelectAll (already done but good to consolidate)
 window.handleRowSelection = handleRowSelection;
 window.toggleSelectAll = toggleSelectAll;
+
+// Ensure modals are also available if used inline
+window.closeModal = (modalId) => {
+    document.getElementById(modalId).style.display = 'none';
+};
+window.openModal = (modalId) => {
+    document.getElementById(modalId).style.display = 'block';
+};
+
+// ... existing code ...
+

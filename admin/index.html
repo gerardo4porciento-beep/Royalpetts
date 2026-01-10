@@ -30,6 +30,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script type="module" src="firebase-config.js"></script>
     <script>
         // Verificar que los scripts se cargaron
@@ -174,7 +175,10 @@
                     <button class="filter-tab" data-filter="all">Todo</button>
                 </div>
 
-                <div class="table-actions-bar">
+                <div class="table-actions-bar" style="display: flex; gap: 10px;">
+                    <select id="monthFilter" class="input-field" style="max-width: 200px;">
+                        <!-- Options populated by JS -->
+                    </select>
                     <input type="text" id="searchInput" class="search-input" placeholder="Buscar...">
                 </div>
 
