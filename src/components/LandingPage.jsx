@@ -49,49 +49,50 @@ const LandingPage = () => {
 
     return (
         <SmoothScroll>
-            {/* Main Wrapper */}
+            {/* FIXED BACKGROUNDS (Moved outside main wrapper to prevent stacking issues) */}
+            {/* Mobile background (visible on screens < md) */}
+            <img
+                src="/FONDO_MOBILE4.png"
+                alt="Mobile background"
+                className="fixed left-0 w-full z-[-1] pointer-events-none object-cover md:hidden"
+                style={{
+                    top: '40px',
+                    height: 'calc(100vh - 40px)',
+                    backgroundColor: '#07acdd',
+                    transform: 'scale(1.05)',
+                }}
+            />
+
+            {/* Desktop background (visible on md and larger) */}
+            <div
+                ref={bgRef}
+                className="absolute inset-0 w-full z-[-1] pointer-events-none hidden md:block"
+                style={{
+                    backgroundImage: "url('/fondo todo el landing.png')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'top',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundColor: '#07acdd',
+                    transform: 'scale(1.05)',
+                }}
+            ></div>
+
+            {/* Frenchie GIF anchor - Mobile Only - Z-index fixed */}
+            <img
+                src="/frenchie_hero.gif"
+                alt="Frenchie background"
+                className="fixed bottom-0 left-0 w-[240px] z-[0] pointer-events-none md:hidden"
+                style={{
+                    transform: 'rotate(5deg) scale(1.1)',
+                    filter: 'drop-shadow(0 0 15px rgba(7, 172, 221, 0.4))'
+                }}
+            />
+
+            {/* Main Content Wrapper */}
             <div
                 id="scrolly-main-wrapper"
-                className="relative bg-[#07acdd] text-white selection:bg-royal-pink selection:text-white overflow-x-hidden"
+                className="relative text-white selection:bg-royal-pink selection:text-white overflow-x-hidden"
             >
-
-                {/* Mobile background (visible on screens < md) */}
-                <img
-                    src="/FONDO_MOBILE4.png"
-                    alt="Mobile background"
-                    className="fixed left-0 w-full z-0 pointer-events-none object-cover md:hidden"
-                    style={{
-                        top: '40px',
-                        height: 'calc(100vh - 40px)',
-                        backgroundColor: '#07acdd',
-                        transform: 'scale(1.05)',
-                    }}
-                />
-
-                {/* Desktop background (visible on md and larger) */}
-                <div
-                    ref={bgRef}
-                    className="absolute inset-0 w-full z-0 pointer-events-none hidden md:block"
-                    style={{
-                        backgroundImage: "url('/fondo todo el landing.png')",
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'top',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundColor: '#07acdd',
-                        transform: 'scale(1.05)',
-                    }}
-                ></div>
-
-                {/* Frenchie GIF anchor - Mobile Only */}
-                <img
-                    src="/frenchie_hero.gif"
-                    alt="Frenchie background"
-                    className="fixed bottom-0 left-0 w-[240px] z-[0] pointer-events-none md:hidden"
-                    style={{
-                        transform: 'rotate(5deg) scale(1.1)',
-                        filter: 'drop-shadow(0 0 15px rgba(7, 172, 221, 0.4))'
-                    }}
-                />
 
                 {/* Magical Particle Atmosphere */}
                 <ParticleBackground />

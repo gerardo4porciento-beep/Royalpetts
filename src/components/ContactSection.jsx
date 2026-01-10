@@ -57,7 +57,7 @@ const ContactSection = () => {
                                 </div>
                                 <div>
                                     <h3 className="text-black font-bold text-lg">Instagram</h3>
-                                    <p className="text-black/70">@royalpetts</p>
+                                    <p className="text-black/70">@luxurypuppies.ve</p>
                                 </div>
                             </div>
 
@@ -67,7 +67,7 @@ const ContactSection = () => {
                                 </div>
                                 <div>
                                     <h3 className="text-black font-bold text-lg">WhatsApp</h3>
-                                    <p className="text-black/70">+1 234 567 890</p>
+                                    <p className="text-black/70">+58 412 946 1175</p>
                                 </div>
                             </div>
 
