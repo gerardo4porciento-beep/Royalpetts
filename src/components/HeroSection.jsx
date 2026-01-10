@@ -303,7 +303,7 @@ const HeroSection = () => {
                         muted
                         playsInline
                         preload="metadata"
-                        className="w-[213px] sm:w-[500px] lg:w-[763px] fixed lg:absolute z-[1] lg:z-[1] animate-fade-in-up object-cover"
+                        className="w-[213px] sm:w-[500px] lg:w-[763px] fixed lg:absolute z-0 lg:z-[1] animate-fade-in-up object-cover"
                         style={{
                             top: 'calc(25% - 80px)', // moved down another 10px
                             left: '50%',
