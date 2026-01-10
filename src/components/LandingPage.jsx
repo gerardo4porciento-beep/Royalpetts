@@ -64,6 +64,25 @@ const LandingPage = () => {
                     transform: 'scale(1.05)',
                 }}
             />
+            {/* Pug Video - Mobile Only - Fixed Position */}
+            <video
+                src="/video home.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                className="block lg:hidden w-[213px] sm:w-[500px] fixed z-0 animate-fade-in-up object-cover pointer-events-none"
+                style={{
+                    top: 'calc(25% - 80px)',
+                    left: '50%',
+                    transform: `translateX(calc(-50% + 160px)) rotate(-5deg)`,
+                    bottom: 'auto',
+                    maskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
+                    WebkitMaskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
+                    filter: 'drop-shadow(0 0 15px #00D2FF)'
+                }}
+            />
 
             {/* Desktop background (visible on md and larger) */}
             <div
@@ -92,10 +111,9 @@ const LandingPage = () => {
 
 
 
-            {/* Main Content Wrapper */}
             <div
                 id="scrolly-main-wrapper"
-                className="relative text-white selection:bg-royal-pink selection:text-white overflow-x-hidden"
+                className="relative z-10 text-white selection:bg-royal-pink selection:text-white overflow-x-hidden"
             >
 
                 {/* Magical Particle Atmosphere */}

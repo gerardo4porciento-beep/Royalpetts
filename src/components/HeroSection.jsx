@@ -295,7 +295,7 @@ const HeroSection = () => {
 
                 {/* Right Column: Space for 3D Visuals & Puppy Image */}
                 <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-full flex items-start lg:items-center justify-center lg:justify-end order-last">
-                    {/* Video popping out of hole - responsive */}
+                    {/* Video popping out of hole - responsive - DESKTOP ONLY */}
                     <video
                         src="/video home.mp4"
                         autoPlay
@@ -303,12 +303,12 @@ const HeroSection = () => {
                         muted
                         playsInline
                         preload="metadata"
-                        className="w-[213px] sm:w-[500px] lg:w-[763px] absolute z-[1] animate-fade-in-up object-cover"
+                        className="hidden lg:block w-[763px] absolute z-[1] animate-fade-in-up object-cover"
                         style={{
                             top: 'calc(25% - 80px)', // moved down another 10px
                             left: '50%',
-                            transform: `translateX(calc(-50% + ${window.innerWidth >= 1024 ? '110px' : '160px'})) rotate(-5deg)`,
-                            bottom: window.innerWidth >= 1024 ? '35%' : 'auto',
+                            transform: `translateX(calc(-50% + 110px)) rotate(-5deg)`,
+                            bottom: '35%',
                             maskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
                             WebkitMaskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
                             filter: 'drop-shadow(0 0 15px #00D2FF)'
