@@ -131,8 +131,6 @@ const LandingPage = () => {
                 {/* Navigation (Simplified for Immersion) */}
                 <Navbar />
 
-                <Navbar />
-
                 {/* Floating WhatsApp Button */}
                 <WhatsAppButton />
 
