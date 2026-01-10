@@ -295,25 +295,7 @@ const HeroSection = () => {
 
                 {/* Right Column: Space for 3D Visuals & Puppy Image */}
                 <div className="col-span-12 lg:col-span-5 pointer-events-none relative h-full flex items-start lg:items-center justify-center lg:justify-end order-last">
-                    {/* Video popping out of hole - responsive */}
-                    <video
-                        src="/video home.mp4"
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="metadata"
-                        className="w-[213px] sm:w-[500px] lg:w-[763px] fixed lg:absolute z-0 lg:z-[1] animate-fade-in-up object-cover"
-                        style={{
-                            top: 'calc(25% - 80px)', // moved down another 10px
-                            left: '50%',
-                            transform: `translateX(calc(-50% + ${window.innerWidth >= 1024 ? '110px' : '160px'})) rotate(-5deg)`,
-                            bottom: window.innerWidth >= 1024 ? '35%' : 'auto',
-                            maskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
-                            WebkitMaskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
-                            filter: 'drop-shadow(0 0 15px #00D2FF)'
-                        }}
-                    />
+                    {/* Video moved to LandingPage.jsx for better z-index control */}
                 </div>
             </div>
 

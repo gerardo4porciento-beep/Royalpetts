@@ -13,7 +13,9 @@ import ContactSection from './ContactSection';
 import LogoLoop from './LogoLoop';
 import FallingText from './FallingText';
 
-// WhatsApp widget implemented via script in index.html
+import WhatsAppButton from './WhatsAppButton';
+
+// WhatsApp widget implemented via script in index.html (REMOVED) - replaced by WhatsAppButton
 
 import { motion, useScroll, useSpring } from 'framer-motion';
 
@@ -88,6 +90,26 @@ const LandingPage = () => {
                 }}
             />
 
+            {/* Pug Video - Moved from HeroSection to fix Z-Index issues on Mobile */}
+            <video
+                src="/video home.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                className="w-[213px] sm:w-[500px] lg:w-[763px] fixed lg:absolute z-0 lg:z-[1] animate-fade-in-up object-cover pointer-events-none"
+                style={{
+                    top: 'calc(25% - 80px)',
+                    left: '50%',
+                    transform: `translateX(calc(-50% + ${typeof window !== 'undefined' && window.innerWidth >= 1024 ? '110px' : '160px'})) rotate(-5deg)`,
+                    bottom: typeof window !== 'undefined' && window.innerWidth >= 1024 ? '35%' : 'auto',
+                    maskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
+                    WebkitMaskImage: 'radial-gradient(closest-side at 35% 50%, black 85%, transparent 100%)',
+                    filter: 'drop-shadow(0 0 15px #00D2FF)'
+                }}
+            />
+
             {/* Main Content Wrapper */}
             <div
                 id="scrolly-main-wrapper"
@@ -109,8 +131,10 @@ const LandingPage = () => {
                 {/* Navigation (Simplified for Immersion) */}
                 <Navbar />
 
-                {/* WhatsApp Floating Button */}
-                {/* WhatsApp Widget is loaded via index.html script */}
+                <Navbar />
+
+                {/* Floating WhatsApp Button */}
+                <WhatsAppButton />
 
                 <main className="relative z-10">
                     <HeroSection />
