@@ -54,12 +54,12 @@ const LandingPage = () => {
             {/* FIXED BACKGROUNDS (Moved outside main wrapper to prevent stacking issues) */}
             {/* Mobile background (visible on screens < md) */}
             <img
-                src="/FONDO_MOBILE4.png"
+                src="/fondo_mobile4.png"
                 alt="Mobile background"
                 className="fixed left-0 w-full z-[-1] pointer-events-none object-cover md:hidden"
                 style={{
-                    top: '40px',
-                    height: 'calc(100vh - 40px)',
+                    top: '0',
+                    height: '100vh',
                     backgroundColor: '#07acdd',
                     transform: 'scale(1.05)',
                 }}
