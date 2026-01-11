@@ -53,13 +53,14 @@ const LandingPage = () => {
         <SmoothScroll>
             {/* FIXED BACKGROUNDS (Moved outside main wrapper to prevent stacking issues) */}
             {/* Mobile background (visible on screens < md) */}
-            <img
-                src="/fondo_mobile4.png"
-                alt="Mobile background"
-                className="fixed left-0 w-full z-[-1] pointer-events-none object-cover md:hidden"
+            {/* Mobile background (visible on screens < md) */}
+            <div
+                className="fixed inset-0 w-full h-full z-0 pointer-events-none md:hidden"
                 style={{
-                    top: '0',
-                    height: '100vh',
+                    backgroundImage: "url('/fondo_mobile4.png')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
                     backgroundColor: '#07acdd',
                     transform: 'scale(1.05)',
                 }}
