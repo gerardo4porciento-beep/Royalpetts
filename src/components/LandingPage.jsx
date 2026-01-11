@@ -2,6 +2,7 @@ import React from 'react';
 import SmoothScroll from './SmoothScroll';
 import HeroSection from './HeroSection';
 import ParticleBackground from './ParticleBackground';
+import mobileBg from '../assets/fondo_mobile4.png'; // Imported asset
 
 // import AccessoriesGrid from './AccessoriesGrid'; // REMOVED
 // import Footer from './Footer'; // REMOVED as per user request
@@ -57,7 +58,7 @@ const LandingPage = () => {
             <div
                 className="fixed inset-0 w-full h-full z-0 pointer-events-none md:hidden"
                 style={{
-                    backgroundImage: "url('/fondo_mobile4.png')",
+                    backgroundImage: `url(${mobileBg})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
